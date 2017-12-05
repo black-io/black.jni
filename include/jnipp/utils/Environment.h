@@ -1,0 +1,101 @@
+// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
+// Apache 2.0 License
+#pragma once
+
+
+namespace Jni
+{
+	/**
+		@brief		JNI Environment instance wrap for thread-local environment.
+		@note		Instances of `Environment` may not be stored in global memory.
+		@warning	Instances of `Environment` may not be used across the threads.
+
+		`Environment` instance represents the thread-local environment of JNI.
+	*/
+	class Environment final
+	{
+	public:
+		template< typename TDesiredType, typename TGivenType >
+		using EnableConvertible = typename std::enable_if<std::is_convertible<TGivenType, TDesiredType>::value>::type;
+
+		template< bool... FLAGS >
+		struct FlagsContainer;
+
+		template< bool... FLAGS >
+		using TrueFlags = std::is_same< FlagsContainer<FLAGS..., true>, FlagsContainer<true, FLAGS...> >;
+
+	public:
+		Environment() = default;
+
+		/// @brief	Get the value of field belongs to object using the local JNI environment.
+		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
+		inline const bool GetValue(
+			const MemberField<TNativeType>& field_handle,
+			const Object& object_handle,
+			TValueType& value_storage
+		) const;
+
+		/// @brief	Get the value of static field using the local JNI environment.
+		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
+		inline const bool GetValue( const StaticField<TNativeType>& field_handle, TValueType& value_storage ) const;
+
+		/// @brief	Set the value of field belongs to object using the local JNI environment.
+		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
+		inline const bool SetValue(
+			const MemberField<TNativeType>& field_handle,
+			const Object& object_handle,
+			const TValueType& value_storage
+		) const;
+
+		/// @brief	Set the value of static field using the local JNI environment.
+		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
+		inline const bool SetValue( const StaticField<TNativeType>& field_handle, const TValueType& value_storage ) const;
+
+		/// @brief	Call the member function on object using the local JNI environment.
+		template<
+			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
+			typename = typename std::enable_if< TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value >::type
+		>
+		inline TNativeReturnType Call(
+			const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
+			const Object& object_handle,
+			const TValueArguments&... arguments
+		);
+
+		/// @brief	Call the member function non-virtually on object using the local JNI environment.
+		template<
+			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
+			typename = typename std::enable_if<TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value>::type
+		>
+		inline TNativeReturnType CallNonVirtual(
+			const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
+			const Object& object_handle,
+			const TValueArguments&... arguments
+		);
+
+		/// @brief	Call the static function using the local JNI environment.
+		template<
+			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
+			typename = typename std::enable_if<TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value>::type
+		>
+		inline TNativeReturnType Call(
+			const StaticFunction<TNativeReturnType, TNativeArguments...>& function_handle,
+			const TValueArguments&... arguments
+		);
+
+		inline const bool IsValid() const				{ return m_local_env != nullptr; };
+
+		inline JNIEnv* operator -> () const				{ return m_local_env; };
+		inline explicit operator const bool () const	{ return IsValid(); };
+
+	private:
+		Environment( const Environment& )				= delete;
+		Environment( Environment&& )					= delete;
+
+		Environment& operator = ( const Environment& )	= delete;
+		Environment& operator = ( Environment&& )		= delete;
+
+	private:
+		JNIEnv*	m_local_env	= VirtualMachine::GetLocalEnvironment();
+	};
+}

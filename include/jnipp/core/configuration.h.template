@@ -1,0 +1,60 @@
+// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
+// Apache 2.0 License
+#pragma once
+
+
+// Force JNI to use standard plain types.
+#define HAVE_INTTYPES_H 1
+
+// Debug build detection.
+#if( !defined( JNIPP_DEBUG_BUILD ) )
+	#if( !defined( NDEBUG ) )
+		#define JNIPP_DEBUG_BUILD 1
+	#else
+		#define JNIPP_DEBUG_BUILD 0
+	#endif
+#endif
+
+
+// Overall logging switch.
+#if( !defined( JNIPP_LOGS_ENABLED ) )
+	#define JNIPP_LOGS_ENABLED			1
+#endif
+
+// Logging switches by priority.
+#if( !defined( JNIPP_LOGS_VERBOSE_ENABLED ) )
+	#define JNIPP_LOGS_VERBOSE_ENABLED	1
+#endif
+
+#if( !defined( JNIPP_LOGS_DEBUG_ENABLED ) )
+	#define JNIPP_LOGS_DEBUG_ENABLED	1
+#endif
+
+#if( !defined( JNIPP_LOGS_INFO_ENABLED ) )
+	#define JNIPP_LOGS_INFO_ENABLED		1
+#endif
+
+#if( !defined( JNIPP_LOGS_WARNING_ENABLED ) )
+	#define JNIPP_LOGS_WARNING_ENABLED	1
+#endif
+
+#if( !defined( JNIPP_LOGS_EROR_ENABLED ) )
+	#define JNIPP_LOGS_EROR_ENABLED		1
+#endif
+
+#if( !defined( JNIPP_LOGS_ASSERT_ENABLED ) )
+	#define JNIPP_LOGS_ASSERT_ENABLED	1
+#endif
+
+
+// Use STL synchronization by default.
+#include <mutex>
+
+namespace Jni
+{
+namespace Utils
+{
+	using Mutex		= std::recursive_mutex;
+	using MutexLock	= std::lock_guard<Mutex>;
+};
+};
