@@ -14,7 +14,8 @@ inline namespace Jni
 }
 
 // Most basic utils.
-#include "utils/HasBitsField.h"
+#include "type-traits/HasBitsField.h"
+#include "type-traits/types.h"
 
 // Type Marshaling.
 #include "marshaling/JavaTypeTraits.h"
@@ -25,8 +26,7 @@ inline namespace Jni
 #include "marshaling/BitfieldTypeTraits.h"
 
 // Most crucial forwards.
-#include "utils/forwards.h"
-#include "utils/types.h"
+#include "virtual-machine/forwards.h"
 
 // JNI classes.
 #include "handles/Class.h"
@@ -51,15 +51,15 @@ inline namespace Jni
 #include "utils/NativeFunction.macros.h"
 
 // JNI Virtual machine and environment.
-#include "utils/HandlesCacheEntry.h"
-#include "utils/CachedHandles.h"
-#include "utils/VirtualMachine.h"
-#include "utils/Environment.h"
+#include "virtual-machine/HandlesCacheEntry.h"
+#include "virtual-machine/CachedHandles.h"
+#include "virtual-machine/VirtualMachine.h"
+#include "virtual-machine/Environment.h"
 
 // Deferred implementation of JNI functionality.
-#include "utils/CachedHandles.inl"
-#include "utils/VirtualMachine.inl"
-#include "utils/Environment.inl"
+#include "virtual-machine/CachedHandles.inl"
+#include "virtual-machine/VirtualMachine.inl"
+#include "virtual-machine/Environment.inl"
 #include "utils/NativeFunction.utils.inl"
 #include "handles/Object.inl"
 #include "handles/MemberField.inl"
