@@ -13,7 +13,16 @@ inline namespace Jni
 }
 }
 
+// Cut off the compilation in case of target platform is not Android.
+#if( !BLACK_ANDROID_PLATFORM )
+	#error Black::Jni was designed for Android OS only! Be sure to exclude it from build for other target platforms.
+#endif
+
+// Local overrides for logging stuff.
+#include "utils/logging.h"
+
 // Most basic utils.
+#include "type-traits/StaticStrings.jni.h"
 #include "type-traits/HasBitsField.h"
 #include "type-traits/types.h"
 
@@ -72,3 +81,6 @@ inline namespace Jni
 #include "marshaling/NativeTypeTraits.ToJava.inl"
 #include "marshaling/ArrayTranslationTraits.FromJava.inl"
 #include "marshaling/ArrayTranslationTraits.ToJava.inl"
+
+// Remove local logging overrides if necessary.
+#include "utils/logging.isolation.h"
