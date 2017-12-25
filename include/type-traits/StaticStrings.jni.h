@@ -33,19 +33,19 @@ namespace Traits
 
 	// Transform the class path into JNI-consumable class signature.
 	template< char... CHARS >
-	using DalvikClassSignature		= Black::StaticString<'L', CHARS..., ';'>;
+	using JniClassSignature		= Black::StaticString<'L', CHARS..., ';'>;
 
 	// Transform the type signature into JNI-consumable array signature.
 	template< typename TValueSignature >
-	using DalvikArraySignature		= Black::StaticStrings::Join<Black::StaticString<'['>, TValueSignature>;
+	using JniArraySignature		= Black::StaticStrings::Join<Black::StaticString<'['>, TValueSignature>;
 
 	// Get the JNI-consumable function signature.
 	template< typename TResultSignature, typename... TArgumentSignatures >
-	using DalvikFunctionSignature	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
+	using JniFunctionSignature	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
-	using DalvikClassPath			= typename ClassPathExtractor<TClassSignature>::Signature;
+	using JniClassPath			= typename ClassPathExtractor<TClassSignature>::Signature;
 }
 }
 }
