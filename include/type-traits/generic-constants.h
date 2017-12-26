@@ -17,6 +17,8 @@ namespace Traits
 	};
 
 	// Path to check that the given type has required field for bit-fields.
+	// In case of `TBitfield` has no `bits` member, the deducing will fall into common path with `false` result.
+	// Additional checks may be implemented for this path, if needed.
 	template< typename TBitfield >
 	struct HasBitsField<TBitfield, decltype( (void)TBitfield::bits, 0 )> : std::true_type
 	{
