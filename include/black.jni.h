@@ -22,9 +22,9 @@ inline namespace Jni
 #include "utils/logging.h"
 
 // Most basic utils.
+#include "type-traits/generic-constants.h"
+#include "type-traits/generic-types.h"
 #include "type-traits/StaticStrings.jni.h"
-#include "type-traits/HasBitsField.h"
-#include "type-traits/types.h"
 
 // Type Marshaling.
 #include "marshaling/JavaTypeTraits.h"
