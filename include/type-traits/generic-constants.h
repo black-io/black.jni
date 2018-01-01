@@ -24,12 +24,23 @@ namespace Traits
 	{
 
 	};
+
+	// Get the total size of local frame for JNI environment.
+	template< size_t FRAME_SIZE, size_t... REST_SIZES >
+	constexpr size_t GetLocalFrameSize()
+	{
+		return ( sizeof...( REST_SIZES ) == 0 )? FRAME_SIZE : FRAME_SIZE + GetLocalFrameSize<REST_SIZES...>();
+	}
 }
 
 
 	// Bit-field type check.
 	template< typename TCondition >
 	constexpr bool IS_BIT_FIELD = Traits::HasBitsField<TCondition>::value;
+
+	// Total size of locale frame for JNI environment.
+	template< typename... TNativeTypes >
+	constexpr size_t JNI_LOCAL_FRAME_SIZE = Traits::GetLocalFrameSize<Black::NativeTypeTraits<TNativeTypes>::LOCAL_FRAME_SIZE...>();
 }
 }
 }

@@ -21,9 +21,7 @@ inline namespace Jni
 // Local overrides for logging stuff.
 #include "utils/logging.h"
 
-// Most basic utils.
-#include "type-traits/generic-constants.h"
-#include "type-traits/generic-types.h"
+// Most basic utils and traits.
 #include "type-traits/StaticStrings.jni.h"
 
 // Type Marshaling.
@@ -31,6 +29,9 @@ inline namespace Jni
 #include "marshaling/EnvironmentTraits.h"
 #include "marshaling/ArrayTranslationTraits.h"
 #include "marshaling/NativeTypeTraits.h"
+
+#include "type-traits/generic-constants.h"
+
 #include "marshaling/EnumTypeTraits.h"
 #include "marshaling/BitfieldTypeTraits.h"
 
