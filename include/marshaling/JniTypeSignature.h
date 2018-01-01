@@ -1,120 +1,123 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	/// @brief	Traits for arbitrary regular Java type.
-	template< typename TJavaType >
-	struct JavaTypeTraits;
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI regular type signature specification.
+	template< typename TJniType >
+	struct JniSignature;
 
-
-	/// @brief	Signature of arbitrary regular Java type.
-	template< typename TJavaType >
-	using JavaTypeSignature = typename JavaTypeTraits<TJavaType>::Signature;
-
-	/// @brief	Signature of function, which uses regular Java types.
-	template< typename TJavaReturnType, typename... TJavaArgumentTypes >
-	using JavaFunctionSignature = FunctionSignature<JavaTypeSignature<TJavaReturnType>, JavaTypeSignature<TJavaArgumentTypes>...>;
-
-
-	/// @brief	Traits specification for `void` type.
+	// `void` type signature.
 	template<>
-	struct JavaTypeTraits<void>
+	struct JniSignature<void>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'V'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'V'>;
 	};
 
-	/// @brief	Traits specification for `boolean` type.
+	// `boolean` type signature.
 	template<>
-	struct JavaTypeTraits<jboolean>
+	struct JniSignature<jboolean>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'Z'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'Z'>;
 	};
 
-	/// @brief	Traits specification for `byte` type.
+	// `byte` type signature.
 	template<>
-	struct JavaTypeTraits<jbyte>
+	struct JniSignature<jbyte>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'B'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'B'>;
 	};
 
-	/// @brief	Traits specification for `char` type.
+	// `char` type signature.
 	template<>
-	struct JavaTypeTraits<jchar>
+	struct JniSignature<jchar>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'C'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'C'>;
 	};
 
-	/// @brief	Traits specification for `short` type.
+	// `short` type signature.
 	template<>
-	struct JavaTypeTraits<jshort>
+	struct JniSignature<jshort>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'S'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'S'>;
 	};
 
-	/// @brief	Traits specification for `int` type.
+	// `int` type signature.
 	template<>
-	struct JavaTypeTraits<jint>
+	struct JniSignature<jint>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'I'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'I'>;
 	};
 
-	/// @brief	Traits specification for `long` type.
+	// `long` type signature.
 	template<>
-	struct JavaTypeTraits<jlong>
+	struct JniSignature<jlong>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'J'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'J'>;
 	};
 
-	/// @brief	Traits specification for `float` type.
+	// `float` type signature.
 	template<>
-	struct JavaTypeTraits<jfloat>
+	struct JniSignature<jfloat>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'F'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'F'>;
 	};
 
-	/// @brief	Traits specification for `double` type.
+	// `double` type signature.
 	template<>
-	struct JavaTypeTraits<jdouble>
+	struct JniSignature<jdouble>
 	{
-		/// @brief	Java type signature.
-		using Signature	= StaticString<'D'>;
+		// JNI signature.
+		using Signature	= Black::StaticString<'D'>;
 	};
 
-	/// @brief	Traits specification for `java.lang.Object` type.
+	// `java.lang.Object` type signature.
 	template<>
-	struct JavaTypeTraits<jobject>
+	struct JniSignature<jobject>
 	{
-		/// @brief	Java type signature.
-		using Signature	= ClassName<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't'>;
+		// JNI signature.
+		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't'>;
 	};
 
-	/// @brief	Traits specification for `java.lang.Class` type.
+	// `java.lang.Class` type signature.
 	template<>
-	struct JavaTypeTraits<jclass>
+	struct JniSignature<jclass>
 	{
-		/// @brief	Java type signature.
-		using Signature	= ClassName<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's'>;
+		// JNI signature.
+		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's'>;
 	};
 
-	/// @brief	Traits specification for `java.lang.String` type.
+	// `java.lang.String` type signature.
 	template<>
-	struct JavaTypeTraits<jstring>
+	struct JniSignature<jstring>
 	{
-		/// @brief	Java type signature.
-		using Signature	= ClassName<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g'>;
+		// JNI signature.
+		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g'>;
 	};
+}
+
+
+	// Type signature for any regular JNI type.
+	template< typename TJniType >
+	using JniTypeSignature		= typename Traits::JniSignature<TJniType>::Signature;
+
+	// Function signature for any JNI type.
+	template< typename TJniResult, typename... TJniArguments >
+	using JniFunctionSignature	= Black::JniFunctionSignatureBase<JniTypeSignature<TJniResult>, JniTypeSignature<TJniArguments>...>;
+}
 }
 }
