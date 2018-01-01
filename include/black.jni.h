@@ -26,7 +26,7 @@ inline namespace Jni
 
 // Type Marshaling.
 #include "marshaling/JniTypeSignature.h"
-#include "marshaling/EnvironmentTraits.h"
+#include "marshaling/JniTypeContext.h"
 #include "marshaling/ArrayTranslationTraits.h"
 #include "marshaling/NativeTypeTraits.h"
 
