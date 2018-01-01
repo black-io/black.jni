@@ -25,7 +25,7 @@ inline namespace Jni
 #include "type-traits/StaticStrings.jni.h"
 
 // Type Marshaling.
-#include "marshaling/JavaTypeTraits.h"
+#include "marshaling/JniTypeSignature.h"
 #include "marshaling/EnvironmentTraits.h"
 #include "marshaling/ArrayTranslationTraits.h"
 #include "marshaling/NativeTypeTraits.h"
