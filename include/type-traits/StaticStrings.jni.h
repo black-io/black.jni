@@ -41,7 +41,7 @@ namespace Traits
 
 	// Get the JNI-consumable function signature.
 	template< typename TResultSignature, typename... TArgumentSignatures >
-	using JniFunctionSignature	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
+	using JniFunctionSignatureBase	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
