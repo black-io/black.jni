@@ -27,7 +27,7 @@ inline namespace Jni
 // Type Marshaling.
 #include "marshaling/JniTypeSignature.h"
 #include "marshaling/JniTypeContext.h"
-#include "marshaling/ArrayTranslationTraits.h"
+#include "marshaling/JniArrayTranslation.h"
 #include "marshaling/NativeTypeTraits.h"
 
 #include "type-traits/generic-constants.h"
@@ -80,8 +80,8 @@ inline namespace Jni
 #include "utils/StaticFunctionInvocation.inl"
 #include "marshaling/NativeTypeTraits.FromJava.inl"
 #include "marshaling/NativeTypeTraits.ToJava.inl"
-#include "marshaling/ArrayTranslationTraits.FromJava.inl"
-#include "marshaling/ArrayTranslationTraits.ToJava.inl"
+#include "marshaling/JniArrayTranslation.FromJni.inl"
+#include "marshaling/JniArrayTranslation.ToJni.inl"
 
 // Remove local logging overrides if necessary.
 #include "utils/logging.isolation.h"
