@@ -32,8 +32,8 @@ inline namespace Jni
 
 #include "type-traits/generic-constants.h"
 
-#include "marshaling/EnumTypeTraits.h"
-#include "marshaling/BitfieldTypeTraits.h"
+#include "marshaling/NativeEnumContext.h"
+#include "marshaling/NativeBitfieldContext.h"
 
 // Most crucial forwards.
 #include "virtual-machine/forwards.h"
