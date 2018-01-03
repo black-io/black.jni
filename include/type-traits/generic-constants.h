@@ -40,7 +40,7 @@ namespace Traits
 
 	// Total size of locale frame for JNI environment.
 	template< typename... TNativeTypes >
-	constexpr size_t JNI_LOCAL_FRAME_SIZE = Traits::GetLocalFrameSize<Black::NativeTypeTraits<TNativeTypes>::LOCAL_FRAME_SIZE...>();
+	constexpr size_t JNI_LOCAL_FRAME_SIZE = Traits::GetLocalFrameSize<Black::NativeTypeContext<TNativeTypes>::LOCAL_FRAME_SIZE...>();
 }
 }
 }
