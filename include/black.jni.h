@@ -28,7 +28,7 @@ inline namespace Jni
 #include "marshaling/JniTypeSignature.h"
 #include "marshaling/JniTypeContext.h"
 #include "marshaling/JniArrayTranslation.h"
-#include "marshaling/NativeTypeTraits.h"
+#include "marshaling/NativeTypeContext.h"
 
 #include "type-traits/generic-constants.h"
 
@@ -78,8 +78,8 @@ inline namespace Jni
 #include "handles/StaticFunction.inl"
 #include "utils/MemberFunctionInvocation.inl"
 #include "utils/StaticFunctionInvocation.inl"
-#include "marshaling/NativeTypeTraits.FromJava.inl"
-#include "marshaling/NativeTypeTraits.ToJava.inl"
+#include "marshaling/NativeTypeContext.FromJni.inl"
+#include "marshaling/NativeTypeContext.ToJni.inl"
 #include "marshaling/JniArrayTranslation.FromJni.inl"
 #include "marshaling/JniArrayTranslation.ToJni.inl"
 
