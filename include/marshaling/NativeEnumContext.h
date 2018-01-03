@@ -18,9 +18,9 @@ namespace Traits
 	struct EnumContext<TNativeEnum, true> : NativeContext<Black::UnderlyingType<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
-		using UnderlyingType	= typename std::underlying_type<TNativeEnum>::type;
+		using UnderlyingType	= Black::UnderlyingType<TNativeEnum>;
 
-		// Native type traits for underlying type of enumeration type.
+		// JNI context for underlying type.
 		using UnderlyingContext	= NativeContext<UnderlyingType>;
 
 
