@@ -1,45 +1,54 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	/// @brief	Type translation traits specification for bit-field types.
-	template< class TBitfieldType, bool HAS_BITS = Utils::HasBitsField<TBitfieldType>::value >
-	struct BitfieldTypeTraits;
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// Safe environment context for native bit-fields.
+	template< typename TNativeBitfield, bool IS_VALID_BITFIELD >
+	struct BitfieldContext;
 
-	/// @brief	Type translation traits specification for bit-field types.
-	template< class TBitfieldType >
-	struct BitfieldTypeTraits<TBitfieldType, true> : NativeTypeTraits<decltype( std::declval<TBitfieldType>().bits )>
+	// JNI environment context for native bit-fields.
+	template< typename TNativeBitfield >
+	struct BitfieldContext<TNativeBitfield, true> : NativeContext<decltype( std::declval<TNativeBitfield>().bits )>
 	{
-		/// @brief	Underlying type for bit-field type.
-		using UnderlyingType	= decltype( std::declval<TBitfieldType>().bits );
+		// Underlying type for bit-field type.
+		using UnderlyingType	= decltype( std::declval<TNativeBitfield>().bits );
 
-		/// @brief	Native type traits for underlying type of enumeration type.
-		using UnderlyingTraits	= NativeTypeTraits<UnderlyingType>;
-
-
-		/// @brief	C++ native type.
-		using NativeType	= TBitfieldType;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= typename UnderlyingTraits::JavaType;
+		// JNI context for underlying type.
+		using UnderlyingContext	= NativeTypeTraits<UnderlyingType>;
 
 
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination )
+		// C++ native type.
+		using NativeType	= TNativeBitfield;
+
+		// JNI type
+		using JniType		= typename UnderlyingContext::JniType;
+
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination )
 		{
-			UnderlyingTraits::FromJava( source, destination.bits );
+			UnderlyingContext::FromJni( source, destination.bits );
 		}
 
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination )
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
-			UnderlyingTraits::FromJava( source.bits, destination );
+			UnderlyingContext::FromJni( source.bits, destination );
 		}
 	};
+}
+
+
+	// JNI environment context for native bit-fields.
+	template< typename TNativeBitfield >
+	using NativeBitfieldContext = Traits::BitfieldContext<TNativeBitfield, Black::IS_BIT_FIELD<TNativeBitfield>>;
+}
 }
 }
