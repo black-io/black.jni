@@ -1,10 +1,14 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	class Environment;
-	class VirtualMachine;
+inline namespace Jni
+{
+inline namespace VirtualMachine
+{
+	class JniEnvironment;
+	class JniConnection;
+}
+}
 }
