@@ -15,13 +15,13 @@ namespace Traits
 
 	// JNI environment context for native enumeration.
 	template< typename TNativeEnum >
-	struct EnumContext<TNativeEnum, true> : Black::NativeTypeContext<Black::UnderlyingType<TNativeEnum>>
+	struct EnumContext<TNativeEnum, true> : NativeContext<Black::UnderlyingType<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
 		using UnderlyingType	= typename std::underlying_type<TNativeEnum>::type;
 
 		// Native type traits for underlying type of enumeration type.
-		using UnderlyingContext	= Black::NativeTypeContext<UnderlyingType>;
+		using UnderlyingContext	= NativeContext<UnderlyingType>;
 
 
 		// C++ native type.
@@ -32,18 +32,18 @@ namespace Traits
 
 
 		// Type translation from JNI space to C++ space.
-		static inline void FromJava( const JniType& source, NativeType& destination )
+		static inline void FromJni( const JniType& source, NativeType& destination )
 		{
 			UnderlyingType buffer;
-			UnderlyingContext::FromJava( source, buffer );
+			UnderlyingContext::FromJni( source, buffer );
 			destination = static_cast<TNativeEnum>( buffer );
 		}
 
 		// Type translation from C++ space to JNI space.
-		static inline void ToJava( const NativeType& source, JniType& destination )
+		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
 			const UnderlyingType buffer = static_cast<UnderlyingType>( source );
-			UnderlyingContext::FromJava( buffer, destination );
+			UnderlyingContext::FromJni( buffer, destination );
 		}
 	};
 }
