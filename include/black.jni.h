@@ -34,6 +34,7 @@ inline namespace Jni
 
 #include "marshaling/NativeEnumContext.h"
 #include "marshaling/NativeBitfieldContext.h"
+#include "marshaling/NativeTypeContext.EnumFlags.h"
 
 // Most crucial forwards.
 #include "virtual-machine/forwards.h"
