@@ -1,48 +1,73 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	template< typename TElementTraits, bool IS_ELEMENT_PLAIN = TElementTraits::IS_PLAIN >
-	struct ArrayTranslationTraits final
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// Translation traits for JNI object arrays.
+	template< typename TElementContext, bool IS_TYPE_PLAIN >
+	struct JniArrayTranslation
 	{
-		using ElementJavaType	= typename TElementTraits::JavaType;
+		// JNI regular type of single element.
+		using JniValue		= typename TElementContext::JniValue;
 
-		using ElementNativeType	= typename TElementTraits::NativeType;
+		// JNI regular type of array.
+		using JniArray		= typename TElementContext::JniArray;
 
-		using JavaType			= typename TElementTraits::JavaArrayType;
+		// Native regular type of single element.
+		using NativeValue	= typename TElementContext::NativeType;
 
-		template< typename TAllocatorType >
-		using NativeType		= std::vector<typename TElementTraits::NativeType, TAllocatorType>;
+		// Native regular type of array.
+		template< typename TAllocator >
+		using NativeArray	= std::vector<NativeValue, TAllocator>;
 
-		template< typename TAllocatorType >
-		static inline void FromJava( const JavaType& source, NativeType<TAllocatorType>& destination );
 
-		template< typename TAllocatorType >
-		static inline void ToJava( const NativeType<TAllocatorType>& source, JavaType& destination );
+		// Transform the array from JNI regular type to native one.
+		template< typename TAllocator >
+		static inline void FromJni( const JniArray& source, NativeArray<TAllocator>& destination );
+
+		// Transform the array from Native regular type to JNI one.
+		template< typename TAllocator >
+		static inline void ToJni( const NativeArray<TAllocator>& source, JniArray& destination );
 	};
 
-	template< typename TElementTraits >
-	struct ArrayTranslationTraits<TElementTraits, true> final
+	// Translation traits for JNI plain arrays.
+	template< typename TElementContext >
+	struct JniArrayTranslation<TElementContext, true>
 	{
-		using ElementJavaType	= typename TElementTraits::JavaType;
+		// JNI regular type of single element.
+		using JniValue		= typename TElementContext::JniValue;
 
-		using ElementNativeType	= typename TElementTraits::NativeType;
+		// JNI regular type of array.
+		using JniArray		= typename TElementContext::JniArray;
 
-		using JavaType			= typename TElementTraits::JavaArrayType;
+		// Native regular type of single element.
+		using NativeValue	= typename TElementContext::NativeType;
 
-		template< typename TAllocatorType >
-		using NativeType		= std::vector<typename TElementTraits::NativeType, TAllocatorType>;
+		// Native regular type of array.
+		template< typename TAllocator >
+		using NativeArray	= std::vector<NativeValue, TAllocator>;
 
-		template< typename TAllocatorType >
-		static inline void FromJava( const JavaType& source, NativeType<TAllocatorType>& destination );
 
-		template< typename TAllocatorType >
-		static inline void ToJava( const NativeType<TAllocatorType>& source, JavaType& destination );
+		// Transform the array from JNI regular type to native one.
+		template< typename TAllocator >
+		static inline void FromJni( const JniArray& source, NativeArray<TAllocator>& destination );
+
+		// Transform the array from Native regular type to JNI one.
+		template< typename TAllocator >
+		static inline void ToJni( const NativeArray<TAllocator>& source, JniArray& destination );
 	};
+}
+
+
+	// JNI array type translation.
+	template< typename TElementContext >
+	using JniArrayTranslation = Traits::JniArrayTranslation<TElementContext, TElementContext::IS_PLAIN>;
+}
 }
 }
