@@ -1,60 +1,430 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	/// @brief	Common specification of type translation traits.
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI environment context for regular native type.
 	template< typename TNativeType >
-	struct NativeTypeTraits;
+	struct NativeContext;
+
+	// JNI environment context for `void` type.
+	template<>
+	struct NativeContext<void> : JniContext<void>, JniSignature<void>
+	{
+		// Count of local references required to store this type in Dalvik local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= void;
+
+		// JNI type
+		using JniType		= void;
+
+		// Type translation from JNI space to C++ space.
+		//static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		//static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `bool` type.
+	template<>
+	struct NativeContext<bool> : JniContext<jboolean>, JniSignature<jboolean>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= bool;
+
+		// JNI type
+		using JniType		= jboolean;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `char16_t` type.
+	template<>
+	struct NativeContext<char16_t> : JniContext<jchar>, JniSignature<jchar>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= char16_t;
+
+		// JNI type
+		using JniType		= jchar;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `int8_t` type.
+	template<>
+	struct NativeContext<int8_t> : JniContext<jbyte>, JniSignature<jbyte>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= int8_t;
+
+		// JNI type
+		using JniType		= jbyte;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `int16_t` type.
+	template<>
+	struct NativeContext<int16_t> : JniContext<jshort>, JniSignature<jshort>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= int16_t;
+
+		// JNI type
+		using JniType		= jshort;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `int32_t` type.
+	template<>
+	struct NativeContext<int32_t> : JniContext<jint>, JniSignature<jint>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= int32_t;
+
+		// JNI type
+		using JniType		= jint;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `int64_t` type.
+	template<>
+	struct NativeContext<int64_t> : JniContext<jlong>, JniSignature<jlong>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= int64_t;
+
+		// JNI type
+		using JniType		= jlong;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `uint8_t` type.
+	template<>
+	struct NativeContext<uint8_t> : JniContext<jshort>, JniSignature<jshort>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= uint8_t;
+
+		// JNI type
+		using JniType		= jshort;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `uint16_t` type.
+	template<>
+	struct NativeContext<uint16_t> : JniContext<jint>, JniSignature<jint>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= uint16_t;
+
+		// JNI type
+		using JniType		= jint;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `uint32_t` type.
+	template<>
+	struct NativeContext<uint32_t> : JniContext<jlong>, JniSignature<jlong>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= uint32_t;
+
+		// JNI type
+		using JniType		= jlong;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `uint64_t` type.
+	template<>
+	struct NativeContext<uint64_t> : JniContext<jlong>, JniSignature<jlong>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= uint64_t;
+
+		// JNI type
+		using JniType		= jlong;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `float` type.
+	template<>
+	struct NativeContext<float> : JniContext<jfloat>, JniSignature<jfloat>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= float;
+
+		// JNI type
+		using JniType		= jfloat;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `double` type.
+	template<>
+	struct NativeContext<double> : JniContext<jdouble>, JniSignature<jdouble>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+
+		// C++ native type.
+		using NativeType	= double;
+
+		// JNI type
+		using JniType		= jdouble;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `const char*` type.
+	template<>
+	struct NativeContext<const char*> : JniContext<jobject>, JniSignature<jstring>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+
+		// C++ native type.
+		using NativeType	= const char*;
+
+		// JNI type
+		using JniType		= jstring;
+
+		// Type translation from JNI space to C++ space.
+		//static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `const char16_t*` type.
+	template<>
+	struct NativeContext<const char16_t*> : JniContext<jobject>, JniSignature<jstring>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+
+		// C++ native type.
+		using NativeType	= const char16_t*;
+
+		// JNI type
+		using JniType		= jstring;
+
+		// Type translation from JNI space to C++ space.
+		//static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `std::string` type.
+	template<>
+	struct NativeContext<std::string> : JniContext<jobject>, JniSignature<jstring>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+
+		// C++ native type.
+		using NativeType	= std::string;
+
+		// JNI type
+		using JniType		= jstring;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `std::u16string` type.
+	template<>
+	struct NativeContext<std::u16string> : JniContext<jobject>, JniSignature<jstring>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+
+		// C++ native type.
+		using NativeType	= std::u16string;
+
+		// JNI type
+		using JniType		= jstring;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+
+	// JNI environment context for `std::vector` type.
+	template< typename TNativeValue, typename TAllocator >
+	struct NativeContext< std::vector<TNativeValue, TAllocator> > : JniContext<jobject>
+	{
+		// Count of local references required to store this type in JNI local frame.
+		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+
+		// JNI type signature.
+		using Signature		= Black::JniArraySignature<typename NativeContext<TNativeValue>::Signature>;
+
+		// C++ native type.
+		using NativeType	= std::vector<TNativeValue, TAllocator>;
+
+		// JNI type
+		using JniType		= jarray;
+
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination );
+
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination );
+	};
+}
 
 
-	/// @brief	JNI signature of arbitrary native type.
+	// JNI environment context for regular native type.
 	template< typename TNativeType >
-	using TypeSignature = typename NativeTypeTraits<TNativeType>::Signature;
+	using NativeTypeContext		= Traits::NativeContext<TNativeType>;
 
+	// JNI representation for regular native type.
 	template< typename TNativeType >
-	using JavaType = typename NativeTypeTraits<TNativeType>::JavaType;
+	using JniType				= typename Traits::NativeContext<TNativeType>::JniType;
 
+	// JNI type signature for regular native type.
+	template< typename TNativeType >
+	using NativeTypeSignature	= typename Traits::NativeContext<TNativeType>::Signature;
 
 	/**
-		@brief	Regular converting function from Java type to C++ one.
+		@brief	Regular converting function from Jni type to C++ one.
 		@tparam	TNativeType	C++ type of value to be converted.
-		@param	source		Initial storage of value, Java-side.
+		@param	source		Initial storage of value, JNI-side.
 		@param	destination	Final storage of converted value, C++-side.
 	*/
 	template< typename TNativeType >
-	inline void FromJava( const JavaType<TNativeType>& source, TNativeType& destination )
+	inline void FromJni( const JniType<TNativeType>& source, TNativeType& destination )
 	{
-		NativeTypeTraits<TNativeType>::FromJava( source, destination );
+		NativeTypeTraits<TNativeType>::FromJni( source, destination );
 	}
 
 	/**
-		@brief	Regular converting function from C++ type to Java one.
+		@brief	Regular converting function from C++ type to Jni one.
 		@tparam	TNativeType	C++ type of value to be converted.
 		@param	source		Initial storage of value, C++-side.
-		@param	destination	Final storage of converted value, Java-side.
+		@param	destination	Final storage of converted value, Jni-side.
 	*/
 	template< typename TNativeType >
-	inline void ToJava( const TNativeType& source, JavaType<TNativeType>& destination )
+	inline void ToJni( const TNativeType& source, JniType<TNativeType>& destination )
 	{
-		NativeTypeTraits<TNativeType>::ToJava( source, destination );
+		NativeTypeTraits<TNativeType>::ToJni( source, destination );
 	}
 
 	/**
-		@brief	NRVO-optimizable converting function from Java type to C++ one.
+		@brief	NRVO-optimizable converting function from Jni type to C++ one.
 		@tparam	TNativeType	C++ type of value to be converted.
-		@param	source		Initial storage of value, Java-side.
+		@param	source		Initial storage of value, Jni-side.
 		@return				Final storage of converted value, C++-side.
 	*/
 	template< typename TNativeType >
-	inline TNativeType FromJava( const JavaType<TNativeType>& source )
+	inline TNativeType FromJni( const JniType<TNativeType>& source )
 	{
 		TNativeType destination;
-		NativeTypeTraits<TNativeType>::FromJava( source, destination );
+		NativeTypeTraits<TNativeType>::FromJni( source, destination );
 		return destination;
 	}
 
@@ -65,375 +435,12 @@ namespace Marshaling
 		@return				Final storage of converted value, Java-side.
 	*/
 	template< typename TNativeType >
-	inline JavaType<TNativeType> ToJava( const TNativeType& source )
+	inline JniType<TNativeType> ToJni( const TNativeType& source )
 	{
-		JavaType<TNativeType> destination;
-		NativeTypeTraits<TNativeType>::ToJava( source, destination );
+		JniType<TNativeType> destination;
+		NativeTypeTraits<TNativeType>::ToJni( source, destination );
 		return destination;
 	}
-
-
-	/// @brief	Traits specification for native `void` type.
-	template<>
-	struct NativeTypeTraits<void> : EnvironmentTraits<void>, JavaTypeTraits<void>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= void;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= void;
-
-		/// @brief	Type translation from Java space to C++ space.
-		//static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		//static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `bool` type.
-	template<>
-	struct NativeTypeTraits<bool> : EnvironmentTraits<jboolean>, JavaTypeTraits<jboolean>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= bool;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jboolean;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `char16_t` type.
-	template<>
-	struct NativeTypeTraits<char16_t> : EnvironmentTraits<jchar>, JavaTypeTraits<jchar>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= char16_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jchar;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `int8_t` type.
-	template<>
-	struct NativeTypeTraits<int8_t> : EnvironmentTraits<jbyte>, JavaTypeTraits<jbyte>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= int8_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jbyte;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `int16_t` type.
-	template<>
-	struct NativeTypeTraits<int16_t> : EnvironmentTraits<jshort>, JavaTypeTraits<jshort>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= int16_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jshort;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `int32_t` type.
-	template<>
-	struct NativeTypeTraits<int32_t> : EnvironmentTraits<jint>, JavaTypeTraits<jint>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= int32_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jint;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `int64_t` type.
-	template<>
-	struct NativeTypeTraits<int64_t> : EnvironmentTraits<jlong>, JavaTypeTraits<jlong>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= int64_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jlong;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `uint8_t` type.
-	template<>
-	struct NativeTypeTraits<uint8_t> : EnvironmentTraits<jshort>, JavaTypeTraits<jshort>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= uint8_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jshort;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `uint16_t` type.
-	template<>
-	struct NativeTypeTraits<uint16_t> : EnvironmentTraits<jint>, JavaTypeTraits<jint>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= uint16_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jint;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `uint32_t` type.
-	template<>
-	struct NativeTypeTraits<uint32_t> : EnvironmentTraits<jlong>, JavaTypeTraits<jlong>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= uint32_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jlong;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `uint64_t` type.
-	template<>
-	struct NativeTypeTraits<uint64_t> : EnvironmentTraits<jlong>, JavaTypeTraits<jlong>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= uint64_t;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jlong;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `float` type.
-	template<>
-	struct NativeTypeTraits<float> : EnvironmentTraits<jfloat>, JavaTypeTraits<jfloat>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= float;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jfloat;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `double` type.
-	template<>
-	struct NativeTypeTraits<double> : EnvironmentTraits<jdouble>, JavaTypeTraits<jdouble>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
-
-		/// @brief	C++ native type.
-		using NativeType	= double;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jdouble;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `const char*` type.
-	template<>
-	struct NativeTypeTraits<const char*> : EnvironmentTraits<jobject>, JavaTypeTraits<jstring>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
-
-		/// @brief	C++ native type.
-		using NativeType	= const char*;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jstring;
-
-		/// @brief	Type translation from Java space to C++ space.
-		//static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `const char16_t*` type.
-	template<>
-	struct NativeTypeTraits<const char16_t*> : EnvironmentTraits<jobject>, JavaTypeTraits<jstring>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
-
-		/// @brief	C++ native type.
-		using NativeType	= const char16_t*;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jstring;
-
-		/// @brief	Type translation from Java space to C++ space.
-		//static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `std::string` type.
-	template<>
-	struct NativeTypeTraits<std::string> : EnvironmentTraits<jobject>, JavaTypeTraits<jstring>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
-
-		/// @brief	C++ native type.
-		using NativeType	= std::string;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jstring;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `std::u16string` type.
-	template<>
-	struct NativeTypeTraits<std::u16string> : EnvironmentTraits<jobject>, JavaTypeTraits<jstring>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
-
-		/// @brief	C++ native type.
-		using NativeType	= std::u16string;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jstring;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
-
-	/// @brief	Traits specification for native `std::u16string` type.
-	template< typename TNativeElementType, typename TAllocatorType >
-	struct NativeTypeTraits< std::vector<TNativeElementType, TAllocatorType> > : EnvironmentTraits<jobject>
-	{
-		/// @brief	Count of local references required to store this type in Java local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
-
-		/// @brief	Java type signature.
-		using Signature		= ArrayName<TypeSignature<TNativeElementType>>;
-
-		/// @brief	C++ native type.
-		using NativeType	= std::vector<TNativeElementType, TAllocatorType>;
-
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jarray;
-
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination );
-
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination );
-	};
+}
 }
 }
