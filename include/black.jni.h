@@ -40,8 +40,8 @@ inline namespace Jni
 #include "virtual-machine/forwards.h"
 
 // JNI classes.
-#include "handles/Class.h"
-#include "handles/Object.h"
+#include "handles/JniClass.h"
+#include "handles/JniObject.h"
 #include "marshaling/NativeTypeTraits.Object.h"
 #include "marshaling/NativeTypeTraits.Class.h"
 #include "marshaling/ObjectTypeTraits.h"
