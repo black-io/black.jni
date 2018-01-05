@@ -1,59 +1,65 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/// @brief	Handle of arbitrary Java class.
+inline namespace Jni
+{
+inline namespace Handles
+{
+	// Handle to JNI class.
 	class Class final
 	{
 		friend class Object;	// Grant access to `AcquireClassReference` function.
+
+	// Construction and assignment.
 	public:
 		Class() = default;
 		Class( const Class& other );
 		Class( Class&& other );
-		Class( const std::string& class_name );
-		Class( const char* class_name );
-
-
-		/// @brief	Invalidate the handle.
-		void Invalidate();
-
-		/// @brief	Returns the canonical name of this class or empty string for invalid class.
-		const std::string GetCanonicalName() const;
-
-		/// @brief	Get the name of this class or empty string for invalid class.
-		const std::string GetName() const;
-
-		/// @brief	Returns the simple name of this class or empty string for invalid class.
-		const std::string GetSimpleName() const;
-
-		/// @brief	Get the handle of parent class, if available.
-		Class GetParentClass() const;
-
-		/// @brief	Check the class handle carries valid value.
-		inline const bool IsValid() const		{ return m_class_ref != nullptr; };
-
-		/// @brief	Get the JNI representation of Java class reference.
-		inline jclass GetJniReference() const	{ return m_class_ref.get(); };
+		Class( Black::StringView class_name );
 
 
 		const Class& operator = ( jclass class_ref );
 		const Class& operator = ( const Class& other );
 		const Class& operator = ( Class&& other );
-		const Class& operator = ( const std::string& class_name );
-		const Class& operator = ( const char* class_name );
+		const Class& operator = ( Black::StringView class_name );
+
+	// Public interface.
+	public:
+		// Invalidate the handle.
+		void Invalidate();
+
+
+		// Get the canonical name of class. Empty string will be returned for invalid class.
+		const std::string GetCanonicalName() const;
+
+		// Get the name of class. Empty string will be returned for invalid class.
+		const std::string GetName() const;
+
+		// Get the simple name for class. Empty string will be returned for invalid class.
+		const std::string GetSimpleName() const;
+
+		// Get the parent class handle, if available.
+		Class GetParentClass() const;
+
+
+		// Check the class handle carries valid value.
+		inline const bool IsValid() const				{ return m_class_ref != nullptr; };
+
+		// Get the JNI representation of Java class reference.
+		inline jclass GetJniReference() const			{ return m_class_ref.get(); };
 
 
 		inline explicit operator const bool () const	{ return IsValid(); };
 		inline jclass operator * () const				{ return GetJniReference(); };
 
+	// Private interface.
 	private:
-		/// @brief	Acquire the reference of class via its name.
-		void AcquireClassReference( const char* class_name );
+		// Acquire the reference of class via its name.
+		void AcquireClassReference( Black::StringView class_name );
 
-		/// @brief	Acquire the reference of class via reference of its object.
+		// Acquire the reference of class via reference of its object.
 		void AcquireClassReference( jobject object_ref );
 
 	private:
@@ -63,4 +69,6 @@ namespace Jni
 
 	const bool operator == ( const Class& left, const Class& right );
 	const bool operator != ( const Class& left, const Class& right );
+}
+}
 }
