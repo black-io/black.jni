@@ -8,22 +8,22 @@ inline namespace Jni
 inline namespace Handles
 {
 	// Handle to JNI class.
-	class Class final
+	class JniClass final
 	{
-		friend class Object;	// Grant access to `AcquireClassReference` function.
+		friend class JniObject;	// Grant access to `AcquireClassReference` function.
 
 	// Construction and assignment.
 	public:
-		Class() = default;
-		Class( const Class& other );
-		Class( Class&& other );
-		Class( Black::StringView class_name );
+		JniClass() = default;
+		JniClass( const JniClass& other );
+		JniClass( JniClass&& other );
+		JniClass( Black::StringView class_name );
 
 
-		const Class& operator = ( jclass class_ref );
-		const Class& operator = ( const Class& other );
-		const Class& operator = ( Class&& other );
-		const Class& operator = ( Black::StringView class_name );
+		const JniClass& operator = ( jclass class_ref );
+		const JniClass& operator = ( const JniClass& other );
+		const JniClass& operator = ( JniClass&& other );
+		const JniClass& operator = ( Black::StringView class_name );
 
 	// Public interface.
 	public:
@@ -41,7 +41,7 @@ inline namespace Handles
 		const std::string GetSimpleName() const;
 
 		// Get the parent class handle, if available.
-		Class GetParentClass() const;
+		JniClass GetParentClass() const;
 
 
 		// Check the class handle carries valid value.
@@ -67,8 +67,8 @@ inline namespace Handles
 	};
 
 
-	const bool operator == ( const Class& left, const Class& right );
-	const bool operator != ( const Class& left, const Class& right );
+	const bool operator == ( const JniClass& left, const JniClass& right );
+	const bool operator != ( const JniClass& left, const JniClass& right );
 }
 }
 }
