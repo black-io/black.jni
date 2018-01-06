@@ -1,36 +1,34 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	/// @brief	Traits specification for native `Jni::Object` type.
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI environment context for `Black::JniObject` type.
 	template<>
-	struct NativeTypeTraits<Jni::Object> : EnvironmentTraits<jobject>, JavaTypeTraits<jobject>
+	struct NativeContext<Black::JniObject> : JniContext<jobject>, JniSignature<jobject>
 	{
-		/// @brief	Count of local references required to store this type in Java local frame.
+		// Count of local references required to store this type in JNI local frame.
 		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
 
-		/// @brief	C++ native type.
-		using NativeType	= Jni::Object;
+		// C++ native type.
+		using NativeType	= Black::JniObject;
 
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jobject;
+		// JNI type
+		using JniType		= jobject;
 
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination )
-		{
-			destination = source;
-		}
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination )	{ destination = source; };
 
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination )
-		{
-			destination = *source;
-		}
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination )		{ destination = *source; };
 	};
+}
+}
 }
 }
