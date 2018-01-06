@@ -11,7 +11,7 @@ namespace Traits
 {
 	// JNI environment context for `Black::JniClass` type.
 	template<>
-	struct NativeContext<Black::JniClass> : JniContext<jobject>, JniSignature<jobject>
+	struct NativeContext<Black::JniClass> : JniContext<jobject>, JniSignature<jclass>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
