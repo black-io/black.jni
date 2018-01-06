@@ -44,7 +44,7 @@ inline namespace Jni
 #include "handles/JniObject.h"
 #include "marshaling/NativeTypeContext.JniObject.h"
 #include "marshaling/NativeTypeContext.JniClass.h"
-#include "marshaling/JniObjectContext.h"
+#include "marshaling/NativeObjectContext.h"
 
 // JNI member fields.
 #include "handles/MemberField.h"
