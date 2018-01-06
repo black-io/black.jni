@@ -42,9 +42,9 @@ inline namespace Jni
 // JNI classes.
 #include "handles/JniClass.h"
 #include "handles/JniObject.h"
-#include "marshaling/NativeTypeTraits.Object.h"
-#include "marshaling/NativeTypeTraits.Class.h"
-#include "marshaling/ObjectTypeTraits.h"
+#include "marshaling/NativeTypeContext.JniObject.h"
+#include "marshaling/NativeTypeContext.JniClass.h"
+#include "marshaling/JniObjectContext.h"
 
 // JNI member fields.
 #include "handles/MemberField.h"
