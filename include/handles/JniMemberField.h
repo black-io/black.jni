@@ -1,89 +1,96 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/// @brief	Handle of arbitrary Java member field.
+inline namespace Jni
+{
+inline namespace Handles
+{
+	// Member-field handle for JNI objects.
 	template< typename TNativeType >
-	class MemberField final
+	class JniMemberField final
 	{
-		friend class Environment;
+		friend class Black::Jni::VirtualMachine::JniEnvironment; // Grant access to private `GetValue` functions.
+
+	// Construction and assignment.
 	public:
-		MemberField() = default;
-		MemberField( const MemberField& other );
-		MemberField( MemberField&& other );
-		MemberField( const std::string& class_name, const std::string& field_name );
-		MemberField( const Class& class_handle, const std::string& field_name );
-		MemberField( const char* class_name, const char* field_name );
-		MemberField( const Class& class_handle, const char* field_name );
-		MemberField( const std::string& class_name, const std::string& field_name, IgnoreFailure );
-		MemberField( const Class& class_handle, const std::string& field_name, IgnoreFailure );
-		MemberField( const char* class_name, const char* field_name, IgnoreFailure );
-		MemberField( const Class& class_handle, const char* field_name, IgnoreFailure );
+		JniMemberField() = default;
+
+		JniMemberField( const JniMemberField& other );
+		JniMemberField( JniMemberField&& other );
+
+		JniMemberField( Black::StringView class_name, Black::StringView field_name );
+		JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name );
+
+		JniMemberField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure );
+		JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
 
 
-		/// @brief	Get the value of field from given handle to object.
+		inline const JniMemberField& operator = ( const JniMemberField& other )	{ m_field_id = other.m_field_id; return *this; };
+		inline const JniMemberField& operator = ( JniMemberField&& other )		{ m_field_id = std::move( other.m_field_id ); return *this; };
+
+	// Public interface.
+	public:
+		// Get the value of field from given handle to object.
 		inline const bool GetValue( const Object& object_handle, TNativeType& value_storage ) const;
 
-		/// @brief	Get the value of field from given object ref.
+		// Get the value of field from given object ref.
 		inline const bool GetValue( jobject object_ref, TNativeType& value_storage ) const;
 
-		/// @brief	Get the value of field from given handle to object.
+		// Get the value of field from given handle to object.
 		inline TNativeType GetValue( const Object& object_handle, const TNativeType& default_value ) const;
 
-		/// @brief	Get the value of field from given object ref.
+		// Get the value of field from given object ref.
 		inline TNativeType GetValue( jobject object_ref, const TNativeType& default_value ) const;
 
 
-		/// @brief	Set the value of field to given object by its handle.
+		// Set the value of field to given object by its handle.
 		inline const bool SetValue( const Object& object_handle, const TNativeType& value_storage ) const;
 
-		/// @brief	Set the value of field to given object by its ref.
+		// Set the value of field to given object by its ref.
 		inline const bool SetValue( jobject object_ref, const TNativeType& value_storage ) const;
 
 
-		/// @brief	Check the field handle carries valid value.
-		inline const bool IsValid() const									{ return m_field_id != 0; };
+		// Check the field handle carries valid value.
+		inline const bool IsValid() const				{ return m_field_id != 0; };
 
-		/// @brief	Get the JNI id of Java member field.
-		inline jfieldID GetFieldId() const									{ return m_field_id; };
-
-
-		inline const MemberField& operator = ( const MemberField& other )	{ m_field_id = other.m_field_id; return *this; };
-		inline const MemberField& operator = ( MemberField&& other )		{ m_field_id = std::move( other.m_field_id ); return *this; };
+		// Get the JNI id of Java member field.
+		inline jfieldID GetFieldId() const				{ return m_field_id; };
 
 
-		inline explicit operator const bool () const						{ return IsValid(); };
-		inline jfieldID operator * () const									{ return GetFieldId(); };
+		inline explicit operator const bool () const	{ return IsValid(); };
+		inline jfieldID operator * () const				{ return GetFieldId(); };
 
+	// Private interface.
 	private:
-		using JavaType	= typename Marshaling::JavaType<TNativeType>;
-		using Signature	= typename Marshaling::TypeSignature<TNativeType>;
+		// JNI-side type for used native one.
+		using JniType		= Black::JniType<TNativeType>;
 
-		MemberField( jclass class_ref, const char* field_name );
-		MemberField( jclass class_ref, const char* field_name, IgnoreFailure );
+		// JNI type signature.
+		using Signature		= Black::NativeTypeSignature<TNativeType>;
+
+		// JNI environment context.
+		using JniContext	= Black::NativeTypeContext<TNativeType>;
 
 
-		/// @brief	Get the value of field from given handle to object.
-		inline const bool GetValue( JNIEnv* local_env, const Object& object_handle, TNativeType& value_storage ) const;
+		JniMemberField( jclass class_ref, Black::StringView field_name field_name );
+		JniMemberField( jclass class_ref, Black::StringView field_name field_name, Black::IgnoreFailure );
 
-		/// @brief	Get the value of field from given object ref.
+
+		// Get the value of field from given object ref.
 		inline const bool GetValue( JNIEnv* local_env, jobject object_ref, TNativeType& value_storage ) const;
 
-
-		/// @brief	Set the value of field to given object by its handle.
-		inline const bool SetValue( JNIEnv* local_env, const Object& object_handle, const TNativeType& value_storage ) const;
-
-		/// @brief	Set the value of field to given object by its ref.
+		// Set the value of field to given object by its ref.
 		inline const bool SetValue( JNIEnv* local_env, jobject object_ref, const TNativeType& value_storage ) const;
 
 	private:
-		constexpr static size_t LOCAL_FRAME_SIZE	= Marshaling::NativeTypeTraits<TNativeType>::LOCAL_FRAME_SIZE;
-		constexpr static auto FIELD_READ_HANDLER	= Marshaling::NativeTypeTraits<TNativeType>::FIELD_READ_HANDLER;
-		constexpr static auto FIELD_WRITE_HANDLER	= Marshaling::NativeTypeTraits<TNativeType>::FIELD_WRITE_HANDLER;
+		constexpr static size_t LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
+		constexpr static auto FIELD_READ_HANDLER	= JniContext::FIELD_READ_HANDLER;
+		constexpr static auto FIELD_WRITE_HANDLER	= JniContext::FIELD_WRITE_HANDLER;
 
 		jfieldID	m_field_id	= nullptr;	// Field id for JNI.
 	};
+}
+}
 }
