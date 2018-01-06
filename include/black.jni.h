@@ -39,21 +39,21 @@ inline namespace Jni
 // Most crucial forwards.
 #include "virtual-machine/forwards.h"
 
-// JNI classes.
+// JNI handles.
 #include "handles/JniClass.h"
+#include "marshaling/NativeTypeContext.JniClass.h"
+
 #include "handles/JniObject.h"
 #include "marshaling/NativeTypeContext.JniObject.h"
-#include "marshaling/NativeTypeContext.JniClass.h"
 #include "marshaling/NativeObjectContext.h"
 
-// JNI member fields.
-#include "handles/MemberField.h"
+#include "handles/JniMemberField.h"
 #include "handles/StaticField.h"
 
-// JNI member functions.
 #include "utils/MemberFunctionInvocation.h"
-#include "utils/StaticFunctionInvocation.h"
 #include "handles/MemberFunction.h"
+
+#include "utils/StaticFunctionInvocation.h"
 #include "handles/StaticFunction.h"
 
 // JNI native function specification.
@@ -73,7 +73,7 @@ inline namespace Jni
 #include "virtual-machine/Environment.inl"
 #include "utils/NativeFunction.utils.inl"
 #include "handles/Object.inl"
-#include "handles/MemberField.inl"
+#include "handles/JniMemberField.inl"
 #include "handles/StaticField.inl"
 #include "handles/MemberFunction.inl"
 #include "handles/StaticFunction.inl"
