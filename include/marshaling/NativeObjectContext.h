@@ -1,43 +1,46 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	/// @brief	Type translation traits specification for object types.
-	template< class TObjectType, bool IS_OBJECT_HANDLE = std::is_base_of<Object, TObjectType>::value >
-	struct ObjectTypeTraits;
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// Safe environment context for object handle.
+	template< typename TObjectHandle, bool IS_VALID_HANDLE >
+	struct ObjectContext;
 
-	/// @brief	Type translation traits specification for object types.
-	template< class TObjectType >
-	struct ObjectTypeTraits<TObjectType, true> : EnvironmentTraits<jobject>
+	// JNI environment context for object handle.
+	template< typename TObjectHandle >
+	struct ObjectContext<TObjectHandle, true> : JniContext<jobject>
 	{
-		/// @brief	Count of local references required to store this type in Java local frame.
+		// Count of local references required to store this type in JNI local frame.
 		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
 
-		/// @brief	Java type signature.
-		using Signature		= CombinedStaticString< StaticString<'L'>, typename TObjectType::ClassPath, StaticString<';'> >;
+		// JNI type signature.
+		using Signature		= Black::StaticStrings::Join<Black::StaticString<'L'>, typename TObjectHandle::ClassPath, Black::StaticString<';'>>;
 
-		/// @brief	C++ native type.
-		using NativeType	= TObjectType;
+		// C++ native type.
+		using NativeType	= TObjectHandle;
 
-		/// @brief	JNI representation of Java type.
-		using JavaType		= jobject;
+		// JNI type
+		using JniType		= jobject;
 
-		/// @brief	Type translation from Java space to C++ space.
-		static inline void FromJava( const JavaType& source, NativeType& destination )
-		{
-			destination = source;
-		}
+		// Type translation from JNI space to C++ space.
+		static inline void FromJni( const JniType& source, NativeType& destination )	{ destination = source; };
 
-		/// @brief	Type translation from C++ space to Java space.
-		static inline void ToJava( const NativeType& source, JavaType& destination )
-		{
-			destination = *source;
-		}
+		// Type translation from C++ space to JNI space.
+		static inline void ToJni( const NativeType& source, JniType& destination )		{ destination = *source; };
 	};
+}
+
+
+	// JNI environment context for object handle.
+	template< typename TObjectHandle >
+	using NativeObjectContext = Traits::ObjectContext<TObjectHandle, Black::IS_BASE_OF<Black::JniObject, TObjectHandle>>;
+}
 }
 }
