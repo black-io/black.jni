@@ -50,10 +50,10 @@ inline namespace Jni
 #include "handles/JniMemberField.h"
 #include "handles/JniStaticField.h"
 
-#include "utils/MemberFunctionInvocation.h"
+#include "handles/MemberFunctionInvocation.h"
 #include "handles/MemberFunction.h"
 
-#include "utils/StaticFunctionInvocation.h"
+#include "handles/StaticFunctionInvocation.h"
 #include "handles/StaticFunction.h"
 
 // JNI native function specification.
@@ -77,8 +77,8 @@ inline namespace Jni
 #include "handles/JniStaticField.inl"
 #include "handles/MemberFunction.inl"
 #include "handles/StaticFunction.inl"
-#include "utils/MemberFunctionInvocation.inl"
-#include "utils/StaticFunctionInvocation.inl"
+#include "handles/MemberFunctionInvocation.inl"
+#include "handles/StaticFunctionInvocation.inl"
 #include "marshaling/NativeTypeContext.FromJni.inl"
 #include "marshaling/NativeTypeContext.ToJni.inl"
 #include "marshaling/JniArrayTranslation.FromJni.inl"
