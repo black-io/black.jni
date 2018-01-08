@@ -48,7 +48,7 @@ inline namespace Jni
 #include "marshaling/NativeObjectContext.h"
 
 #include "handles/JniMemberField.h"
-#include "handles/StaticField.h"
+#include "handles/JniStaticField.h"
 
 #include "utils/MemberFunctionInvocation.h"
 #include "handles/MemberFunction.h"
@@ -74,7 +74,7 @@ inline namespace Jni
 #include "utils/NativeFunction.utils.inl"
 #include "handles/Object.inl"
 #include "handles/JniMemberField.inl"
-#include "handles/StaticField.inl"
+#include "handles/JniStaticField.inl"
 #include "handles/MemberFunction.inl"
 #include "handles/StaticFunction.inl"
 #include "utils/MemberFunctionInvocation.inl"
