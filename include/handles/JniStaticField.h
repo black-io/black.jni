@@ -1,69 +1,82 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/// @brief	Handle of arbitrary Java static field.
+inline namespace Jni
+{
+inline namespace Handles
+{
+	// Static-field handle for JNI objects.
 	template< typename TNativeType >
-	class StaticField final
+	class JniStaticField final
 	{
-		friend class Environment;
+		friend class Environment;	// Grant access to private `GetValue` functions.
+
+	// Construction and assignment.
 	public:
-		StaticField() = default;
-		StaticField( const StaticField& other );
-		StaticField( StaticField&& other );
-		StaticField( const std::string& class_name, const std::string& field_name );
-		StaticField( const Class& class_handle, const std::string& field_name );
-		StaticField( const char* class_name, const char* field_name );
-		StaticField( const Class& class_handle, const char* field_name );
-		StaticField( const std::string& class_name, const std::string& field_name, IgnoreFailure );
-		StaticField( const Class& class_handle, const std::string& field_name, IgnoreFailure );
-		StaticField( const char* class_name, const char* field_name, IgnoreFailure );
-		StaticField( const Class& class_handle, const char* field_name, IgnoreFailure );
+		JniStaticField() = default;
+
+		JniStaticField( const JniStaticField& other );
+		JniStaticField( JniStaticField&& other );
+
+		JniStaticField( Black::StringView class_name, Black::StringView field_name );
+		JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name );
+
+		JniStaticField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure );
+		JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
 
 
-		/// @brief	Get the value of field.
+		inline const JniStaticField& operator = ( const JniStaticField& other );
+		inline const JniStaticField& operator = ( JniStaticField&& other );
+
+	// Public interface.
+	public:
+		// Get the value of field.
 		inline const bool GetValue( TNativeType& value_storage ) const;
 
-		/// @brief	Get the value of field.
+		// Get the value of field.
 		inline TNativeType GetValue( const TNativeType& default_value ) const;
 
-		/// @brief	Set the value of field.
+		// Set the value of field.
 		inline const bool SetValue( const TNativeType& value_storage ) const;
 
 
-		/// @brief	Check the field handle carries valid value.
+		// Check the field handle is valid.
 		inline const bool IsValid() const				{ return m_class_handle.IsValid() && ( m_field_id != 0 ); };
 
-		/// @brief	Get the JNI id of Java static field.
+		// Get the field id.
 		inline jfieldID GetFieldId() const				{ return m_field_id; };
-
-
-		inline const StaticField& operator = ( const StaticField& other );
-		inline const StaticField& operator = ( StaticField&& other );
 
 
 		inline explicit operator const bool () const	{ return IsValid(); };
 		inline jfieldID operator * () const				{ return GetFieldId(); };
 
 	private:
-		using JavaType	= typename Marshaling::JavaType<TNativeType>;
-		using Signature	= typename Marshaling::TypeSignature<TNativeType>;
+		// JNI-side type for used native one.
+		using JniType		= Black::JniType<TNativeType>;
 
-		/// @brief	Get the value of field.
+		// JNI type signature.
+		using Signature		= Black::NativeTypeSignature<TNativeType>;
+
+		// JNI environment context.
+		using JniContext	= Black::NativeTypeContext<TNativeType>;
+
+
+		// Get the value of field.
 		inline const bool GetValue( JNIEnv* local_env, TNativeType& value_storage ) const;
 
-		/// @brief	Set the value of field.
+		// Set the value of field.
 		inline const bool SetValue( JNIEnv* local_env, const TNativeType& value_storage ) const;
 
 	private:
-		constexpr static size_t LOCAL_FRAME_SIZE	= Marshaling::NativeTypeTraits<TNativeType>::LOCAL_FRAME_SIZE;
-		constexpr static auto FIELD_READ_HANDLER	= Marshaling::NativeTypeTraits<TNativeType>::STATIC_FIELD_READ_HANDLER;
-		constexpr static auto FIELD_WRITE_HANDLER	= Marshaling::NativeTypeTraits<TNativeType>::STATIC_FIELD_WRITE_HANDLER;
+		constexpr static size_t LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
+		constexpr static auto FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
+		constexpr static auto FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
 
 		Class		m_class_handle;				// Handle to class of field.
 		jfieldID	m_field_id		= nullptr;	// Field id for JNI.
 	};
+}
+}
 }

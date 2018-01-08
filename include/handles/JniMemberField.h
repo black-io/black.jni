@@ -27,8 +27,8 @@ inline namespace Handles
 		JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
 
 
-		inline const JniMemberField& operator = ( const JniMemberField& other )	{ m_field_id = other.m_field_id; return *this; };
-		inline const JniMemberField& operator = ( JniMemberField&& other )		{ m_field_id = std::move( other.m_field_id ); return *this; };
+		inline const JniMemberField& operator = ( const JniMemberField& other );
+		inline const JniMemberField& operator = ( JniMemberField&& other );
 
 	// Public interface.
 	public:
@@ -55,7 +55,7 @@ inline namespace Handles
 		// Check the field handle carries valid value.
 		inline const bool IsValid() const				{ return m_field_id != 0; };
 
-		// Get the JNI id of Java member field.
+		// Get the field id.
 		inline jfieldID GetFieldId() const				{ return m_field_id; };
 
 
