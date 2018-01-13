@@ -51,7 +51,7 @@ inline namespace Jni
 #include "handles/JniStaticField.h"
 
 #include "handles/MemberFunctionEntry.h"
-#include "handles/MemberFunction.h"
+#include "handles/JniMemberFunction.h"
 
 #include "handles/StaticFunctionInvocation.h"
 #include "handles/StaticFunction.h"
@@ -75,7 +75,7 @@ inline namespace Jni
 #include "handles/Object.inl"
 #include "handles/JniMemberField.inl"
 #include "handles/JniStaticField.inl"
-#include "handles/MemberFunction.inl"
+#include "handles/JniMemberFunction.inl"
 #include "handles/StaticFunction.inl"
 #include "handles/MemberFunctionEntry.inl"
 #include "handles/StaticFunctionInvocation.inl"
