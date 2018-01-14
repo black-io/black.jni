@@ -74,8 +74,8 @@ inline namespace Handles
 		constexpr static auto FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
 		constexpr static auto FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
 
-		Class		m_class_handle;				// Handle to class of field.
-		jfieldID	m_field_id		= nullptr;	// Field id for JNI.
+		Black::JniClass	m_class_handle;				// Handle to class of field.
+		jfieldID		m_field_id		= nullptr;	// Field id for JNI.
 	};
 }
 }
