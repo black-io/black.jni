@@ -24,10 +24,10 @@ namespace Traits
 
 	private:
 		// Type of function result from JNI side.
-		using JniResult = Black::JniType<TResult>;
+		using JniResult		= Black::JniType<TResult>;
 
 		// JNI environment context.
-		using JniContext	= Black::NativeTypeContext<TNativeType>;
+		using JniContext	= Black::NativeTypeContext<TResult>;
 
 	private:
 		constexpr static auto FUNCTION_HANDLER				= JniContext::FUNCTION_HANDLER;
