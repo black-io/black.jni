@@ -43,7 +43,7 @@ inline namespace Handles
 		inline jmethodID GetFunctionId() const			{ return m_function_id; };
 
 		// Get the signature of function.
-		inline const char* GetSignature() const			{ return Signature::GetString(); };
+		inline Black::StringView GetSignature() const	{ return { Signature::GetData(), Signature::GetLength() }; };
 
 
 		inline explicit operator const bool () const	{ return IsValid(); };
