@@ -54,7 +54,7 @@ inline namespace Jni
 #include "handles/JniMemberFunction.h"
 
 #include "handles/StaticFunctionEntry.h"
-#include "handles/StaticFunction.h"
+#include "handles/JniStaticFunction.h"
 
 // JNI native function specification.
 #include "utils/NativeFunction.h"
@@ -76,7 +76,7 @@ inline namespace Jni
 #include "handles/JniMemberField.inl"
 #include "handles/JniStaticField.inl"
 #include "handles/JniMemberFunction.inl"
-#include "handles/StaticFunction.inl"
+#include "handles/JniStaticFunction.inl"
 #include "handles/MemberFunctionEntry.inl"
 #include "handles/StaticFunctionEntry.inl"
 #include "marshaling/NativeTypeContext.FromJni.inl"
