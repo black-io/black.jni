@@ -72,7 +72,7 @@ inline namespace Jni
 #include "virtual-machine/VirtualMachine.inl"
 #include "virtual-machine/Environment.inl"
 #include "utils/NativeFunction.utils.inl"
-#include "handles/Object.inl"
+#include "handles/JniObject.inl"
 #include "handles/JniMemberField.inl"
 #include "handles/JniStaticField.inl"
 #include "handles/JniMemberFunction.inl"
