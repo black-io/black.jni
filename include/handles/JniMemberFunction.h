@@ -1,85 +1,74 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/// @brief	Handle of arbitrary Java member function.
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	class MemberFunction final
+inline namespace Jni
+{
+inline namespace Handles
+{
+	// Member-function handle for JNI objects.
+	template< typename TResult, typename... TArguments >
+	class JniMemberFunction final
 	{
-		friend class Environment;
+		friend class Black::Jni::VirtualMachine::JniEnvironment; // Grant access to function calls.
+
+	// Construction and assignment.
 	public:
-		MemberFunction() = default;
-		MemberFunction( const MemberFunction& other );
-		MemberFunction( MemberFunction&& other );
-		MemberFunction( const std::string& class_name, const std::string& function_name );
-		MemberFunction( const Class& class_handle, const std::string& function_name );
-		MemberFunction( const char* class_name, const char* function_name );
-		MemberFunction( const Class& class_handle, const char* function_name );
-		MemberFunction( const std::string& class_name, const std::string& function_name, IgnoreFailure );
-		MemberFunction( const Class& class_handle, const std::string& function_name, IgnoreFailure );
-		MemberFunction( const char* class_name, const char* function_name, IgnoreFailure );
-		MemberFunction( const Class& class_handle, const char* function_name, IgnoreFailure );
+		JniMemberFunction() = default;
+		JniMemberFunction( const JniMemberFunction& other );
+		JniMemberFunction( JniMemberFunction&& other );
+		JniMemberFunction( Black::StringView class_name, Black::StringView funtion_name );
+		JniMemberFunction( Black::StringView class_name, Black::StringView funtion_name, Black::IgnoreFailure );
+		JniMemberFunction( const Black::JniClass& class_handle, Black::StringView funtion_name );
+		JniMemberFunction( const Black::JniClass& class_handle, Black::StringView funtion_name, Black::IgnoreFailure );
 
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType Call( const Object& object_handle, const TNativeArguments&... arguments ) const;
+		inline JniMemberFunction& operator = ( const JniMemberFunction& other );
+		inline JniMemberFunction& operator = ( JniMemberFunction&& other );
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType Call( jobject object_ref, const TNativeArguments&... arguments ) const;
+	// Public interface.
+	public:
+		// Call the function for given object, using given arguments.
+		inline TResult Call( const Black::JniObject& object_handle, const TArguments&... arguments ) const;
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType CallNonVirtual( const Object& object_handle, const TNativeArguments&... arguments ) const;
-
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType CallNonVirtual( jobject object_ref, const TNativeArguments&... arguments ) const;
-
-
-		/// @brief	Check the field handle carries valid value.
-		inline const bool IsValid() const										{ return m_function_id != 0; };
-
-		/// @brief	Get the JNI id of Java object method.
-		inline jmethodID GetFunctionId() const									{ return m_function_id; };
-
-		/// @brief	Get the function signature string.
-		inline const char* GetSignature() const									{ return Signature::GetString(); };
+		// Call the non-virtual function for given object, using given arguments.
+		inline TResult CallNonVirtual( const Black::JniObject& object_handle, const TArguments&... arguments ) const;
 
 
-		inline const MemberFunction& operator = ( const MemberFunction& other )	{ m_function_id = other.m_function_id; return *this; };
-		inline const MemberFunction& operator = ( MemberFunction&& other )		{ m_function_id = std::move( other.m_function_id ); return *this; };
+		// Check the field handle carries valid value.
+		inline const bool IsValid() const				{ return m_function_id != 0; };
+
+		// Get the function id.
+		inline jmethodID GetFunctionId() const			{ return m_function_id; };
+
+		// Get the signature of function.
+		inline const char* GetSignature() const			{ return Signature::GetString(); };
 
 
-		inline explicit operator const bool () const							{ return IsValid(); };
-		inline jmethodID operator * () const									{ return GetFunctionId(); };
+		inline explicit operator const bool () const	{ return IsValid(); };
+		inline jmethodID operator * () const			{ return GetFunctionId(); };
 
+	// Private interface.
 	private:
-		using Signature				= FunctionSignature< Marshaling::TypeSignature<TNativeReturnType>, Marshaling::TypeSignature<TNativeArguments>... >;
-		using FunctionInvocation	= Utils::MemberFunctionInvocation<TNativeReturnType, TNativeArguments...>;
+		// JNI type signature.
+		using Signature		= Black::NativeTypeSignature<TNativeType>;
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType Call( JNIEnv* local_env, const Object& object_handle, const TNativeArguments&... arguments ) const;
+		// Entry-point.
+		using EntryPoint	= Traits::MemberFunctionEntry<TResult, TArguments...>;
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType Call( JNIEnv* local_env, jobject object_ref, const TNativeArguments&... arguments ) const;
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType CallNonVirtual(
-			JNIEnv* local_env,
-			const Object& object_handle,
-			const TNativeArguments&... arguments
-		) const;
+		// Call the function for given object and local JNI environment, using given arguments.
+		inline TResult Call( JNIEnv* local_env, jobject object_ref, const TArguments&... arguments ) const;
 
-		/// @brief	Call the function with given arguments for given Java object and return result.
-		inline TNativeReturnType CallNonVirtual(
-			JNIEnv* local_env,
-			jobject object_ref,
-			const TNativeArguments&... arguments
-		) const;
+		// Call the non-virtual function for given object and local JNI environment, using given arguments.
+		inline TResult CallNonVirtual( JNIEnv* local_env, jobject object_ref, const TArguments&... arguments ) const;
 
+	// Private state.
 	private:
 		Class		m_class_handle;				// Handle to class owning the static method.
 		jmethodID	m_function_id	= nullptr;	// Id of Java object method.
 	};
+}
+}
 }
