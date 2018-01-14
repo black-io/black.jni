@@ -16,11 +16,14 @@ inline namespace Handles
 	// Construction and assignment.
 	public:
 		JniMemberFunction() = default;
+
 		JniMemberFunction( const JniMemberFunction& other );
 		JniMemberFunction( JniMemberFunction&& other );
+
 		JniMemberFunction( Black::StringView class_name, Black::StringView funtion_name );
-		JniMemberFunction( Black::StringView class_name, Black::StringView funtion_name, Black::IgnoreFailure );
 		JniMemberFunction( const Black::JniClass& class_handle, Black::StringView funtion_name );
+
+		JniMemberFunction( Black::StringView class_name, Black::StringView funtion_name, Black::IgnoreFailure );
 		JniMemberFunction( const Black::JniClass& class_handle, Black::StringView funtion_name, Black::IgnoreFailure );
 
 
@@ -66,8 +69,8 @@ inline namespace Handles
 
 	// Private state.
 	private:
-		Class		m_class_handle;				// Handle to class owning the static method.
-		jmethodID	m_function_id	= nullptr;	// Id of Java object method.
+		Black::JniClass	m_class_handle;				// Handle to class owning the static method.
+		jmethodID		m_function_id	= nullptr;	// Id of Java object method.
 	};
 }
 }
