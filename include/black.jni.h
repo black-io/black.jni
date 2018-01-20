@@ -57,7 +57,7 @@ inline namespace Jni
 #include "handles/JniStaticFunction.h"
 
 // JNI native function specification.
-#include "utils/NativeFunction.h"
+#include "utils/JniNativeBindingTable.h"
 #include "utils/NativeFunction.utils.h"
 #include "utils/NativeFunction.macros.h"
 
