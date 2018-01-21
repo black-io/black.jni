@@ -380,15 +380,19 @@ namespace Traits
 
 	// JNI environment context for regular native type.
 	template< typename TNativeType >
-	using NativeTypeContext		= Traits::NativeContext<TNativeType>;
+	using NativeTypeContext			= Traits::NativeContext<TNativeType>;
 
 	// JNI representation for regular native type.
 	template< typename TNativeType >
-	using JniType				= typename Traits::NativeContext<TNativeType>::JniType;
+	using JniType					= typename Traits::NativeContext<TNativeType>::JniType;
 
 	// JNI type signature for regular native type.
 	template< typename TNativeType >
-	using NativeTypeSignature	= typename Traits::NativeContext<TNativeType>::Signature;
+	using NativeTypeSignature		= typename Traits::NativeContext<TNativeType>::Signature;
+
+	// JNI function signature for native function.
+	template< typename TResult, typename... TArguments >
+	using NativeFunctionSignature	= Black::JniFunctionSignature<Black::JniType<TResult>, Black::JniType<TArguments>...>;
 
 	/**
 		@brief	Regular converting function from Jni type to C++ one.
