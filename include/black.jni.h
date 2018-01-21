@@ -58,7 +58,7 @@ inline namespace Jni
 
 // JNI native function specification.
 #include "utils/NativeFunction.h"
-#include "utils/JniNativeBindingTable.h"
+#include "utils/NativeBindingTable.h"
 
 // JNI Virtual machine and environment.
 #include "virtual-machine/HandlesCacheEntry.h"
