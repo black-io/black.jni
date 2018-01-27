@@ -1,93 +1,85 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/// @brief
-	class VirtualMachine final
+inline namespace Jni
+{
+inline namespace VirtualMachine
+{
+	/**
+		@brief	Global connection to topside virtual machine.
+		This class is the most major and most crucial part of interaction with JNI.
+	*/
+	class JniConnection final : private Black::NonTransferable
 	{
-		friend class Class;	// Intensively uses `GetClassReference` functions.
+		friend class Black::Jni::Handles::JniClass;	// Intensively uses `m_stored_classes`.
+
+	// Public interface.
 	public:
-		constexpr static int32_t JNI_VERSION = JNI_VERSION_1_6;
+		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
+		static const bool Initialize( JavaVM* connection );
 
-		/// @brief	Initialize the instance with the given JVM.
-		static const bool Initialize( JavaVM* jvm );
+		// Finalize the JNI connection. Expected to be used only at `JNI_OnUnload` function.
+		static const bool Finalize();
 
-		/// @brief	Finalize the instance. All environment instances must be released before this function invoked.
-		static void Finalize();
 
-		/// @brief	Register native handlers for Java class via given binding table.
-		static const bool RegisterClassNatives( const NativeBindingTable& bindings );
+		// Register the native function handlers for JNI class.
+		static const bool RegisterClassNatives( const Black::NativeBindingTable& bindings );
 
-		/// @brief	Register native handlers for list of Java classes via given list of binding tables.
-		static const bool RegisterClassNatives( std::initializer_list<NativeBindingTable> bindings );
+		// Register the native function handlers for list of JNI classes.
+		static const bool RegisterClassNatives( std::initializer_list<Black::NativeBindingTable> bindings );
 
-		/// @brief	Get the `Environment` instance for current thread.
+
+		// Get the thread-local JNI environment.
 		static JNIEnv* GetLocalEnvironment();
 
-		/// @brief	Get the storage for handles table.
-		template< typename TCachedHandles >
-		static inline Utils::HandlesStorageEntry<TCachedHandles>* GetHandlesStorage();
 
-		/// @brief	Get the global `JavaVM` instance.
-		static inline JavaVM* GetJvm()				{ return GetInstance().m_jvm; };
+		// Check that the connection is properly initialized.
+		static inline const bool IsValid()		{ return GetConnection() != nullptr; };
 
-		/// @brief	Check the `VirtualMachine` is properly initialized.
-		static inline const bool IsValid()			{ return GetInstance().m_jvm != nullptr; };
+		// Get the connection to virtual machine.
+		static inline JavaVM* GetConnection()	{ return GetInstance().m_connection; };
 
-		/// @brief	Get the mutex for handles cache.
-		static inline Utils::Mutex& GetCacheMutex()	{ return GetInstance().m_cache_mutex; };
-
+	// Private interface.
 	private:
-		/// @brief	Access to single instance (using Meyers's implementation).
-		static VirtualMachine& GetInstance();
+		// Get the global instance of connection.
+		static JniConnection& GetInstance();
 
-		/// @brief	Deleter of shared class.
-		static void DeleteSharedClass( jclass value );
-
-		/// @brief	Detach thread-local JNIEnv instance from thread.
+		// Thread-local JNI environment termination routine.
 		static void DetachLocalEnv( void* local_env );
 
-	private:
-		VirtualMachine() = default;
 
+		JniConnection() = default;
+
+
+		// Retrieve the instance of class loader.
 		const bool CaptureClassLoader();
-		const bool AcquireClassInterface();
 
-		std::shared_ptr<_jclass> GetClassReference( jobject local_object_ref );
-		std::shared_ptr<_jclass> GetClassReference( jclass local_class_ref );
-		std::shared_ptr<_jclass> GetClassReference( const char* class_name );
-		std::shared_ptr<_jclass> LoadClass( const char* class_name );
-
+	// Private state.
 	private:
-		// ['Java class name'] -> weak `jclass` pointer. Used for shared owning of `jclass` instances.
-		using WeakClassStorage = std::unordered_map< std::string, std::weak_ptr<_jclass> >;
+		JavaVM*						m_connection		= nullptr;	// Current connection to virtual machine.
+		JNIEnv*						m_main_env			= nullptr;	// Thread-local environment for main thread.
+		int64_t						m_main_thread_id	= 0;		// Id of main thread.
+		int64_t						m_thread_detach_key	= 0;		// Thread-local environment detach key.
 
-		Utils::Mutex		m_cache_mutex;					// Synchronization mutex for safe multi-thread access to handles cache.
-		Utils::Mutex		m_classes_mutex;				// Synchronization mutex for safe multi-thread access to class references.
-		JavaVM*				m_jvm				= nullptr;	// Instance of Java virtual machine.
-		JNIEnv*				m_main_env			= nullptr;	// Instance of Environment for the main thread.
-		int64_t				m_main_thread_id	= 0;		// TID of main thread, where the initialization was invoked from.
-		int64_t				m_detach_key		= 0;		// ID of thread-local key, which stores the local `JNIEnv` instance.
+		Traits::SharedClassStorage	m_stored_classes;				// Storage for shared classes.
 
-		WeakClassStorage	m_shared_classes;				// Storage for found Java class descriptors.
-
+	// Persistently cached handles.
 	private:
-		Object	m_class_loader;
+		Black::JniObject										m_class_loader;				// Instance of `java.lang.ClassLoader`.
 
-		MemberFunction<Class, std::string>	m_load_class_func;		// `java.lang.Class java.lang.ClassLoader::loadClass( java.lang.String )`
+		Black::JniMemberFunction<Black::JniClass, std::string>	m_load_class_func;			// `java.lang.Class java.lang.ClassLoader.loadClass( java.lang.String )`
 
-		MemberFunction<Class>				m_get_super_class_func;	// `java.lang.Class java.lang.Class::getSuperClass()`
-		MemberFunction<std::string>			m_get_canonical_name;	// `java.lang.String java.lang.Class::getCanonicalName()`
-		MemberFunction<std::string>			m_get_name;				// `java.lang.String java.lang.Class::getName()`
-		MemberFunction<std::string>			m_get_simple_name;		// `java.lang.String java.lang.Class::getSimpleName()`
+		Black::JniMemberFunction<Black::JniClass>				m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
+		Black::JniMemberFunction<std::string>					m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
+		Black::JniMemberFunction<std::string>					m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
+		Black::JniMemberFunction<std::string>					m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
 
+	// Persistent cache.
 	private:
-		// ['Table type index'] -> pointer to allocated table.
-		using HandlesCache = std::unordered_map<std::type_index, std::unique_ptr<Utils::HandlesCacheEntry>>;
-
-		HandlesCache		m_handles_cache;				// Cache for handles tables.
+		Traits::SharedStateCache	m_cached_states;	// Cache for shared states.
 	};
+}
+}
 }

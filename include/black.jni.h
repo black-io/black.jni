@@ -66,6 +66,7 @@ inline namespace Jni
 
 // JNI Virtual machine and environment.
 #include "virtual-machine/SharedStateCache.h"
+#include "virtual-machine/SharedClassStorage.h"
 #include "virtual-machine/VirtualMachine.h"
 #include "virtual-machine/Environment.h"
 

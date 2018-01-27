@@ -21,7 +21,7 @@ namespace Traits
 		The cache is not thread-safe inside, but it supplies the `Black::Mutex` interface to implement thread-safety on higher levels of execution.
 		It will be more efficient to lock the mutex when the storage is actually used by consumer.
 	*/
-	class SharedStateCache final
+	class SharedStateCache final : private Black::NonTransferable
 	{
 	public:
 		// Get the cached storage for shared state.
@@ -33,10 +33,10 @@ namespace Traits
 		inline const Black::Mutex& GetMutex() const		{ return m_latch; };
 
 	private:
-		using SharedStateStorage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
+		using Storage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
 
 		Black::CriticalSection	m_latch;	// Synchronization latch.
-		SharedStateStorage		m_storage;	// Permanent storage for shared states.
+		Storage					m_storage;	// Permanent storage for shared states.
 	};
 }
 }
