@@ -1,59 +1,55 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	/**
-		@brief	Special accessor to table of JNI handles for some class, stored in `Jni::VirtualMachine`.
-		`Jni::VirtualMachine` can store some already constructed handles. It may keep your time when constructing a lot of object instances.
-		Or, it may keep your time when the instance of such JNI object frequently constructed and has small lifetime.
-		Your handles for such object may be stored inside of some 'table' (`struct` for ex.) and you may get access to it via instance of `CachedHandles` template.
-
-		@note	The tables of JNI handles always stored by `Jni::VirtualMachine`. So it have to be ready before the c-tor of `Jni::CachedHandles`.
-
-		@tparam	TCachedHandles	Type of the cached table.
-		@tparam	IS_PERMANENT	Indicates that the cached table must be allocated all the time the `Jni::VirtualMachine` initialized.
-	*/
-	template< typename TCachedHandles, bool IS_PERMANENT = false >
-	class CachedHandles final
+inline namespace Jni
+{
+inline namespace VirtualMachine
+{
+namespace Traits
+{
+	//
+	template< typename TState, bool IS_PERSISTENT = false >
+	class SharedObjectState final
 	{
-	// Construction and assignation.
+	// Construction and assignment.
 	public:
-		CachedHandles() = default;
-		CachedHandles( const CachedHandles& other );
-		CachedHandles( CachedHandles&& other );
-		CachedHandles( const CachedHandles<TCachedHandles, !IS_PERMANENT>& other );
-		CachedHandles( CachedHandles<TCachedHandles, !IS_PERMANENT>&& other );
-		~CachedHandles();
+		SharedObjectState() = default;
+		SharedObjectState( const SharedObjectState& other );
+		SharedObjectState( SharedObjectState&& other );
+		~SharedObjectState();
 
-		// There is nothing different between two instances of same type.
-		inline CachedHandles& operator = ( const CachedHandles& other );
-		inline CachedHandles& operator = ( CachedHandles&& other );
-		inline CachedHandles& operator = ( const CachedHandles<TCachedHandles, !IS_PERMANENT>& other );
-		inline CachedHandles& operator = ( CachedHandles<TCachedHandles, !IS_PERMANENT>&& other );
 
-	// public interface.
+		inline SharedObjectState& operator = ( const SharedObjectState& other );
+		inline SharedObjectState& operator = ( SharedObjectState&& other );
+
+	// Public interface.
 	public:
-		/// @brief	Get the cached handles.
-		inline const TCachedHandles& GetHandles() const		{ return *GetStorage().GetHandles(); };
+		// Get the shared state.
+		inline const TState& GetState() const		{ return *GetStorage().GeState(); };
 
-		inline const TCachedHandles* operator -> () const	{ return GetStorage().GetHandles(); };
+		inline const TState* operator -> () const	{ return GetStorage().GeState(); };
 
 	// Private interface.
 	private:
-		/// @brief	Lazy initialization of storage.
-		inline Utils::HandlesStorageEntry<TCachedHandles>& GetStorage() const;
+		// Lazy initialization for state storage.
+		inline SharedStateStorage<TState>& GetStorage() const;
 
-		///
+		// Retain the valid storage.
 		inline void RetainStorage() const;
 
-		///
+		// Release the valid storage.
 		inline void ReleaseStorage() const;
+
+		// Make the valid storage to be persistent.
+		inline void MakeStoragePersistent() const;
 
 	// Private state.
 	private:
-		mutable Utils::HandlesStorageEntry<TCachedHandles>*	m_storage	= nullptr;
+		mutable SharedStateStorage<TState>*	m_storage = nullptr;
 	};
+}
+}
+}
 }
