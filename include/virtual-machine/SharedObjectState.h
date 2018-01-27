@@ -11,18 +11,18 @@ namespace Traits
 {
 	//
 	template< typename TState, bool IS_PERSISTENT = false >
-	class SharedObjectState final
+	class SharedState final
 	{
 	// Construction and assignment.
 	public:
-		SharedObjectState() = default;
-		SharedObjectState( const SharedObjectState& other );
-		SharedObjectState( SharedObjectState&& other );
-		~SharedObjectState();
+		SharedState() = default;
+		SharedState( const SharedState& other );
+		SharedState( SharedState&& other );
+		~SharedState();
 
 
-		inline SharedObjectState& operator = ( const SharedObjectState& other );
-		inline SharedObjectState& operator = ( SharedObjectState&& other );
+		inline SharedState& operator = ( const SharedState& other );
+		inline SharedState& operator = ( SharedState&& other );
 
 	// Public interface.
 	public:
