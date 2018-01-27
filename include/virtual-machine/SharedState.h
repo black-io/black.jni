@@ -9,7 +9,7 @@ inline namespace VirtualMachine
 {
 namespace Traits
 {
-	//
+	// The shared state entity.
 	template< typename TState, bool IS_PERSISTENT = false >
 	class SharedState final
 	{
