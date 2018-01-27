@@ -44,7 +44,7 @@ inline namespace Jni
 #include "marshaling/NativeTypeContext.JniClass.h"
 
 #include "virtual-machine/SharedStateStorage.h"
-#include "virtual-machine/SharedObjectState.h"
+#include "virtual-machine/SharedState.h"
 #include "handles/JniObject.h"
 #include "marshaling/NativeTypeContext.JniObject.h"
 #include "marshaling/NativeObjectContext.h"
