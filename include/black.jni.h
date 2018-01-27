@@ -68,7 +68,7 @@ inline namespace Jni
 #include "virtual-machine/SharedStateCache.h"
 #include "virtual-machine/SharedClassStorage.h"
 #include "virtual-machine/JniConnection.h"
-#include "virtual-machine/Environment.h"
+#include "virtual-machine/JniEnvironment.h"
 
 // Deferred implementation of JNI functionality.
 #include "virtual-machine/CachedHandles.inl"
