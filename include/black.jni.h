@@ -3,6 +3,8 @@
 // Dependencies.
 #include <black.core.h>
 
+#include <typeindex>
+
 
 namespace Black
 {
