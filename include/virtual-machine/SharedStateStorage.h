@@ -21,7 +21,7 @@ namespace Traits
 	class SharedStateEntity : private Black::NonTransferable
 	{
 	public:
-		virtual ~SharedStateEntity();
+		virtual ~SharedStateEntity() = default;
 
 	protected:
 		SharedStateEntity() = default;
