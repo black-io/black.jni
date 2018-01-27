@@ -1,101 +1,74 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
+{
+inline namespace Jni
+{
+inline namespace VirtualMachine
 {
 	/**
-		@brief		JNI Environment instance wrap for thread-local environment.
-		@note		Instances of `Environment` may not be stored in global memory.
-		@warning	Instances of `Environment` may not be used across the threads.
+		@brief		Thread-local JNI environment.
+		@warning	The instance of this class may not be used in other thread than the instance allocated.
+		@note		Its not recommended to store `JniEnvironment` instances in global memory.
 
-		`Environment` instance represents the thread-local environment of JNI.
+		This class is only wrap, there are may be no needs to store instances of one.
+		The instance is supposed to be allocated only on stack and only in short scope of function.
+		There are no copying or moving of instances allowed.
 	*/
-	class Environment final
+	class JniEnvironment final : private Black::NonTransferable
 	{
 	public:
-		template< typename TDesiredType, typename TGivenType >
-		using EnableConvertible = typename std::enable_if<std::is_convertible<TGivenType, TDesiredType>::value>::type;
+		JniEnvironment() = default;
 
-		template< bool... FLAGS >
-		struct FlagsContainer;
 
-		template< bool... FLAGS >
-		using TrueFlags = std::is_same< FlagsContainer<FLAGS..., true>, FlagsContainer<true, FLAGS...> >;
+		// Read the value into storage from given field of given JNI object.
+		template< typename TValue >
+		inline const bool GetValue( const Black::JniObject& objct_handle, const Black::JniMemberField<TValue>& field_hanle, TValue& value_storage ) const;
 
-	public:
-		Environment() = default;
+		// Read the value into storage from given static field.
+		template< typename TValue >
+		inline const bool GetValue( const Black::JniStaticField<TValue>& field_hanle, TValue& value_storage ) const;
 
-		/// @brief	Get the value of field belongs to object using the local JNI environment.
-		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
-		inline const bool GetValue(
-			const MemberField<TNativeType>& field_handle,
-			const Object& object_handle,
-			TValueType& value_storage
+		// Write the value from storage into given field of given object.
+		template< typename TValue >
+		inline const bool SetValue( const Black::JniObject& objct_handle, const Black::JniMemberField<TValue>& field_hanle, const TValue& value_storage ) const;
+
+		// Write the value from storage into given static field.
+		template< typename TValue >
+		inline const bool SetValue( const Black::JniStaticField<TValue>& field_hanle, const TValue& value_storage ) const;
+
+
+		// Call the member-function using given arguments.
+		template< typename TResult, typename... TArguments >
+		inline TResult Call(
+			const Black::JniObject& objct_handle,
+			const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
+			const TArguments&... arguments
 		) const;
 
-		/// @brief	Get the value of static field using the local JNI environment.
-		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
-		inline const bool GetValue( const StaticField<TNativeType>& field_handle, TValueType& value_storage ) const;
-
-		/// @brief	Set the value of field belongs to object using the local JNI environment.
-		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
-		inline const bool SetValue(
-			const MemberField<TNativeType>& field_handle,
-			const Object& object_handle,
-			const TValueType& value_storage
+		// Call the member-function using given arguments.
+		template< typename TResult, typename... TArguments >
+		inline TResult Call(
+			const Black::JniStaticFunction<TResult, TArguments...>& function_handle,
+			const TArguments&... arguments
 		) const;
 
-		/// @brief	Set the value of static field using the local JNI environment.
-		template< typename TNativeType, typename TValueType, typename = EnableConvertible<TNativeType, TValueType> >
-		inline const bool SetValue( const StaticField<TNativeType>& field_handle, const TValueType& value_storage ) const;
 
-		/// @brief	Call the member function on object using the local JNI environment.
-		template<
-			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
-			typename = typename std::enable_if< TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value >::type
-		>
-		inline TNativeReturnType Call(
-			const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-			const Object& object_handle,
-			const TValueArguments&... arguments
-		);
-
-		/// @brief	Call the member function non-virtually on object using the local JNI environment.
-		template<
-			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
-			typename = typename std::enable_if<TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value>::type
-		>
-		inline TNativeReturnType CallNonVirtual(
-			const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-			const Object& object_handle,
-			const TValueArguments&... arguments
-		);
-
-		/// @brief	Call the static function using the local JNI environment.
-		template<
-			typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments,
-			typename = typename std::enable_if<TrueFlags< std::is_convertible<TValueArguments, TNativeArguments>::value... >::value>::type
-		>
-		inline TNativeReturnType Call(
-			const StaticFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-			const TValueArguments&... arguments
-		);
-
+		// Check that the instance is valid.
 		inline const bool IsValid() const				{ return m_local_env != nullptr; };
 
-		inline JNIEnv* operator -> () const				{ return m_local_env; };
+		// Check that the instance is used in its own thread.
+		inline const bool IsThreadLocal() const			{ return m_owner_id == std::this_thread::get_id(); };
+
+
+		inline JNIEnv* operator -> () const				{ ENSURES_DEBUG( IsThreadLocal() ); return m_local_env; };
 		inline explicit operator const bool () const	{ return IsValid(); };
 
 	private:
-		Environment( const Environment& )				= delete;
-		Environment( Environment&& )					= delete;
-
-		Environment& operator = ( const Environment& )	= delete;
-		Environment& operator = ( Environment&& )		= delete;
-
-	private:
-		JNIEnv*	m_local_env	= VirtualMachine::GetLocalEnvironment();
+		JNIEnv* const			m_local_env	= JniConnection::GetLocalEnvironment();	// Thread-local JNI environment.
+		const std::thread::id	m_owner_id	= std::this_thread::get_id();			// Id of thread owning the environment.
 	};
+}
+}
 }
