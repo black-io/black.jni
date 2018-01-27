@@ -43,6 +43,7 @@ inline namespace Jni
 #include "handles/JniClass.h"
 #include "marshaling/NativeTypeContext.JniClass.h"
 
+#include "virtual-machine/SharedObjectState.h"
 #include "handles/JniObject.h"
 #include "marshaling/NativeTypeContext.JniObject.h"
 #include "marshaling/NativeObjectContext.h"
@@ -61,8 +62,6 @@ inline namespace Jni
 #include "utils/NativeBindingTable.h"
 
 // JNI Virtual machine and environment.
-#include "virtual-machine/HandlesCacheEntry.h"
-#include "virtual-machine/CachedHandles.h"
 #include "virtual-machine/VirtualMachine.h"
 #include "virtual-machine/Environment.h"
 
