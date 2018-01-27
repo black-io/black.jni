@@ -12,6 +12,11 @@ inline namespace Handles
 	{
 	// Construction and assignation.
 	public:
+		// Usable shared state to optimize the owning of function/field handles.
+		template< typename TState, bool IS_PERSISTENT = false >
+		using SharedState	= Black::Jni::VirtualMachine::Traits::SharedState<TState, IS_PERSISTENT>;
+
+
 		// Construct new object of given class and using given construction arguments.
 		template< typename... TArguments >
 		static JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
