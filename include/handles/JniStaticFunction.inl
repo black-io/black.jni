@@ -1,125 +1,66 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const StaticFunction& other )
-		: m_class_handle{ other.m_class_handle }
-		, m_function_id{ other.m_function_id }
+inline namespace Jni
+{
+inline namespace Handles
+{
+	template< typename TResult, typename... TArguments >
+	JniStaticFunction<TResult, TArguments...>::JniStaticFunction( Black::StringView class_name, Black::StringView function_name )
+		: JniStaticFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURES }
+	{
+		ENSURES( IsValid() );
+	}
+
+	template< typename TResult, typename... TArguments >
+	JniStaticFunction<TResult, TArguments...>::JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name )
+		: JniStaticFunction{ class_handle, function_name, Black::IGNORE_FALURES }
+	{
+		ENSURES( IsValid() );
+	}
+
+	template< typename TResult, typename... TArguments >
+	JniStaticFunction<TResult, TArguments...>::JniStaticFunction( Black::StringView class_name, Black::StringView function_name, Black::IgnoreFailure )
+		: JniStaticFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURES }
 	{
 
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( StaticFunction&& other )
-		: m_class_handle{ std::move( other.m_class_handle ) }
-		, m_function_id{ std::move( other.m_function_id ) }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const std::string& class_name, const std::string& function_name )
-		: StaticFunction{ class_name.c_str(), function_name.c_str() }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const Class& class_handle, const std::string& function_name )
-		: StaticFunction{ class_handle, function_name.c_str() }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const char* class_name, const char* function_name )
-		: StaticFunction{ Class{ class_name }, function_name }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const Class& class_handle, const char* function_name )
-		: StaticFunction{ class_handle, function_name, IGNORE_FAILURE }
-	{
-		JNI_ENSURES( m_function_id != 0 );
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const std::string& class_name, const std::string& function_name, IgnoreFailure )
-		: StaticFunction{ class_name.c_str(), function_name.c_str(), IGNORE_FAILURE }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const Class& class_handle, const std::string& function_name, IgnoreFailure )
-		: StaticFunction{ class_handle, function_name.c_str(), IGNORE_FAILURE }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const char* class_name, const char* function_name, IgnoreFailure )
-		: StaticFunction{ Class{ class_name }, function_name, IGNORE_FAILURE }
-	{
-
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	StaticFunction<TNativeReturnType, TNativeArguments...>::StaticFunction( const Class& class_handle, const char* function_name, IgnoreFailure )
+	template< typename TResult, typename... TArguments >
+	JniStaticFunction<TResult, TArguments...>::JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name, Black::IgnoreFailure )
 		: m_class_handle{ class_handle }
 	{
-		JNI_EXPECTS( m_class_handle );
-		JNI_RETURN_IF_E( !VirtualMachine::IsValid(), , "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
+		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+		JNIEnv* local_env = Black::JniConnection().GetLocalEnvironment();
 
-		auto local_env	= VirtualMachine::GetLocalEnvironment();
-		m_function_id	= local_env->GetStaticMethodID( *m_class_handle, function_name, Signature::GetString() );
+		ENSURES( m_class_handle );
+		m_function_id = local_env->GetStaticMethodID( *m_class_handle, function_name.data(), Signature::GetData() );
 
-		if( local_env->ExceptionCheck() == JNI_TRUE )
-		{
-			local_env->ExceptionDescribe();
-			local_env->ExceptionClear();
-			m_function_id = nullptr;
-		}
+		CRET( local_env->ExceptionCheck() != JNI_TRUE );
+
+		BLACK_NON_RELEASE_CODE( local_env->ExceptionDescribe() );
+		local_env->ExceptionClear();
+		m_function_id = nullptr;
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline TNativeReturnType StaticFunction<TNativeReturnType, TNativeArguments...>::Call( const TNativeArguments&... arguments ) const
+	template< typename TResult, typename... TArguments >
+	inline TResult JniStaticFunction<TResult, TArguments...>::Call( const TArguments&... arguments ) const
 	{
-		JNI_RETURN_IF_E( !VirtualMachine::IsValid(), TNativeReturnType(), "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		auto local_env	= VirtualMachine::GetLocalEnvironment();
+		CRETD( !Black::JniConnection::IsValid(), TResult(), LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 
 		return Call( local_env, arguments... );
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline TNativeReturnType StaticFunction<TNativeReturnType, TNativeArguments...>::Call( JNIEnv* local_env, const TNativeArguments&... arguments ) const
+	template< typename TResult, typename... TArguments >
+	inline TResult JniStaticFunction<TResult, TArguments...>::Call( JNIEnv* local_env, const TArguments&... arguments ) const
 	{
-		JNI_RETURN_IF_E( !IsValid(), TNativeReturnType(), "Function handle was not initialized properly." );
+		CRETD( !IsValid(), TResult(), LOG_CHANNEL, "Attempt to use invalid function handle." );
 
-		return FunctionInvocation{ local_env, *m_class_handle, m_function_id }.Call( arguments... );
+		return EntryPoint{ local_env, *m_class_handle, m_function_id }.Call( arguments... );
 	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline const StaticFunction<TNativeReturnType, TNativeArguments...>&
-	StaticFunction<TNativeReturnType, TNativeArguments...>::operator=( const StaticFunction& other )
-	{
-		m_class_handle	= other.m_class_handle;
-		m_function_id	= other.m_function_id;
-		return *this;
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline const StaticFunction<TNativeReturnType, TNativeArguments...>&
-	StaticFunction<TNativeReturnType, TNativeArguments...>::operator=( StaticFunction&& other )
-	{
-		m_class_handle	= std::move( other.m_class_handle );
-		m_function_id	= std::move( other.m_function_id );
-		return *this;
-	}
+}
+}
 }

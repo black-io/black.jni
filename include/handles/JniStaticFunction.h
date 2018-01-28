@@ -15,10 +15,10 @@ inline namespace Handles
 
 	// Construction and assignment.
 	public:
-		JniStaticFunction() = default;
+		JniStaticFunction()									= default;
 
-		JniStaticFunction( const JniStaticFunction& other );
-		JniStaticFunction( JniStaticFunction&& other );
+		JniStaticFunction( const JniStaticFunction& other )	= default;
+		JniStaticFunction( JniStaticFunction&& other )		= default;
 
 		JniStaticFunction( Black::StringView class_name, Black::StringView function_name );
 		JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name );
@@ -27,8 +27,8 @@ inline namespace Handles
 		JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name, Black::IgnoreFailure );
 
 
-		inline JniStaticFunction& operator = ( const JniStaticFunction& other );
-		inline JniStaticFunction& operator = ( JniStaticFunction&& other );
+		inline JniStaticFunction& operator = ( const JniStaticFunction& other )	= default;
+		inline JniStaticFunction& operator = ( JniStaticFunction&& other )		= default;
 
 	// Public interface.
 	public:
@@ -55,7 +55,7 @@ inline namespace Handles
 		using Signature		= Black::NativeTypeSignature<TNativeType>;
 
 		// Entry-point.
-		using EntryPoint	= Traits::MemberFunctionEntry<TResult, TArguments...>;
+		using EntryPoint	= Traits::StaticFunctionEntry<TResult, TArguments...>;
 
 
 		// Call the function using given arguments and local JNI environment.
@@ -63,8 +63,10 @@ inline namespace Handles
 
 	// Private state.
 	private:
-		Black::JniClass	m_class_handle;				// Handle to class owning the static method.
-		jmethodID		m_function_id	= nullptr;	// Id of Java object method.
+		static const char	LOG_CHANNEL[]	= "Black/Jni/StaticFunction";
+
+		Black::JniClass		m_class_handle;				// Handle to class owning the static method.
+		jmethodID			m_function_id	= nullptr;	// Id of Java object method.
 	};
 }
 }
