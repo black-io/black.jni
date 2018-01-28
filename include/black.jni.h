@@ -71,21 +71,26 @@ inline namespace Jni
 #include "virtual-machine/JniEnvironment.h"
 
 // Deferred implementation of JNI functionality.
-#include "virtual-machine/CachedHandles.inl"
-#include "virtual-machine/VirtualMachine.inl"
-#include "virtual-machine/Environment.inl"
-#include "utils/NativeFunction.utils.inl"
-#include "handles/JniObject.inl"
-#include "handles/JniMemberField.inl"
-#include "handles/JniStaticField.inl"
-#include "handles/JniMemberFunction.inl"
-#include "handles/JniStaticFunction.inl"
-#include "handles/MemberFunctionEntry.inl"
-#include "handles/StaticFunctionEntry.inl"
-#include "marshaling/NativeTypeContext.FromJni.inl"
-#include "marshaling/NativeTypeContext.ToJni.inl"
-#include "marshaling/JniArrayTranslation.FromJni.inl"
-#include "marshaling/JniArrayTranslation.ToJni.inl"
+#include "virtual-machine/JniEnvironment.inl"
+//#include "virtual-machine/JniConnection.inl"
+//#include "virtual-machine/SharedClassStorage.inl"
+//#include "virtual-machine/SharedStateCache.inl"
+
+//#include "handles/JniStaticFunction.inl"
+//#include "handles/StaticFunctionEntry.inl"
+//#include "handles/JniMemberFunction.inl"
+//#include "handles/MemberFunctionEntry.inl"
+//#include "handles/JniStaticField.inl"
+//#include "handles/JniMemberField.inl"
+
+//#include "handles/JniObject.inl"
+//#include "virtual-machine/SharedState.inl"
+//#include "virtual-machine/SharedStateStorage.inl"
+
+//#include "marshaling/NativeTypeContext.FromJni.inl"
+//#include "marshaling/NativeTypeContext.ToJni.inl"
+//#include "marshaling/JniArrayTranslation.FromJni.inl"
+//#include "marshaling/JniArrayTranslation.ToJni.inl"
 
 // Remove local logging overrides if necessary.
 #include "utils/logging.isolation.h"
