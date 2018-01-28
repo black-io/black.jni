@@ -47,6 +47,14 @@ inline namespace VirtualMachine
 			const TArguments&... arguments
 		) const;
 
+		// Call the non-virtual member-function using given arguments.
+		template< typename TResult, typename... TArguments >
+		inline TResult CallNonVirtual(
+			const Black::JniObject& object_handle,
+			const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
+			const TArguments&... arguments
+		) const;
+
 		// Call the member-function using given arguments.
 		template< typename TResult, typename... TArguments >
 		inline TResult Call(

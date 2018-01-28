@@ -55,6 +55,17 @@ inline namespace VirtualMachine
 	}
 
 	template< typename TResult, typename... TArguments >
+	inline TResult JniEnvironment::CallNonVirtual(
+		const Black::JniObject& object_handle,
+		const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
+		const TArguments&... arguments
+	) const
+	{
+		ENSURES_DEBUG( IsThreadLocal() );
+		return function_handle.CallNonVirtual( m_local_env, *object_handle, arguments... );
+	}
+
+	template< typename TResult, typename... TArguments >
 	inline TResult JniEnvironment::Call(
 		const Black::JniStaticFunction<TResult, TArguments...>& function_handle,
 		const TArguments&... arguments
