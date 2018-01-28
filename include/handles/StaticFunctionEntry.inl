@@ -16,7 +16,7 @@ namespace Traits
 		, m_function_id{ function_id }
 	{
 		ENSURES( m_class_ref != nullptr );
-		ENSURES( m_function_id != 0 );
+		ENSURES( m_function_id != nullptr );
 	}
 
 	template< typename TResult, typename... TArguments >
