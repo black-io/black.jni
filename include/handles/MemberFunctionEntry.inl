@@ -1,131 +1,117 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Utils
+inline namespace Jni
 {
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline MemberFunctionInvocation<TNativeReturnType, TNativeArguments...>::MemberFunctionInvocation( JNIEnv* local_env, jobject object_ref, jmethodID function_id )
-		: m_local_env( local_env )
-		, m_function_id( function_id )
-		, m_object_ref( object_ref )
+inline namespace Handles
+{
+namespace Traits
+{
+	template< typename TResult, typename... TArguments >
+	inline MemberFunctionEntry<TResult, TArguments...>::MemberFunctionEntry( JNIEnv* local_env, jobject object_ref, jmethodID function_id )
+		: m_local_env{ local_env }
+		, m_object_ref{ object_ref }
+		, m_function_id{ function_id }
 	{
-		JNI_EXPECTS( m_object_ref != nullptr );
-		JNI_EXPECTS( m_function_id != nullptr );
+		ENSURES( m_object_ref != nullptr );
+		ENSURES( m_function_id != nullptr );
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline TNativeReturnType MemberFunctionInvocation<TNativeReturnType, TNativeArguments...>::Call( const TNativeArguments&... arguments ) const
+	template< typename TResult, typename... TArguments >
+	inline TResult MemberFunctionEntry<TResult, TArguments...>::Call( const TArguments&... arguments ) const
 	{
-		constexpr const size_t LOCAL_FRAME_SIZE = TotalLocalFrame<TNativeReturnType, TNativeArguments...>::RESULT;
+		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TResult, TArguments...>;
 
-		JNI_RETURN_IF_E( m_local_env == nullptr, {}, "%s:%d - Attempt to call function while local JNI environment not initialized.", __func__, __LINE__ );
-		JNI_RETURN_IF_E(
-			LOCAL_FRAME_SIZE && ( m_local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK ),
-			{},
-			"Failed to push JVM local frame with size %d.",
-			LOCAL_FRAME_SIZE
-		);
+		CRETD( m_local_env == nullptr, {}, LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
-		auto function_result = (JavaType)(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Jni::Marshaling::ToJava( arguments )... );
-		TNativeReturnType native_result;
-		Jni::Marshaling::FromJava( function_result, native_result );
+		if( FRAME_SIZE != 0 )
+		{
+			CRETD( m_local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, {}, LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+		}
 
-		JNI_RETURN_IF( LOCAL_FRAME_SIZE == 0, native_result );
-		m_local_env->PopLocalFrame( nullptr );
-		return native_result;
+		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ToJni( arguments )... );
+
+		TResult result;
+		Black::FromJni( jni_result, result );
+		CRET( FRAME_SIZE == 0, result );
+
+		m_local_env->PopLocalFrame();
+		return result;
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments >
-	inline TNativeReturnType MemberFunctionInvocation<TNativeReturnType, TNativeArguments...>::CallNonVirtual(
-		jclass class_ref,
-		const TNativeArguments&... arguments
-	) const
+	template< typename TResult, typename... TArguments >
+	inline TResult MemberFunctionEntry<TResult, TArguments...>::CallNonVirtual( jclass class_ref, const TArguments&... arguments ) const
 	{
-		constexpr const size_t LOCAL_FRAME_SIZE = TotalLocalFrame<TNativeReturnType, TNativeArguments...>::RESULT;
+		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TResult, TArguments...>;
 
-		JNI_EXPECTS( class_ref != nullptr );
-		JNI_RETURN_IF_E( m_local_env == nullptr, {}, "%s:%d - Attempt to call function while local JNI environment not initialized.", __func__, __LINE__ );
-		JNI_RETURN_IF_E(
-			LOCAL_FRAME_SIZE && ( m_local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK ),
-			{},
-			"Failed to push JVM local frame with size %d.",
-			LOCAL_FRAME_SIZE
-		);
+		EXPECTS( class_ref == nullptr );
+		CRETD( m_local_env == nullptr, {}, LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
-		auto function_result = (JavaType)(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)(
-			m_object_ref,
-			class_ref,
-			m_function_id,
-			Jni::Marshaling::ToJava( arguments )...
-		);
+		if( FRAME_SIZE != 0 )
+		{
+			CRETD( m_local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, {}, LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+		}
 
-		TNativeReturnType native_result;
-		Jni::Marshaling::FromJava( function_result, native_result );
+		auto jni_result = (JniResult)(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ToJni( arguments )... );
 
-		JNI_RETURN_IF( LOCAL_FRAME_SIZE == 0, native_result );
-		m_local_env->PopLocalFrame( nullptr );
-		return native_result;
+		TResult result;
+		Black::FromJni( jni_result, result );
+		CRET( FRAME_SIZE == 0, result );
+
+		m_local_env->PopLocalFrame();
+		return result;
 	}
 
-	template< typename... TNativeArguments >
-	inline MemberFunctionInvocation<void, TNativeArguments...>::MemberFunctionInvocation( JNIEnv* local_env, jobject object_ref, jmethodID function_id )
-		: m_local_env( local_env )
-		, m_function_id( function_id )
-		, m_object_ref( object_ref )
+
+	template< typename... TArguments >
+	inline MemberFunctionEntry<void, TArguments...>::MemberFunctionEntry( JNIEnv* local_env, jobject object_ref, jmethodID function_id )
+		: m_local_env{ local_env }
+		, m_object_ref{ object_ref }
+		, m_function_id{ function_id }
 	{
-		JNI_EXPECTS( m_object_ref != nullptr );
-		JNI_EXPECTS( m_function_id != nullptr )
+		ENSURES( m_object_ref != nullptr );
+		ENSURES( m_function_id != nullptr );
 	}
 
-	template< typename... TNativeArguments >
-	inline void MemberFunctionInvocation<void, TNativeArguments...>::Call( const TNativeArguments&... arguments ) const
+	template< typename... TArguments >
+	inline void MemberFunctionEntry<void, TArguments...>::Call( const TArguments&... arguments ) const
 	{
-		constexpr const size_t LOCAL_FRAME_SIZE = TotalLocalFrame<TNativeArguments...>::RESULT;
+		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TArguments...>;
 
-		JNI_RETURN_IF_E( m_local_env == nullptr, , "%s:%d - Attempt to call function while local JNI environment not initialized.", __func__, __LINE__ );
-		JNI_RETURN_IF_E(
-			LOCAL_FRAME_SIZE && ( m_local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK ),
-			,
-			"Failed to push JVM local frame with size %d.",
-			LOCAL_FRAME_SIZE
-		);
+		CRETD( m_local_env == nullptr, , LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
-		(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Jni::Marshaling::ToJava( arguments )... );
+		if( FRAME_SIZE != 0 )
+		{
+			CRETD( m_local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+		}
 
-		JNI_RETURN_IF( LOCAL_FRAME_SIZE == 0 );
-		m_local_env->PopLocalFrame( nullptr );
+		(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ToJni( arguments )... );
+
+		CRET( FRAME_SIZE == 0 );
+		m_local_env->PopLocalFrame();
 	}
 
-	template< typename... TNativeArguments >
-	inline void MemberFunctionInvocation<void, TNativeArguments...>::CallNonVirtual(
-		jclass class_ref,
-		const TNativeArguments&... arguments
-	) const
+	template< typename... TArguments >
+	inline void MemberFunctionEntry<void, TArguments...>::CallNonVirtual( jclass class_ref, const TArguments&... arguments ) const
 	{
-		constexpr const size_t LOCAL_FRAME_SIZE = TotalLocalFrame<TNativeArguments...>::RESULT;
+		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TArguments...>;
 
-		JNI_EXPECTS( class_ref != nullptr );
-		JNI_RETURN_IF_E( m_local_env == nullptr, , "%s:%d - Attempt to call function while local JNI environment not initialized.", __func__, __LINE__ );
-		JNI_RETURN_IF_E(
-			LOCAL_FRAME_SIZE && ( m_local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK ),
-			,
-			"Failed to push JVM local frame with size %d.",
-			LOCAL_FRAME_SIZE
-		);
+		EXPECTS( class_ref == nullptr );
+		CRETD( m_local_env == nullptr, , LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
-		(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)(
-			m_object_ref,
-			class_ref,
-			m_function_id,
-			Jni::Marshaling::ToJava( arguments )...
-		);
+		if( FRAME_SIZE != 0 )
+		{
+			CRETD( m_local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+		}
 
-		JNI_RETURN_IF( LOCAL_FRAME_SIZE == 0 );
-		m_local_env->PopLocalFrame( nullptr );
+		(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ToJni( arguments )... );
+
+		CRET( FRAME_SIZE == 0 );
+		m_local_env->PopLocalFrame();
 	}
+}
+}
 }
 }
