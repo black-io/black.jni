@@ -38,7 +38,7 @@ namespace Traits
 
 	// Entry-point for JNI static function with void result.
 	template< typename... TArguments >
-	class StaticFunctionEntry< void, TArguments... > final : private Black::NonTransferable
+	class StaticFunctionEntry<void, TArguments...> final : private Black::NonTransferable
 	{
 	public:
 		StaticFunctionEntry() = delete;
