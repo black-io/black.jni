@@ -24,25 +24,25 @@ inline namespace VirtualMachine
 
 		// Read the value into storage from given field of given JNI object.
 		template< typename TValue >
-		inline const bool GetValue( const Black::JniObject& objct_handle, const Black::JniMemberField<TValue>& field_hanle, TValue& value_storage ) const;
+		inline const bool GetValue( const Black::JniObject& object_handle, const Black::JniMemberField<TValue>& field_handle, TValue& value_storage ) const;
 
 		// Read the value into storage from given static field.
 		template< typename TValue >
-		inline const bool GetValue( const Black::JniStaticField<TValue>& field_hanle, TValue& value_storage ) const;
+		inline const bool GetValue( const Black::JniStaticField<TValue>& field_handle, TValue& value_storage ) const;
 
 		// Write the value from storage into given field of given object.
 		template< typename TValue >
-		inline const bool SetValue( const Black::JniObject& objct_handle, const Black::JniMemberField<TValue>& field_hanle, const TValue& value_storage ) const;
+		inline const bool SetValue( const Black::JniObject& object_handle, const Black::JniMemberField<TValue>& field_handle, const TValue& value_storage ) const;
 
 		// Write the value from storage into given static field.
 		template< typename TValue >
-		inline const bool SetValue( const Black::JniStaticField<TValue>& field_hanle, const TValue& value_storage ) const;
+		inline const bool SetValue( const Black::JniStaticField<TValue>& field_handle, const TValue& value_storage ) const;
 
 
 		// Call the member-function using given arguments.
 		template< typename TResult, typename... TArguments >
 		inline TResult Call(
-			const Black::JniObject& objct_handle,
+			const Black::JniObject& object_handle,
 			const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
 			const TArguments&... arguments
 		) const;
