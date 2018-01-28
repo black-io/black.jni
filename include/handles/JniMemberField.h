@@ -33,13 +33,13 @@ inline namespace Handles
 	// Public interface.
 	public:
 		// Get the value of field from given handle to object.
-		inline const bool GetValue( const Object& object_handle, TNativeType& value_storage ) const;
+		inline const bool GetValue( const JniObject& object_handle, TNativeType& value_storage ) const;
 
 		// Get the value of field from given object ref.
 		inline const bool GetValue( jobject object_ref, TNativeType& value_storage ) const;
 
 		// Get the value of field from given handle to object.
-		inline TNativeType GetValue( const Object& object_handle, const TNativeType& default_value ) const;
+		inline TNativeType GetValue( const JniObject& object_handle, const TNativeType& default_value ) const;
 
 		// Get the value of field from given object ref.
 		inline TNativeType GetValue( jobject object_ref, const TNativeType& default_value ) const;
