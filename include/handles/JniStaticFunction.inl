@@ -48,17 +48,12 @@ inline namespace Handles
 	template< typename TResult, typename... TArguments >
 	inline TResult JniStaticFunction<TResult, TArguments...>::Call( const TArguments&... arguments ) const
 	{
-		CRETD( !Black::JniConnection::IsValid(), TResult(), LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
-		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
-
-		return Call( local_env, arguments... );
+		return Call( Black::JniConnection::GetLocalEnvironment(), arguments... );
 	}
 
 	template< typename TResult, typename... TArguments >
 	inline TResult JniStaticFunction<TResult, TArguments...>::Call( JNIEnv* local_env, const TArguments&... arguments ) const
 	{
-		CRETD( !IsValid(), TResult(), LOG_CHANNEL, "Attempt to use invalid function handle." );
-
 		return EntryPoint{ local_env, *m_class_handle, m_function_id }.Call( arguments... );
 	}
 }
