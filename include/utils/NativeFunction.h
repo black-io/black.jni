@@ -44,7 +44,7 @@ namespace Traits
 
 	// Specification for true native functions.
 	template< typename TSender, typename TResult, typename... TArguments >
-	struct NativeFunctionWrapper< TResult (*)( JNIEnv*, TSender, const TArguments&... ) > final
+	struct NativeFunctionWrapper<TResult (*)( JNIEnv*, TSender, const TArguments&... )> final
 	{
 		// Suppress the possible wrong declaration of native function.
 		static_assert( Black::IS_BASE_OF<jobject, TSender> || Black::IS_SAME<jclass, TSender>, "The sender class may be only `jclass` or `jobject`." );

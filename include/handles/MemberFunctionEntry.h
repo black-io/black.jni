@@ -40,7 +40,7 @@ namespace Traits
 
 	// Entry-point for JNI member function with void result.
 	template< typename... TArguments >
-	class MemberFunctionEntry< void, TArguments... >
+	class MemberFunctionEntry<void, TArguments...>
 	{
 	public:
 		inline MemberFunctionEntry( JNIEnv* local_env, jobject object_ref, jmethodID function_id );

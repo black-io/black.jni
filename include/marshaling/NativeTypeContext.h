@@ -355,7 +355,7 @@ namespace Traits
 
 	// JNI environment context for `std::vector` type.
 	template< typename TNativeValue, typename TAllocator >
-	struct NativeContext< std::vector<TNativeValue, TAllocator> > : JniContext<jobject>
+	struct NativeContext<std::vector<TNativeValue, TAllocator>> : JniContext<jobject>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
