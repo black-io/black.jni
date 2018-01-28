@@ -72,7 +72,6 @@ inline namespace Jni
 
 // Deferred implementation of JNI functionality.
 #include "virtual-machine/JniEnvironment.inl"
-//#include "virtual-machine/JniConnection.inl"
 //#include "virtual-machine/SharedClassStorage.inl"
 //#include "virtual-machine/SharedStateCache.inl"
 
