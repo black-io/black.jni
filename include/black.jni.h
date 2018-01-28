@@ -76,7 +76,7 @@ inline namespace Jni
 
 #include "handles/JniStaticFunction.inl"
 #include "handles/StaticFunctionEntry.inl"
-//#include "handles/JniMemberFunction.inl"
+#include "handles/JniMemberFunction.inl"
 //#include "handles/MemberFunctionEntry.inl"
 //#include "handles/JniStaticField.inl"
 //#include "handles/JniMemberField.inl"
