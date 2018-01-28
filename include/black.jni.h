@@ -74,8 +74,8 @@ inline namespace Jni
 #include "virtual-machine/JniEnvironment.inl"
 #include "virtual-machine/SharedStateCache.inl"
 
-//#include "handles/JniStaticFunction.inl"
-//#include "handles/StaticFunctionEntry.inl"
+#include "handles/JniStaticFunction.inl"
+#include "handles/StaticFunctionEntry.inl"
 //#include "handles/JniMemberFunction.inl"
 //#include "handles/MemberFunctionEntry.inl"
 //#include "handles/JniStaticField.inl"
