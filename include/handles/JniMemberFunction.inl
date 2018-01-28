@@ -66,7 +66,7 @@ inline namespace Handles
 	template< typename TResult, typename... TArguments >
 	inline TResult JniMemberFunction<TResult, TArguments...>::CallNonVirtual( JNIEnv* local_env, jobject object_ref, const TArguments&... arguments ) const
 	{
-		return EntryPoint{ local_env, object_ref, m_function_id }.CallNonVirtual( arguments... );
+		return EntryPoint{ local_env, object_ref, m_function_id }.CallNonVirtual( *m_class_handle, arguments... );
 	}
 }
 }
