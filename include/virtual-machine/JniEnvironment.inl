@@ -1,68 +1,68 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	template< typename TNativeType, typename TValueType, typename >
-	inline const bool Environment::GetValue(
-		const MemberField<TNativeType>& field_handle,
-		const Object& object_handle,
-		TValueType& value_storage
+inline namespace Jni
+{
+inline namespace VirtualMachine
+{
+	template< typename TValue >
+	inline const bool JniEnvironment::GetValue(
+		const Black::JniObject& object_handle,
+		const Black::JniMemberField<TValue>& field_handle,
+		TValue& value_storage
 	) const
 	{
-		return field_handle.GetValue( m_local_env, object_handle, value_storage );
+		ENSURES_DEBUG( IsThreadLocal() );
+		return field_handle.GetValue( m_local_env, *object_handle, value_storage );
 	}
 
-	template< typename TNativeType, typename TValueType, typename >
-	inline const bool Environment::GetValue( const StaticField<TNativeType>& field_handle, TValueType& value_storage ) const
+	template< typename TValue >
+	inline const bool JniEnvironment::GetValue( const Black::JniStaticField<TValue>& field_handle, TValue& value_storage ) const
 	{
+		ENSURES_DEBUG( IsThreadLocal() );
 		return field_handle.GetValue( m_local_env, value_storage );
 	}
 
-	template< typename TNativeType, typename TValueType, typename >
-	inline const bool Environment::SetValue(
-		const MemberField<TNativeType>& field_handle,
-		const Object& object_handle,
-		const TValueType& value_storage
+	template< typename TValue >
+	inline const bool JniEnvironment::SetValue(
+		const Black::JniObject& object_handle,
+		const Black::JniMemberField<TValue>& field_handle,
+		const TValue& value_storage
 	) const
 	{
-		return field_handle.SetValue( m_local_env, object_handle, value_storage );
+		ENSURES_DEBUG( IsThreadLocal() );
+		return field_handle.SetValue( m_local_env, *object_handle, value_storage );
 	}
 
-	template< typename TNativeType, typename TValueType, typename >
-	inline const bool Environment::SetValue( const StaticField<TNativeType>& field_handle, const TValueType& value_storage ) const
+	template< typename TValue >
+	inline const bool JniEnvironment::SetValue( const Black::JniStaticField<TValue>& field_handle, const TValue& value_storage ) const
 	{
+		ENSURES_DEBUG( IsThreadLocal() );
 		return field_handle.SetValue( m_local_env, value_storage );
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments, typename >
-	inline TNativeReturnType Environment::Call(
-		const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-		const Object& object_handle,
-		const TValueArguments&... arguments
-	)
+	template< typename TResult, typename... TArguments >
+	inline TResult JniEnvironment::Call(
+		const Black::JniObject& object_handle,
+		const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
+		const TArguments&... arguments
+	) const
 	{
-		return function_handle.Call( m_local_env, object_handle, arguments... );
+		ENSURES_DEBUG( IsThreadLocal() );
+		return function_handle.Call( m_local_env, *object_handle, arguments... );
 	}
 
-	template< typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments, typename >
-	inline TNativeReturnType Environment::CallNonVirtual(
-		const MemberFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-		const Object& object_handle,
-		const TValueArguments&... arguments
-	)
+	template< typename TResult, typename... TArguments >
+	inline TResult JniEnvironment::Call(
+		const Black::JniStaticFunction<TResult, TArguments...>& function_handle,
+		const TArguments&... arguments
+	) const
 	{
-		return function_handle.CallNonVirtual( m_local_env, object_handle, arguments... );
-	}
-
-	template< typename TNativeReturnType, typename... TNativeArguments, typename... TValueArguments, typename >
-	inline TNativeReturnType Environment::Call(
-		const StaticFunction<TNativeReturnType, TNativeArguments...>& function_handle,
-		const TValueArguments&... arguments
-	)
-	{
+		ENSURES_DEBUG( IsThreadLocal() );
 		return function_handle.Call( m_local_env, arguments... );
 	}
+}
+}
 }
