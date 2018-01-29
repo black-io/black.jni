@@ -37,7 +37,7 @@ namespace Traits
 		Black::FromJni( jni_result, result );
 		CRET( FRAME_SIZE == 0, result );
 
-		m_local_env->PopLocalFrame();
+		m_local_env->PopLocalFrame( nullptr );
 		return result;
 	}
 
@@ -67,7 +67,7 @@ namespace Traits
 		(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ToJni( arguments )... );
 
 		CRET( FRAME_SIZE == 0 );
-		m_local_env->PopLocalFrame();
+		m_local_env->PopLocalFrame( nullptr );
 	}
 }
 }
