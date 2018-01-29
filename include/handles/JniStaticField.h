@@ -15,10 +15,10 @@ inline namespace Handles
 
 	// Construction and assignment.
 	public:
-		JniStaticField() = default;
+		JniStaticField()								= default;
 
-		JniStaticField( const JniStaticField& other );
-		JniStaticField( JniStaticField&& other );
+		JniStaticField( const JniStaticField& other )	= default;
+		JniStaticField( JniStaticField&& other )		= default;
 
 		JniStaticField( Black::StringView class_name, Black::StringView field_name );
 		JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name );
@@ -27,8 +27,8 @@ inline namespace Handles
 		JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
 
 
-		inline const JniStaticField& operator = ( const JniStaticField& other );
-		inline const JniStaticField& operator = ( JniStaticField&& other );
+		inline const JniStaticField& operator = ( const JniStaticField& other )	= default;
+		inline const JniStaticField& operator = ( JniStaticField&& other )		= default;
 
 	// Public interface.
 	public:
@@ -70,9 +70,9 @@ inline namespace Handles
 		inline const bool SetValue( JNIEnv* local_env, const TNativeType& value_storage ) const;
 
 	private:
-		constexpr static size_t LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
-		constexpr static auto FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
-		constexpr static auto FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
+		static constexpr auto	FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
+		static constexpr auto	FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
+		static const char		LOG_CHANNEL[]		= "Black/Jni/StaticField";
 
 		Black::JniClass	m_class_handle;				// Handle to class of field.
 		jfieldID		m_field_id		= nullptr;	// Field id for JNI.
