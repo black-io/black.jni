@@ -79,7 +79,7 @@ inline namespace Jni
 #include "handles/JniMemberFunction.inl"
 #include "handles/MemberFunctionEntry.inl"
 #include "handles/JniStaticField.inl"
-//#include "handles/JniMemberField.inl"
+#include "handles/JniMemberField.inl"
 
 //#include "handles/JniObject.inl"
 //#include "virtual-machine/SharedState.inl"
