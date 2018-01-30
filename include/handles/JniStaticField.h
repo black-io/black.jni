@@ -11,7 +11,7 @@ inline namespace Handles
 	template< typename TNativeType >
 	class JniStaticField final
 	{
-		friend class Environment;	// Grant access to private `GetValue` functions.
+		friend class Black::Jni::VirtualMachine::JniEnvironment; // Grant access to private `GetValue` functions.
 
 	// Construction and assignment.
 	public:
@@ -70,6 +70,7 @@ inline namespace Handles
 		inline const bool SetValue( JNIEnv* local_env, const TNativeType& value_storage ) const;
 
 	private:
+		static constexpr size_t	LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
 		static constexpr auto	FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
 		static constexpr auto	FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
 		static const char		LOG_CHANNEL[]		= "Black/Jni/StaticField";
