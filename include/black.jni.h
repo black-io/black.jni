@@ -81,7 +81,7 @@ inline namespace Jni
 #include "handles/JniStaticField.inl"
 #include "handles/JniMemberField.inl"
 
-//#include "handles/JniObject.inl"
+#include "handles/JniObject.inl"
 //#include "virtual-machine/SharedState.inl"
 //#include "virtual-machine/SharedStateStorage.inl"
 

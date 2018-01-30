@@ -1,41 +1,44 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-	template< typename... TNativeArguments >
-	Object Object::NewObject( const Class& class_handle, const TNativeArguments&... arguments )
+inline namespace Jni
+{
+inline namespace Handles
+{
+	template< typename... TArguments >
+	JniObject JniObject::Construct( const JniClass& class_handle, const TArguments&... arguments )
 	{
-		constexpr const size_t LOCAL_FRAME_SIZE = Utils::TotalLocalFrame<TNativeArguments...>::RESULT;
+		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TArguments...>;
 
-		JNI_RETURN_IF_E( !VirtualMachine::IsValid(), {}, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
+		CRETD( !Black::JniConnection::IsValid(), {}, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
-		const MemberFunction<void, TNativeArguments...> construction_func{ class_handle, "<init>" };
-		JNI_RETURN_IF_E(
-			!construction_func,
-			{},
-			"Failed to locate proper constructor with signature `%s` for object `%s`.", construction_func.GetSignature(), class_handle.GetName().c_str()
-		);
+		const JniMemberFunction<JniObject, TArguments...> constructor{ class_handle, "<init>" };
+		CRETD( !constructor, {}, LOG_CHANNEL, "Failed to locate constructor with signature '{}'.", constructor.GetSignature().data() );
 
-		auto local_env = VirtualMachine::GetLocalEnvironment();
-		JNI_RETURN_IF_E( LOCAL_FRAME_SIZE && ( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK ), {}, "Failed to push JVM local frame with size %d.", LOCAL_FRAME_SIZE );
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 
-		Object result_handle;
-		result_handle.AcquireObjectRef( local_env->NewObject( *class_handle, *construction_func, Jni::Marshaling::ToJava( arguments )... ) );
-		result_handle.m_class_handle = class_handle;
-
-		// In case of exception the empty value will be returned.
-		if( local_env->ExceptionCheck() == JNI_TRUE )
+		if( FRAME_SIZE != 0 )
 		{
-			local_env->ExceptionDescribe();
-			local_env->ExceptionClear();
-			result_handle.Invalidate();
+			CRETD( local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, {}, LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
 		}
 
-		JNI_RETURN_IF( LOCAL_FRAME_SIZE == 0, result_handle );
+		JniObject result;
+		result.AcquireObjectRef( local_env->NewObject( *class_handle, *constructor, Black::ToJni( arguments )... ) );
+		result.m_class_handle = class_handle;
+
+		if( local_env->ExceptionCheck() == JNI_TRUE )
+		{
+			BLACK_NON_RELEASE_CODE( local_env->ExceptionDescribe() );
+			local_env->ExceptionClear();
+			result.Invalidate();
+		}
+
+		CRET( FRAME_SIZE == 0, result );
 		local_env->PopLocalFrame( nullptr );
-		return result_handle;
+		return result;
 	}
+}
+}
 }
