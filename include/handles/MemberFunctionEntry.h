@@ -31,8 +31,8 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<TResult>;
 
 	private:
-		constexpr static auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
-		constexpr static auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
+		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
+		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
 		static const char		LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
@@ -59,8 +59,8 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<void>;
 
 	private:
-		constexpr static auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
-		constexpr static auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
+		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
+		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
 		static const char		LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
