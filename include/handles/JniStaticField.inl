@@ -68,21 +68,19 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline const bool JniStaticField<TNativeType>::GetValue( JNIEnv* local_env, TNativeType& value_storage ) const
 	{
-		constexpr size_t FRAME_SIZE = JniContext::LOCAL_FRAME_SIZE;
-
 		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use static field with invalid JNI connection." );
 		CRETD( m_class_handle == nullptr, false, LOG_CHANNEL, "Invalid static field - no class specified." );
 		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
 
-		if( FRAME_SIZE != 0 )
+		if( LOCAL_FRAME_SIZE != 0 )
 		{
-			CRETD( local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", LOCAL_FRAME_SIZE );
 		}
 
 		auto jni_value = (JavaType)(local_env->*FIELD_READ_HANDLER)( *m_class_handle, m_field_id );
 		Black::FromJni( jni_value, value_storage );
 
-		CRET( FRAME_SIZE == 0, true );
+		CRET( LOCAL_FRAME_SIZE == 0, true );
 		local_env->PopLocalFrame( nullptr );
 		return true;
 	}
@@ -90,22 +88,20 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline const bool JniStaticField<TNativeType>::SetValue( JNIEnv* local_env, const TNativeType& value_storage ) const
 	{
-		constexpr size_t FRAME_SIZE = JniContext::LOCAL_FRAME_SIZE;
-
 		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use static field with invalid JNI connection." );
 		CRETD( m_class_handle == nullptr, false, LOG_CHANNEL, "Invalid static field - no class specified." );
 		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
 
-		if( FRAME_SIZE != 0 )
+		if( LOCAL_FRAME_SIZE != 0 )
 		{
-			CRETD( local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", LOCAL_FRAME_SIZE );
 		}
 
 		JniType jni_value;
 		Black::ToJni( value_storage, jni_value );
 		(local_env->*FIELD_WRITE_HANDLER)( *m_class_handle, m_field_id, jni_value );
 
-		CRET( FRAME_SIZE == 0, true );
+		CRET( LOCAL_FRAME_SIZE == 0, true );
 		local_env->PopLocalFrame( nullptr );
 		return true;
 	}
