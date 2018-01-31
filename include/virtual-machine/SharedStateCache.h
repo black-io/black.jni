@@ -26,11 +26,14 @@ namespace Traits
 	public:
 		// Get the cached storage for shared state.
 		template< typename TState >
-		inline SharedStateStorage<TState>* GetCachedStorage();
+		static inline SharedStateStorage<TState>* GetCachedStorage();
 
 
 		// Get the synchronization mutex for storage.
-		inline const Black::Mutex& GetMutex() const		{ return m_latch; };
+		static inline const Black::Mutex& GetMutex()	{ return GetInstance().m_latch; };
+
+	private:
+		static SharedStateCache& GetInstance();
 
 	private:
 		using Storage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
