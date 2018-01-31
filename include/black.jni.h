@@ -83,7 +83,7 @@ inline namespace Jni
 
 #include "handles/JniObject.inl"
 #include "virtual-machine/SharedState.inl"
-//#include "virtual-machine/SharedStateStorage.inl"
+#include "virtual-machine/SharedStateStorage.inl"
 
 //#include "marshaling/NativeTypeContext.FromJni.inl"
 //#include "marshaling/NativeTypeContext.ToJni.inl"
