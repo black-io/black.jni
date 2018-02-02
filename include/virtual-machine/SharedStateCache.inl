@@ -12,9 +12,10 @@ namespace Traits
 	template< typename TState >
 	inline SharedStateStorage<TState>* SharedStateCache::GetCachedStorage()
 	{
-		Black::MutexLock lock{ m_latch };
+		SharedStateCache& cache = GetInstance();
+		Black::MutexLock lock{ cache.m_latch };
 
-		std::unique_ptr<SharedStateEntity>& entity = m_storage[ { typeid( TState ) } ];
+		std::unique_ptr<SharedStateEntity>& entity = cache.m_storage[ { typeid( TState ) } ];
 		CRET( entity, static_cast<SharedStateStorage<TState>*>( entity.get() ) );
 
 		auto new_entity = new SharedStateStorage<TState>{};
