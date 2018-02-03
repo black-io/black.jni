@@ -84,6 +84,7 @@ namespace Traits
 	{
 		CRET( m_storage == nullptr );
 		m_storage->Release();
+		m_storage = nullptr;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
