@@ -1,102 +1,100 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Marshaling
+inline namespace Jni
 {
-	inline void NativeTypeTraits<bool>::ToJava( const NativeType& source, JavaType& destination )
+inline namespace Marshaling
+{
+namespace Traits
+{
+	inline void NativeContext<bool>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = ( source )? JNI_TRUE : JNI_FALSE;
+
 	}
 
-	inline void NativeTypeTraits<const char*>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<char16_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		auto local_env	= VirtualMachine::GetLocalEnvironment();
-		destination		= local_env->NewStringUTF( source );
+
 	}
 
-	inline void NativeTypeTraits<const char16_t*>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<int8_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		auto local_env	= VirtualMachine::GetLocalEnvironment();
-		destination		= local_env->NewString( reinterpret_cast<const jchar*>( source ), std::char_traits<char16_t>::length( source ) );
+
 	}
 
-	inline void NativeTypeTraits<std::string>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<int16_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		NativeTypeTraits<const char*>::ToJava( source.c_str(), destination );
+
 	}
 
-	inline void NativeTypeTraits<std::u16string>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<int32_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		NativeTypeTraits<const char16_t*>::ToJava( source.c_str(), destination );
+
 	}
 
-	inline void NativeTypeTraits<float>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<int64_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<double>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<uint8_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<int8_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<uint16_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<char16_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<uint32_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<int16_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<uint64_t>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<int32_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<float>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<int64_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<double>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<uint8_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<const char*>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<uint16_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<const char16_t*>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<uint32_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<std::string>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = source;
+
 	}
 
-	inline void NativeTypeTraits<uint64_t>::ToJava( const NativeType& source, JavaType& destination )
+	inline void NativeContext<std::u16string>::ToJni( const NativeType& source, JniType& destination )
 	{
-		destination = reinterpret_cast<const int64_t&>( source );
+
 	}
 
-	template< typename TNativeElementType, typename TAllocatorType >
-	inline void NativeTypeTraits<std::vector<TNativeElementType, TAllocatorType>>::ToJava( const NativeType& source, JavaType& destination )
+	template< typename TNativeValue, typename TAllocator >
+	inline void NativeContext<std::vector<TNativeValue, TAllocator>>::ToJni( const NativeType& source, JniType& destination )
 	{
-		using ElementTraits		= NativeTypeTraits<TNativeElementType>;
-		using JavaArrayType		= typename ElementTraits::JavaArrayType;
-		using TranslationTraits	= ArrayTranslationTraits<ElementTraits>;
 
-		TranslationTraits::ToJava( source, reinterpret_cast<JavaArrayType&>( destination ) );
 	}
+}
+}
 }
 }

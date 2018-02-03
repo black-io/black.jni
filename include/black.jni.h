@@ -86,7 +86,7 @@ inline namespace Jni
 #include "virtual-machine/SharedStateStorage.inl"
 
 #include "marshaling/NativeTypeContext.FromJni.inl"
-//#include "marshaling/NativeTypeContext.ToJni.inl"
+#include "marshaling/NativeTypeContext.ToJni.inl"
 //#include "marshaling/JniArrayTranslation.FromJni.inl"
 //#include "marshaling/JniArrayTranslation.ToJni.inl"
 
