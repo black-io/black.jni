@@ -88,7 +88,7 @@ inline namespace Jni
 #include "marshaling/NativeTypeContext.FromJni.inl"
 #include "marshaling/NativeTypeContext.ToJni.inl"
 #include "marshaling/JniArrayTranslation.FromJni.inl"
-//#include "marshaling/JniArrayTranslation.ToJni.inl"
+#include "marshaling/JniArrayTranslation.ToJni.inl"
 
 // Remove local logging overrides if necessary.
 #include "utils/logging.isolation.h"
