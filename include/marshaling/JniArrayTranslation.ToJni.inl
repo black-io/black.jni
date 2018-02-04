@@ -39,7 +39,26 @@ namespace Traits
 	template< typename TAllocator >
 	inline void JniArrayTranslation<TElementContext, true>::ToJni( const NativeArray<TAllocator>& source, JniArray& destination )
 	{
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 
+		constexpr auto ARRAY_CONSTRUCT_HANDLER			= TElementContext::ARRAY_CONSTRUCT_HANDLER;
+		constexpr auto ARRAY_ELEMENTS_ACQUIRE_HANDLER	= TElementContext::ARRAY_ELEMENTS_ACQUIRE_HANDLER;
+		constexpr auto ARRAY_ELEMENTS_RELEASE_HANDLER	= TElementContext::ARRAY_ELEMENTS_RELEASE_HANDLER;
+
+		destination = (local_env->*ARRAY_CONSTRUCT_HANDLER)( static_cast<jsize>( source.size() ), *element_class, nullptr );
+		CRET( source.empty() );
+
+		auto destination_data = (local_env->*ARRAY_ELEMENTS_ACQUIRE_HANDLER)( destination, nullptr );
+
+		std::transform(
+			source.begin(), source.end(), destination_data,
+			[]( const NativeValue& source_element ) -> JniValue
+			{
+				return Black::ToJni( source_element )
+			}
+		);
+
+		(local_env->*ARRAY_ELEMENTS_RELEASE_HANDLER)( destination, destination_data, JNI_OK );
 	}
 }
 }
