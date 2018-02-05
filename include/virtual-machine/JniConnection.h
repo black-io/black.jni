@@ -53,9 +53,6 @@ inline namespace VirtualMachine
 		JniConnection() = default;
 
 
-		// Retrieve the instance of class loader.
-		const bool CaptureClassLoader();
-
 		// Initialize the thread-local environment detaching entity.
 		const bool InitEnvDetacher();
 
