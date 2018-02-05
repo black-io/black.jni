@@ -1,37 +1,53 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
-#include <jnipp/jnipp.h>
+#include <black.jni.h>
 
 
-namespace Jni
-{
 namespace Android
 {
-	/// @brief	Handle to `java.lang.ClassLoader` object.
-	class ClassLoader : public Object
+inline namespace Java
+{
+inline namespace Lang
+{
+	// Handle for `java.lang.ClassLoader` objects.
+	class ClassLoader : public Black::JniObject
 	{
 	public:
-		/// @brief	Class path.
-		using ClassPath = Jni::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's', 'L', 'o', 'a', 'd', 'e', 'r'>;
+		// Class path.
+		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's', 'L', 'o', 'a', 'd', 'e', 'r'>;
 
-
+	// Construction and assignation.
+	public:
 		ClassLoader() = default;
-		ClassLoader( jobject object_ref ) : Object( object_ref ) {};
-		ClassLoader( const ClassLoader& other ) : Object( other ) {};
-		ClassLoader( ClassLoader&& other ) : Object( other ) {};
+		ClassLoader( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		ClassLoader( const ClassLoader& other ) : Black::JniObject( other ) {};
+		ClassLoader( ClassLoader&& other ) : Black::JniObject( std::move( other ) ) {};
 
-		const ClassLoader& operator = ( jobject object_ref )			{ Object::operator=( object_ref ); return *this; };
-		const ClassLoader& operator = ( const ClassLoader& other )		{ Object::operator=( other ); return *this; };
-		const ClassLoader& operator = ( ClassLoader&& other )			{ Object::operator=( other ); return *this; };
+
+		const ClassLoader& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
+		const ClassLoader& operator = ( const ClassLoader& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const ClassLoader& operator = ( ClassLoader&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::ClassLoader` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `java.lang.Thread` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::ClassLoader> : ObjectTypeTraits<Jni::Android::ClassLoader> {};
+	struct NativeContext<::Android::Java::Lang::ClassLoader> : public Black::NativeObjectContext<::Android::Java::Lang::ClassLoader>
+	{
+
+	};
+}
+}
 }
 }
