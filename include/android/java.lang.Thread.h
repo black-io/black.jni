@@ -20,13 +20,13 @@ inline namespace Lang
 	public:
 		Thread() = default;
 		Thread( jobject object_ref ) : Black::JniObject{ object_ref } {};
-		Thread( const JniObject& other ) : Black::JniObject( other ) {};
-		Thread( JniObject&& other ) : Black::JniObject( std::move( other ) ) {};
+		Thread( const Thread& other ) : Black::JniObject( other ) {};
+		Thread( Thread&& other ) : Black::JniObject( std::move( other ) ) {};
 
 
 		const Thread& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
-		const Thread& operator = ( const JniObject& other )	{ Black::JniObject::operator=( other ); return *this; };
-		const Thread& operator = ( JniObject&& other )		{ Black::JniObject::operator=( other ); return *this; };
+		const Thread& operator = ( const Thread& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const Thread& operator = ( Thread&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
 }
 }
