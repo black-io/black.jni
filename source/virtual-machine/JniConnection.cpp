@@ -33,7 +33,7 @@ inline namespace VirtualMachine
 		auto& connection = GetInstance();
 		CRET( !IsValid(), true );
 
-		connection.m_cached_states.Finalize();
+		//connection.m_cached_states.Finalize();
 		connection.m_stored_classes.Finalize();
 
 		pthread_key_delete( connection.m_thread_detach_key );
@@ -109,11 +109,6 @@ inline namespace VirtualMachine
 	{
 		ENSURES( IsValid() );
 		GetConnection()->DetachCurrentThread();
-	}
-
-	const bool JniConnection::CaptureClassLoader()
-	{
-
 	}
 
 	const bool JniConnection::InitEnvDetacher()
