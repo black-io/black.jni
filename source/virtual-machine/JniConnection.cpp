@@ -1,252 +1,131 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
-#include <jnipp/jnipp.h>
-#include <jnipp/android/Thread.h>
-#include <jnipp/android/ClassLoader.h>
+#include <black.jni.h>
 #include <pthread.h>
 
 
-namespace Jni
+namespace Black
 {
-	VirtualMachine& VirtualMachine::GetInstance()
+inline namespace Jni
+{
+inline namespace VirtualMachine
+{
+	static constexpr char LOG_CHANNEL[] = "Black/Jni/Connection";
+
+	const bool JniConnection::Initialize( Black::NotNull<JavaVM> jvm )
 	{
-		static VirtualMachine vm;
-		return vm;
-	}
+		auto& connection = GetInstance();
 
-	const bool VirtualMachine::Initialize( JavaVM* jvm )
-	{
-		JNI_EXPECTS( jvm != nullptr );
+		CRETD( connection.m_connection != nullptr, false, LOG_CHANNEL, "Double initialization of JNI connection blocked." );
 
-		auto& vm = GetInstance();
-		JNI_RETURN_IF_E(
-			jvm->GetEnv( reinterpret_cast<void**>( &vm.m_main_env ), VirtualMachine::JNI_VERSION ) != JNI_OK,
-			false,
-			"Failed to get main JNI Environment."
-		);
+		auto main_env_result = jvm->GetEnv( reinterpret_cast<void**>( connection.m_main_env ), Black::JNI_VERSION );
+		CRETM( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
 
-		vm.m_jvm			= jvm;
-		vm.m_main_thread_id	= pthread_self();
+		connection.m_connection = jvm;
+		EXPECTS( connection.InitEnvDetacher() );
+		ENSURES( connection.m_main_env != nullptr );
 
-		JNI_ENSURES( pthread_key_create( &reinterpret_cast<pthread_key_t&>( vm.m_detach_key ), VirtualMachine::DetachLocalEnv ) == 0 )
-		JNI_ENSURES( vm.m_jvm != nullptr );
-		JNI_ENSURES( vm.m_main_env != nullptr );
-
-		JNI_RETURN_IF_E( !vm.CaptureClassLoader(), false, "Failed to capture the class loader." );
-		JNI_RETURN_IF_E( !vm.AcquireClassInterface(), false, "Failed to acquire the interface of `java.lang.Class` class." );
-		return true;
-	}
-
-	void VirtualMachine::Finalize()
-	{
-		auto& vm = GetInstance();
-
-		pthread_key_delete( vm.m_detach_key );
-
-		vm.m_jvm			= nullptr;
-		vm.m_main_env		= nullptr;
-		vm.m_main_thread_id	= 0;
-	}
-
-	const bool VirtualMachine::CaptureClassLoader()
-	{
-		Class loader_class{ "java/lang/ClassLoader" };
-		JNI_RETURN_IF_E( !loader_class, false, "Failed to locate `java.lang.ClassLoader` class." );
-
-		m_load_class_func = { loader_class, "loadClass" };
-		JNI_RETURN_IF_E( !m_load_class_func, false, "Failed to locate `Class ClassLoader::findClass( String )` function." );
-
-		Class thread_class{ "java/lang/Thread" };
-		JNI_RETURN_IF_E( !thread_class, false, "Failed to locate `java.lang.Thread` class." );
-
-		StaticFunction<Android::Thread> current_thread_func{ thread_class, "currentThread" };
-		JNI_RETURN_IF_E( !current_thread_func, false, "Failed to locate `Thread Thread::currentThread()` function." );
-
-		Android::Thread current_thread{ current_thread_func.Call() };
-		JNI_RETURN_IF_E( !current_thread, false, "Failed to get object of current thread." );
-
-		MemberFunction<Android::ClassLoader> get_class_loader_func{ thread_class, "getContextClassLoader" };
-		JNI_RETURN_IF_E( !get_class_loader_func, false, "Failed to locate `ClassLoader Thread::getContextClassLoader()` function." );
-
-		m_class_loader = get_class_loader_func.Call( current_thread );
-		JNI_RETURN_IF_E( !m_class_loader, false, "Failed to get class loader object." );
+		CRETM( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
 
 		return true;
 	}
 
-	const bool VirtualMachine::AcquireClassInterface()
+	const bool JniConnection::Finalize()
 	{
-		const Class class_handle{ "java/lang/Class" };
-		JNI_RETURN_IF_E( !class_handle, false, "Failed to locate `java.lang.Class` class." );
+		auto& connection = GetInstance();
+		CRET( !IsValid(), true );
 
-		m_get_super_class_func = { class_handle, "getSuperclass" };
-		JNI_RETURN_IF_E( !m_get_super_class_func, false, "Failed to locate `Class Class::getSuperclass()` function." );
+		connection.m_cached_states.Finalize();
+		connection.m_stored_classes.Finalize();
 
-		m_get_canonical_name = { class_handle, "getCanonicalName" };
-		JNI_RETURN_IF_E( !m_get_canonical_name, false, "Failed to locate `String Class::getCanonicalName()` function." );
+		pthread_key_delete( connection.m_thread_detach_key );
 
-		m_get_name = { class_handle, "getName" };
-		JNI_RETURN_IF_E( !m_get_name, false, "Failed to locate `String Class::getName()` function." );
-
-		m_get_simple_name = { class_handle, "getSimpleName" };
-		JNI_RETURN_IF_E( !m_get_simple_name, false, "Failed to locate `String Class::getSimpleName()` function." );
-
-		return true;
+		connection.m_connection			= nullptr;
+		connection.m_main_env			= nullptr;
+		connection.m_main_thread_id		= 0;
+		connection.m_thread_detach_key	= 0;
 	}
 
-	const bool VirtualMachine::RegisterClassNatives( const NativeBindingTable& bindings )
+	const bool JniConnection::RegisterClassNatives( const Black::NativeBindingTable& bindings )
 	{
-		JNI_RETURN_IF_E( !IsValid(), nullptr, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
+		CRETD( !IsValid(), false, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
-		auto local_env	= GetLocalEnvironment();
-		auto java_class	= GetInstance().GetClassReference( bindings.class_name );
-		JNI_RETURN_IF_E( !java_class, false, "Class `%s` was not found.", bindings.class_name );
+		JNIEnv* local_env = GetLocalEnvironment();
+		Black::JniClass bound_class{ bindings.class_name };
+		CRETM( !bound_class, false, LOG_CHANNEL, "Failed to get handle to class '{}'.", bindings.class_name );
 
 		std::vector<JNINativeMethod> jni_natives;
 		jni_natives.reserve( bindings.natives.size() );
 		std::transform(
 			bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ),
-			[]( const NativeFunction& stored_function ) -> JNINativeMethod
+			[]( const Traits::NativeFunction& func )
 			{
-				return stored_function.GetJniNativeMethod();
+				return static_cast<JNINativeMethod>( func );
 			}
 		);
 
-		JNI_RETURN_IF_E(
-			local_env->RegisterNatives( java_class.get(), jni_natives.data(), static_cast<int32_t>( jni_natives.size() ) ) != JNI_OK,
-			false,
-			"Failed to register natives for class `%s`.", bindings.class_name
-		);
+		auto result = local_env->RegisterNatives( *bound_class, jni_natives.data(), static_cast<jsize>( jni_natives.size() ) );
+		CRETM( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
 
 		return true;
 	}
 
-	const bool VirtualMachine::RegisterClassNatives( std::initializer_list<NativeBindingTable> bindings )
+	const bool JniConnection::RegisterClassNatives( std::initializer_list<Black::NativeBindingTable> bindings )
 	{
-		return std::all_of(
-			bindings.begin(), bindings.end(),
-			static_cast<const bool (*)( const NativeBindingTable& )>( VirtualMachine::RegisterClassNatives )
-		);
+		using RegisterFunction = const bool (*)( const Black::NativeBindingTable& );
+
+		// Select the right overload for function name.
+		return std::all_of( bindings.begin(), bindings.end(), static_cast<RegisterFunction>( JniConnection::RegisterClassNatives ) );
 	}
 
-	JNIEnv* VirtualMachine::GetLocalEnvironment()
+	Black::NotNull<JNIEnv> JniConnection::GetLocalEnvironment()
 	{
-		JNI_RETURN_IF_E( !IsValid(), nullptr, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
+		ENSURES( IsValid() );
 
-		auto& vm = GetInstance();
-		JNI_RETURN_IF_V( pthread_self() == vm.m_main_thread_id, vm.m_main_env, "Accessing JniEnv from main thread." );
+		auto& connection = GetInstance();
+		CRET( pthread_self() == connection.m_main_thread_id, connection.m_main_env );
 
-		JNIEnv* local_env = nullptr;
-		JNI_RETURN_IF_V( vm.m_jvm->GetEnv( reinterpret_cast<void**>( &local_env ), VirtualMachine::JNI_VERSION ) == JNI_OK, local_env, "Accessing already attached JniEnv." );
+		JNIEnv* local_env			= nullptr;
+		const auto env_result		= connection.m_connection->GetEnv( reinterpret_cast<void**>( local_env ), Black::JNI_VERSION );
+		CRET( env_result == JNI_OK, local_env );
 
-		// Try to attach JVM to this thread.
-		JNI_RETURN_IF_E( vm.m_jvm->AttachCurrentThread( &local_env, nullptr ) != JNI_OK, nullptr, "Failed to attach Java VM to current thread." );
-		JNI_RETURN_IF_D( pthread_getspecific( vm.m_detach_key ) != nullptr, local_env, "Looks like local JniEnv was reattached to thread." );
+		const auto attach_result	= connection.m_connection->AttachCurrentThread( &local_env, nullptr );
+		EXPECTS( attach_result == JNI_OK );
 
-		JNI_RETURN_IF_E( pthread_setspecific( vm.m_detach_key, local_env ) != 0, local_env, "Failed to set thread-local detach routine for JniEnv." );
+		const auto attached_env		= pthread_getspecific( connection.m_thread_detach_key );
+		CRETD( attached_env != nullptr, local_env, LOG_CHANNEL, "Looks like the JNI environment was reattached to {:016X}.", (int64_t)pthread_self() );
+
+		const auto detach_result	= pthread_setspecific( connection.m_thread_detach_key, local_env );
+		CRETD( detach_result != 0, local_env, LOG_CHANNEL, "Failed to attach JNI environment to {:016X} (error: {:08X})", (int64_t)pthread_self(), detach_result );
+
 		return local_env;
 	}
 
-	void VirtualMachine::DeleteSharedClass( jclass value )
+	JniConnection& JniConnection::GetInstance()
 	{
-		JNI_RETURN_IF_E( !IsValid(), , "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-
-		if( value != nullptr )
-		{
-			GetLocalEnvironment()->DeleteGlobalRef( value );
-		}
+		static JniConnection connection;
+		return connection;
 	}
 
-	void VirtualMachine::DetachLocalEnv( void* local_env )
+	void JniConnection::DetachLocalEnv( void* local_env )
 	{
-		JNI_EXPECTS( IsValid() );
-		GetInstance().m_jvm->DetachCurrentThread();
+		ENSURES( IsValid() );
+		GetConnection()->DetachCurrentThread();
 	}
 
-	std::shared_ptr<_jclass> VirtualMachine::GetClassReference( jobject local_object_ref )
+	const bool JniConnection::CaptureClassLoader()
 	{
-		JNI_RETURN_IF_E( !IsValid(), {}, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		JNI_RETURN_IF_V( local_object_ref == nullptr, {}, "Attempt to get Java class via null object." );
 
-		auto local_env		= GetLocalEnvironment();
-		auto local_class	= local_env->GetObjectClass( local_object_ref );
-		JNI_RETURN_IF_W( local_class == nullptr, {}, "Unable to get Java class for object." );
-
-		// The value returned is `std::shared_ptr` with custom deleter.
-		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_class ) ), VirtualMachine::DeleteSharedClass };
 	}
 
-	std::shared_ptr<_jclass> VirtualMachine::GetClassReference( jclass local_class_ref )
+	const bool JniConnection::InitEnvDetacher()
 	{
-		JNI_RETURN_IF_E( !IsValid(), {}, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		JNI_RETURN_IF_V( local_class_ref == nullptr, {}, "Attempt to get Java class via null class." );
+		CRETD( m_main_thread_id != 0, false, LOG_CHANNEL, "Double initialization of environment detacher blocked." );
 
-		auto local_env = GetLocalEnvironment();
+		m_main_thread_id = pthread_self();
 
-		// The value returned is `std::shared_ptr` with custom deleter.
-		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_class_ref ) ), VirtualMachine::DeleteSharedClass };
+		ENSURES( pthread_key_create( reinterpret_cast<pthread_key_t*>( &m_thread_detach_key ), JniConnection::DetachLocalEnv ) == 0 );
+
+		return true;
 	}
-
-	std::shared_ptr<_jclass> VirtualMachine::GetClassReference( const char* class_name )
-	{
-		JNI_RETURN_IF_E( !IsValid(), {}, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		JNI_RETURN_IF_W( ( class_name == nullptr ) || !::strlen( class_name ), {}, "Attempt to get Java class via empty class name." );
-
-		Utils::MutexLock lock{ m_classes_mutex };
-		auto& weak_class = m_shared_classes[ class_name ];
-		JNI_RETURN_IF_V( !weak_class.expired(), weak_class.lock(), "Shared class found." );
-
-		// If shared class already lost or never been found, ask JNI to lookup it.
-		auto shared_class	= LoadClass( class_name );
-		weak_class			= shared_class;
-
-		return shared_class;
-	}
-
-	std::shared_ptr<_jclass> VirtualMachine::LoadClass( const char* class_name )
-	{
-		JNI_RETURN_IF_E( !IsValid(), {}, "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-
-		auto local_env			= GetLocalEnvironment();
-		jclass local_class_ref	= nullptr;
-
-		if( pthread_self() == m_main_thread_id )
-		{
-			// For main thread we may use `FindClass` function of `JNIEnv` object.
-			local_class_ref	= local_env->FindClass( class_name );
-		}
-		else
-		{
-			// Since JNI can't return class reference from native threads,
-			// according to next article the best way is using the cached `ClassLoader` instance.
-			// https://developer.android.com/training/articles/perf-jni.html#faq_FindClass
-
-			// The name of class must be converted into Java-style package name.
-			std::string modified_class_name{ class_name };
-			for( char& stored_char : modified_class_name )
-			{
-				if( stored_char == '/' )
-				{
-					stored_char = '.';
-				}
-			}
-
-			// For any other thread only captured `ClassLoader` instance may be used.
-			local_class_ref = reinterpret_cast<jclass>(
-				local_env->CallObjectMethod( *m_class_loader, *m_load_class_func, Marshaling::ToJava( modified_class_name ) )
-			);
-		}
-
-		if( local_env->ExceptionCheck() == JNI_TRUE )
-		{
-			local_env->ExceptionDescribe();
-			local_env->ExceptionClear();
-			local_class_ref = nullptr;
-		}
-
-		JNI_RETURN_IF_W( local_class_ref == nullptr, {}, "No class was found with name `%s`.", class_name );
-
-		// The value returned is `std::shared_ptr` with custom deleter.
-		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_class_ref ) ), VirtualMachine::DeleteSharedClass };
-	}
+}
+}
 }

@@ -18,7 +18,7 @@ inline namespace VirtualMachine
 	// Public interface.
 	public:
 		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
-		static const bool Initialize( JavaVM* connection );
+		static const bool Initialize( Black::NotNull<JavaVM> jvm );
 
 		// Finalize the JNI connection. Expected to be used only at `JNI_OnUnload` function.
 		static const bool Finalize();
@@ -32,7 +32,7 @@ inline namespace VirtualMachine
 
 
 		// Get the thread-local JNI environment.
-		static JNIEnv* GetLocalEnvironment();
+		static Black::NotNull<JNIEnv> GetLocalEnvironment();
 
 
 		// Check that the connection is properly initialized.
@@ -56,6 +56,9 @@ inline namespace VirtualMachine
 		// Retrieve the instance of class loader.
 		const bool CaptureClassLoader();
 
+		// Initialize the thread-local environment detaching entity.
+		const bool InitEnvDetacher();
+
 	// Private state.
 	private:
 		JavaVM*						m_connection		= nullptr;	// Current connection to virtual machine.
@@ -64,17 +67,6 @@ inline namespace VirtualMachine
 		int64_t						m_thread_detach_key	= 0;		// Thread-local environment detach key.
 
 		Traits::SharedClassStorage	m_stored_classes;				// Storage for shared classes.
-
-	// Persistently cached handles.
-	private:
-		Black::JniObject										m_class_loader;				// Instance of `java.lang.ClassLoader`.
-
-		Black::JniMemberFunction<Black::JniClass, std::string>	m_load_class_func;			// `java.lang.Class java.lang.ClassLoader.loadClass( java.lang.String )`
-
-		Black::JniMemberFunction<Black::JniClass>				m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
-		Black::JniMemberFunction<std::string>					m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
-		Black::JniMemberFunction<std::string>					m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
-		Black::JniMemberFunction<std::string>					m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
 
 	// Persistent cache.
 	private:
