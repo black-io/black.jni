@@ -1,37 +1,53 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
-#include <jnipp/jnipp.h>
+#include <black.jni.h>
 
 
-namespace Jni
-{
 namespace Android
 {
-	/// @brief	Handle to `java.lang.Thread` object.
-	class Thread : public Object
+inline namespace Java
+{
+inline namespace Lang
+{
+	// Handle for `java.lang.Thread` objects.
+	class Thread : public Black::JniObject
 	{
 	public:
-		/// @brief	Class path.
-		using ClassPath = Jni::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'T', 'h', 'r', 'e', 'a', 'd'>;
+		// Class path.
+		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'T', 'h', 'r', 'e', 'a', 'd'>;
 
-
+	// Construction and assignation.
+	public:
 		Thread() = default;
-		Thread( jobject object_ref ) : Object( object_ref ) {};
-		Thread( const Thread& other ) : Object( other ) {};
-		Thread( Thread&& other ) : Object( other ) {};
+		Thread( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		Thread( const JniObject& other ) : Black::JniObject( other ) {};
+		Thread( JniObject&& other ) : Black::JniObject( std::move( other ) ) {};
 
-		const Thread& operator = ( jobject object_ref )		{ Object::operator=( object_ref ); return *this; };
-		const Thread& operator = ( const Thread& other )	{ Object::operator=( other ); return *this; };
-		const Thread& operator = ( Thread&& other )			{ Object::operator=( other ); return *this; };
+
+		const Thread& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
+		const Thread& operator = ( const JniObject& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const Thread& operator = ( JniObject&& other )		{ Black::JniObject::operator=( other ); return *this; };
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::Thread` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `java.lang.Thread` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::Thread> : ObjectTypeTraits<Jni::Android::Thread> {};
+	struct NativeContext<::Android::Java::Lang::Thread> : public Black::NativeObjectContext<::Android::Java::Lang::Thread>
+	{
+
+	};
+}
+}
 }
 }
