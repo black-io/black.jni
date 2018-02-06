@@ -87,6 +87,55 @@ namespace Traits
 
 		return true;
 	}
+
+	std::shared_ptr<_jclass> SharedClassStorage::MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env )
+	{
+		EXPECTS_DEBUG( local_ref != nullptr );
+		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_ref ) ), SharedClassStorage::DeleteSharedClass };
+	}
+
+	std::shared_ptr<_jclass> SharedClassStorage::LoadClass( Black::StringView class_name )
+	{
+		JNIEnv* local_env		= Black::JniConnection::GetLocalEnvironment();
+		jclass local_class_ref	= nullptr;
+
+		if( Black::JniConnection::IsMainThread() )
+		{
+			// For the main thread we may use `FindClass` function from `JNIEnv` object.
+			local_class_ref = local_env->FindClass( class_name.data() );
+		}
+		else
+		{
+			// Since JNI can't return class reference from native threads,
+			// according to next article the best way is using the cached `ClassLoader` instance.
+			// https://developer.android.com/training/articles/perf-jni.html#faq_FindClass
+
+			// The name of class must be converted into Java-style package name.
+			std::string jni_class_name{ class_name.data() };
+			for( auto& item : jni_class_name )
+			{
+				if( item == '/' )
+				{
+					item = '.';
+				}
+			}
+
+			// For any other thread only captured `ClassLoader` instance may be used.
+			local_class_ref = reinterpret_cast<jclass>(
+				local_env->CallObjectMethod( *m_class_loader, *m_load_class_func, Black::ToJni( jni_class_name ) )
+			);
+		}
+
+		if( local_env->ExceptionCheck() == JNI_TRUE )
+		{
+			BLACK_NON_RELEASE_CODE( local_env->ExceptionDescribe() );
+			local_env->ExceptionClear();
+			local_class_ref = nullptr;
+		}
+
+		CRETW( local_class_ref == nullptr, {}, LOG_CHANNEL, "No class was found with name `%s`.", class_name.data() );
+		return MakeGlobalRef( local_class_ref, local_env );
+	}
 }
 }
 }

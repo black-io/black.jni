@@ -38,6 +38,12 @@ namespace Traits
 		//
 		const bool AcquireClassInterface();
 
+		//
+		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env );
+
+		//
+		std::shared_ptr<_jclass> LoadClass( Black::StringView class_name );
+
 	// Private state.
 	private:
 		using Storage = std::unordered_map<std::string, std::weak_ptr<_jclass>>;
