@@ -35,6 +35,9 @@ inline namespace VirtualMachine
 		static Black::NotNull<JNIEnv> GetLocalEnvironment();
 
 
+		// Check that the current thread is the main (for JNI connection) one.
+		static const bool IsMainThread();
+
 		// Check that the connection is properly initialized.
 		static inline const bool IsValid()		{ return GetConnection() != nullptr; };
 

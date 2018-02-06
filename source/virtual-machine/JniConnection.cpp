@@ -81,7 +81,7 @@ inline namespace VirtualMachine
 		ENSURES( IsValid() );
 
 		auto& connection = GetInstance();
-		CRET( pthread_self() == connection.m_main_thread_id, connection.m_main_env );
+		CRET( IsMainThread(), connection.m_main_env );
 
 		JNIEnv* local_env			= nullptr;
 		const auto env_result		= connection.m_connection->GetEnv( reinterpret_cast<void**>( local_env ), Black::JNI_VERSION );
@@ -97,6 +97,11 @@ inline namespace VirtualMachine
 		CRETD( detach_result != 0, local_env, LOG_CHANNEL, "Failed to attach JNI environment to {:016X} (error: {:08X})", (int64_t)pthread_self(), detach_result );
 
 		return local_env;
+	}
+
+	const bool JniConnection::IsMainThread()
+	{
+		return pthread_self() == GetInstance().m_main_thread_id;
 	}
 
 	JniConnection& JniConnection::GetInstance()
