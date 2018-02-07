@@ -34,6 +34,39 @@ namespace Traits
 		return true;
 	}
 
+	std::shared_ptr<_jclass> SharedClassStorage::GetClassReference( jobject object_ref )
+	{
+		CRETD( object_ref == nullptr, {}, LOG_CHANNEL, "Attempt to get JNI class via null object." );
+
+		JNIEnv* local_env	= Black::JniConnection::GetLocalEnvironment();
+		jclass class_ref	= local_env->GetObjectClass( object_ref );
+		CRETW( class_ref == nullptr, {}, LOG_CHANNEL, "Unable to get Java class for object." );
+
+		return MakeGlobalRef( class_ref, local_env );
+	}
+
+	std::shared_ptr<_jclass> SharedClassStorage::GetClassReference( jclass class_ref )
+	{
+		CRETD( class_ref == nullptr, {}, LOG_CHANNEL, "Attempt to get reference for null class." );
+
+		return MakeGlobalRef( class_ref, Black::JniConnection::GetLocalEnvironment() );
+	}
+
+	std::shared_ptr<_jclass> SharedClassStorage::GetClassReference( Black::StringView class_name )
+	{
+		CRETD( class_name.empty(), {}, LOG_CHANNEL, "Attempt to get class reference using null class name." );
+
+		Black::MutexLock lock{ m_latch };
+		auto& weak_class_ref = m_storage[ class_name.data() ];
+		CRET( !weak_class_ref.expired(), weak_class_ref.lock() );
+
+		// If shared class already lost or never been found, ask JNI to lookup it.
+		auto shared_class_ref	= LoadClass( class_name );
+		weak_class_ref			= shared_class_ref;
+
+		return shared_class_ref;
+	}
+
 	void SharedClassStorage::DeleteSharedClass( jclass value )
 	{
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );

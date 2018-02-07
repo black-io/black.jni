@@ -23,6 +23,16 @@ namespace Traits
 		const bool Finalize();
 
 
+		// Get the class reference for JNI object by given JNI reference.
+		std::shared_ptr<_jclass> GetClassReference( jobject object_ref );
+
+		// Get the shared global reference for JNI class using another reference.
+		std::shared_ptr<_jclass> GetClassReference( jclass class_ref );
+
+		// Get the class reference by its name.
+		std::shared_ptr<_jclass> GetClassReference( Black::StringView class_name );
+
+
 		// Get the synchronization mutex for storage.
 		inline const Black::Mutex& GetMutex() const		{ return m_latch; };
 
@@ -32,16 +42,16 @@ namespace Traits
 		static void DeleteSharedClass( jclass value );
 
 
-		//
+		// Capture the global handle to JNI class loader.
 		const bool CaptureClassLoader();
 
-		//
+		// Acquire the helper functions for JNI class handle.
 		const bool AcquireClassInterface();
 
-		//
+		// Create shared global reference to JNI class from local one.
 		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env );
 
-		//
+		// Load the JNI class by given class name.
 		std::shared_ptr<_jclass> LoadClass( Black::StringView class_name );
 
 	// Private state.
