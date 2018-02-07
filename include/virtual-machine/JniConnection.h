@@ -52,6 +52,12 @@ inline namespace VirtualMachine
 		// Thread-local JNI environment termination routine.
 		static void DetachLocalEnv( void* local_env );
 
+		// Short path to get the storage for shared classes.
+		static inline Traits::SharedClassStorage& GetClassStorage()		{ return GetInstance().m_stored_classes; };
+
+		// Short path to get the storage for shared states.
+		static inline Traits::SharedStateCache& GetSharedStateStorage()	{ return GetInstance().m_cached_states; };
+
 
 		JniConnection() = default;
 
