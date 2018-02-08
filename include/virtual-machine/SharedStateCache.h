@@ -24,16 +24,24 @@ namespace Traits
 	class SharedStateCache final : private Black::NonTransferable
 	{
 	public:
+		// Init the cache.
+		const bool Initialize();
+
+		// Finalize.
+		const bool Finalize();
+
+
 		// Get the cached storage for shared state.
 		template< typename TState >
-		static inline SharedStateStorage<TState>* GetCachedStorage();
+		inline SharedStateStorage<TState>* GetCachedStorage();
 
 
 		// Get the synchronization mutex for storage.
-		static inline const Black::Mutex& GetMutex()	{ return GetInstance().m_latch; };
+		inline const Black::Mutex& GetMutex()	{ return m_latch; };
 
 	private:
-		static SharedStateCache& GetInstance();
+		template< Black::BuildMode >
+		void EnsureStorageReleased();
 
 	private:
 		using Storage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
