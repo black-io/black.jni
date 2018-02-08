@@ -24,6 +24,7 @@ inline namespace VirtualMachine
 		ENSURES( connection.m_main_env != nullptr );
 
 		CRETM( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
+		CRETM( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
 
 		return true;
 	}
@@ -33,7 +34,7 @@ inline namespace VirtualMachine
 		auto& connection = GetInstance();
 		CRET( !IsValid(), true );
 
-		//connection.m_cached_states.Finalize();
+		connection.m_cached_states.Finalize();
 		connection.m_stored_classes.Finalize();
 
 		pthread_key_delete( connection.m_thread_detach_key );
