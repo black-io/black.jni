@@ -13,7 +13,7 @@ namespace Traits
 	SharedState<TState, IS_PERSISTENT>::SharedState( const SharedState<TState, IS_PERSISTENT>& other )
 		: m_storage{ other.m_storage }
 	{
-		Black::MutexLock lock{ SharedStateCache::GetMutex() };
+		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
 		RetainStorage();
 	}
 
@@ -29,14 +29,14 @@ namespace Traits
 	{
 		CRET( m_storage == nullptr );
 
-		Black::MutexLock lock{ SharedStateCache::GetMutex() };
+		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
 		m_storage->Release();
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
 	inline SharedState<TState, IS_PERSISTENT>& SharedState<TState, IS_PERSISTENT>::operator=( const SharedState<TState, IS_PERSISTENT>& other )
 	{
-		Black::MutexLock lock{ SharedStateCache::GetMutex() };
+		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
 
 		ReleaseStorage();
 		m_storage = other.m_storage;
@@ -50,7 +50,7 @@ namespace Traits
 	{
 		if( m_storage != nullptr )
 		{
-			Black::MutexLock lock{ SharedStateCache::GetMutex() };
+			Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
 			ReleaseStorage();
 		}
 
@@ -63,8 +63,8 @@ namespace Traits
 	{
 		CRET( m_storage != nullptr, *m_storage );
 
-		Black::MutexLock lock{ SharedStateCache::GetMutex() };
-		m_storage = SharedStateCache::GetCachedStorage<TState>();
+		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
+		m_storage = Black::JniConnection::GetSharedStateStorage().GetCachedStorage<TState>();
 		ENSURES_DEBUG( m_storage != nullptr );
 
 		RetainStorage();
