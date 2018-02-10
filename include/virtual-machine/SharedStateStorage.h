@@ -23,6 +23,10 @@ namespace Traits
 	public:
 		virtual ~SharedStateEntity() = default;
 
+
+		// Check that the entity is currently allocated.
+		virtual const bool IsAllocated() const = 0;
+
 	protected:
 		SharedStateEntity() = default;
 	};
@@ -43,10 +47,13 @@ namespace Traits
 
 
 		// Make the state to be persistent.
-		inline void MakePersistent()	{ m_is_persistent = true; };
+		inline void MakePersistent()					{ m_is_persistent = true; };
 
 		// Get the state.
-		inline TState* GetState() const	{ return m_state; };
+		inline TState* GetState() const					{ return m_state; };
+
+		// Check that the entity is currently allocated.
+		virtual const bool IsAllocated() const override	{ return m_state != nullptr; };
 
 	private:
 		// Create the state.

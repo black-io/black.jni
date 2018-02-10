@@ -24,10 +24,10 @@ namespace Traits
 	{
 		auto storage_check = []( const Storage::value_type& storage ) -> bool
 		{
-			//return storage.second->
+			return !storage.second->IsAllocated();
 		};
 
-		EXPECTS( std::all_of( m_storage.begin(), m_storage.end(),  ) );
+		EXPECTS( std::all_of( m_storage.begin(), m_storage.end(), storage_check ) );
 	}
 
 	template<>
