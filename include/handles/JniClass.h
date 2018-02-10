@@ -10,20 +10,20 @@ inline namespace Handles
 	// Handle to JNI class.
 	class JniClass final
 	{
-		friend class JniObject;	// Grant access to `AcquireClassReference` function.
+		friend class Black::Jni::Handles::JniObject;	// Grant access to `AcquireClassReference` function.
 
 	// Construction and assignment.
 	public:
-		JniClass() = default;
-		JniClass( const JniClass& other );
-		JniClass( JniClass&& other );
+		JniClass()														= default;
+		JniClass( const JniClass& other )								= default;
+		JniClass( JniClass&& other )									= default;
 		JniClass( Black::StringView class_name );
 
 
-		const JniClass& operator = ( jclass class_ref );
-		const JniClass& operator = ( const JniClass& other );
-		const JniClass& operator = ( JniClass&& other );
-		const JniClass& operator = ( Black::StringView class_name );
+		inline JniClass& operator = ( const JniClass& other )			= default;
+		inline JniClass& operator = ( JniClass&& other )				= default;
+		inline JniClass& operator = ( Black::StringView class_name )	{ return Black::CopyAndSwap( *this, class_name ); };
+		JniClass& operator = ( jclass class_ref );
 
 	// Public interface.
 	public:

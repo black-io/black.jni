@@ -1,135 +1,71 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
-#include <jnipp/jnipp.h>
+#include <black.jni.h>
 
 
-namespace Jni
+namespace Black
 {
-	Class::Class( const Class& other )
-		: m_class_ref( other.m_class_ref )
-	{
-
-	}
-
-	Class::Class( Class&& other )
-		: m_class_ref( std::move( other.m_class_ref ) )
-	{
-
-	}
-
-	Class::Class( const std::string& class_name )
-		: Class( class_name.c_str() )
-	{
-
-	}
-
-	Class::Class( const char* class_name )
+inline namespace Jni
+{
+inline namespace Handles
+{
+	JniClass::JniClass( Black::StringView class_name )
 	{
 		AcquireClassReference( class_name );
 	}
 
-	void Class::Invalidate()
+	JniClass& JniClass::operator=( jclass class_ref )
+	{
+		auto new_ref = Black::JniConnection::GetClassStorage().GetClassReference( class_ref );
+		std::swap( m_class_ref, new_ref );
+
+		return *this;
+	}
+
+	void JniClass::Invalidate()
 	{
 		m_class_ref.reset();
 	}
 
-	const std::string Class::GetCanonicalName() const
+	const std::string JniClass::GetCanonicalName() const
 	{
-		JNI_RETURN_IF( !IsValid(), {} );
-		JNI_EXPECTS( VirtualMachine::IsValid() );
-		return VirtualMachine::GetInstance().m_get_canonical_name.Call( GetJniReference() );
+		CRET( !IsValid(), {} );
+		return Black::JniConnection::GetCanonicalClassName( *this );
 	}
 
-	const std::string Class::GetName() const
+	const std::string JniClass::GetName() const
 	{
-		JNI_RETURN_IF( !IsValid(), {} );
-		JNI_EXPECTS( VirtualMachine::IsValid() );
-		std::string class_name{ VirtualMachine::GetInstance().m_get_name.Call( GetJniReference() ) };
-
-		for( char& stored_char : class_name )
-		{
-			if( stored_char == '.' )
-			{
-				stored_char = '/';
-			}
-		}
-
-		return class_name;
+		CRET( !IsValid(), {} );
+		return Black::JniConnection::GetClassName( *this );
 	}
 
-	const std::string Class::GetSimpleName() const
+	const std::string JniClass::GetSimpleName() const
 	{
-		JNI_RETURN_IF( !IsValid(), {} );
-		JNI_EXPECTS( VirtualMachine::IsValid() );
-		return VirtualMachine::GetInstance().m_get_simple_name.Call( GetJniReference() );
+		CRET( !IsValid(), {} );
+		return Black::JniConnection::GetSimpleClassName( *this );
 	}
 
-	Class Class::GetParentClass() const
+	JniClass JniClass::GetParentClass() const
 	{
-		JNI_RETURN_IF( !IsValid(), {} );
-		JNI_EXPECTS( VirtualMachine::IsValid() );
-		return VirtualMachine::GetInstance().m_get_super_class_func.Call( GetJniReference() );
+		CRET( !IsValid(), {} );
+		return Black::JniConnection::GetParentClass( *this );
 	}
 
-	void Class::AcquireClassReference( const char* class_name )
+	void JniClass::AcquireClassReference( Black::StringView class_name )
 	{
 		Invalidate();
+		EXPECTS( !class_name.empty() );
 
-		JNI_EXPECTS( class_name != nullptr );
-		JNI_EXPECTS( strlen( class_name ) > 0 );
-
-		m_class_ref = VirtualMachine::GetInstance().GetClassReference( class_name );
-
-		JNI_ENSURES( IsValid() );
+		m_class_ref = Black::JniConnection::GetClassStorage().GetClassReference( class_name );
+		ENSURES( IsValid() );
 	}
 
-	void Class::AcquireClassReference( jobject object_ref )
+	void JniClass::AcquireClassReference( jobject object_ref )
 	{
 		Invalidate();
+		CRET( object_ref == nullptr );
 
-		JNI_RETURN_IF( object_ref == nullptr );
-		m_class_ref = VirtualMachine::GetInstance().GetClassReference( object_ref );
-
-		JNI_ENSURES( IsValid() );
+		m_class_ref = Black::JniConnection::GetClassStorage().GetClassReference( object_ref );
+		ENSURES( IsValid() );
 	}
-
-	const Class& Class::operator=( jclass class_ref )
-	{
-		m_class_ref = VirtualMachine::GetInstance().GetClassReference( class_ref );
-		return *this;
-	}
-
-	const Class& Class::operator=( const Class& other )
-	{
-		m_class_ref = other.m_class_ref;
-		return *this;
-	}
-
-	const Class& Class::operator=( Class&& other )
-	{
-		m_class_ref = std::move( other.m_class_ref );
-		return *this;
-	}
-
-	const Class& Class::operator=( const std::string& class_name )
-	{
-		AcquireClassReference( class_name.c_str() );
-		return *this;
-	}
-
-	const Class& Class::operator=( const char* class_name )
-	{
-		AcquireClassReference( class_name );
-		return *this;
-	}
-
-	const bool operator==( const Class& left, const Class& right )
-	{
-		return VirtualMachine::GetLocalEnvironment()->IsSameObject( *left, *right );
-	}
-
-	const bool operator!=( const Class& left, const Class& right )
-	{
-		return !VirtualMachine::GetLocalEnvironment()->IsSameObject( *left, *right );
-	}
+}
+}
 }
