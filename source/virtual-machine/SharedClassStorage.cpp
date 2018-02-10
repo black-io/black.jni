@@ -16,17 +16,12 @@ namespace Traits
 	const bool SharedClassStorage::Initialize()
 	{
 		CRETM( !CaptureClassLoader(), false, LOG_CHANNEL, "Failed to capture JNI class loader." );
-		CRETM( !AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
 
 		return true;
 	}
 
 	const bool SharedClassStorage::Finalize()
 	{
-		m_get_simple_name_func		= {};
-		m_get_name_func				= {};
-		m_get_canonical_name_func	= {};
-		m_get_super_class_func		= {};
 		m_load_class_func			= {};
 		m_class_loader				= {};
 
@@ -97,26 +92,6 @@ namespace Traits
 
 		m_class_loader = get_class_loader_func.Call( current_thread );
 		CRETM( !m_class_loader, false, LOG_CHANNEL, "Failed to get class loader object." );
-
-		return true;
-	}
-
-	const bool SharedClassStorage::AcquireClassInterface()
-	{
-		const Black::JniClass class_handle{ "java/lang/Class" };
-		CRETM( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Class` class." );
-
-		m_get_super_class_func = { class_handle, "getSuperclass" };
-		CRETM( !m_get_super_class_func, false, LOG_CHANNEL, "Failed to locate `Class Class::getSuperclass()` function." );
-
-		m_get_canonical_name_func = { class_handle, "getCanonicalName" };
-		CRETM( !m_get_canonical_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getCanonicalName()` function." );
-
-		m_get_name_func = { class_handle, "getName" };
-		CRETM( !m_get_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getName()` function." );
-
-		m_get_simple_name_func = { class_handle, "getSimpleName" };
-		CRETM( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
 
 		return true;
 	}

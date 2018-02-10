@@ -45,8 +45,6 @@ namespace Traits
 		// Capture the global handle to JNI class loader.
 		const bool CaptureClassLoader();
 
-		// Acquire the helper functions for JNI class handle.
-		const bool AcquireClassInterface();
 
 		// Create shared global reference to JNI class from local one.
 		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env );
@@ -63,14 +61,9 @@ namespace Traits
 
 	// Persistently cached handles.
 	private:
-		Black::JniObject										m_class_loader;				// Instance of `java.lang.ClassLoader`.
+		Black::JniObject										m_class_loader;		// Instance of `java.lang.ClassLoader`.
 
-		Black::JniMemberFunction<Black::JniClass, std::string>	m_load_class_func;			// `java.lang.Class java.lang.ClassLoader.loadClass( java.lang.String )`
-
-		Black::JniMemberFunction<Black::JniClass>				m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
-		Black::JniMemberFunction<std::string>					m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
-		Black::JniMemberFunction<std::string>					m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
-		Black::JniMemberFunction<std::string>					m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
+		Black::JniMemberFunction<Black::JniClass, std::string>	m_load_class_func;	// `java.lang.Class java.lang.ClassLoader.loadClass( java.lang.String )`
 	};
 }
 }
