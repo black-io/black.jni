@@ -52,6 +52,18 @@ inline namespace VirtualMachine
 		// Thread-local JNI environment termination routine.
 		static void DetachLocalEnv( void* local_env );
 
+		// Call the `java.lang.Class.getName()`.
+		static std::string GetClassName( const Black::JniClass& class_handle );
+
+		// Call the `java.lang.Class.getSimpleName()`.
+		static std::string GetSimpleClassName( const Black::JniClass& class_handle );
+
+		// Call the `java.lang.Class.getCanonicalName()`.
+		static std::string GetCanonicalClassName( const Black::JniClass& class_handle );
+
+		// Call the `java.lang.Class.getSuperClass()`.
+		static JniClass GetParentClass( const Black::JniClass& class_handle );
+
 		// Short path to get the storage for shared classes.
 		static inline Traits::SharedClassStorage& GetClassStorage()		{ return GetInstance().m_stored_classes; };
 
@@ -65,6 +77,9 @@ inline namespace VirtualMachine
 		// Initialize the thread-local environment detaching entity.
 		const bool InitEnvDetacher();
 
+		// Acquire the helper functions for JNI class handle.
+		const bool AcquireClassInterface();
+
 	// Private state.
 	private:
 		JavaVM*						m_connection		= nullptr;	// Current connection to virtual machine.
@@ -73,6 +88,13 @@ inline namespace VirtualMachine
 		int64_t						m_thread_detach_key	= 0;		// Thread-local environment detach key.
 
 		Traits::SharedClassStorage	m_stored_classes;				// Storage for shared classes.
+
+	// Persistently captured JNI entities.
+	private:
+		Black::JniMemberFunction<Black::JniClass>	m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
+		Black::JniMemberFunction<std::string>		m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
+		Black::JniMemberFunction<std::string>		m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
+		Black::JniMemberFunction<std::string>		m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
 
 	// Persistent cache.
 	private:

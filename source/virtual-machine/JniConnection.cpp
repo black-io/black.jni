@@ -24,6 +24,7 @@ inline namespace VirtualMachine
 		ENSURES( connection.m_main_env != nullptr );
 
 		CRETM( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
+		CRETM( !connection.AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
 		CRETM( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
 
 		return true;
@@ -33,6 +34,11 @@ inline namespace VirtualMachine
 	{
 		auto& connection = GetInstance();
 		CRET( !IsValid(), true );
+
+		connection.m_get_simple_name_func		= {};
+		connection.m_get_name_func				= {};
+		connection.m_get_canonical_name_func	= {};
+		connection.m_get_super_class_func		= {};
 
 		connection.m_cached_states.Finalize();
 		connection.m_stored_classes.Finalize();
@@ -117,6 +123,41 @@ inline namespace VirtualMachine
 		GetConnection()->DetachCurrentThread();
 	}
 
+	std::string JniConnection::GetClassName( const Black::JniClass& class_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		std::string name{ GetInstance().m_get_name_func.Call( local_env, *class_handle ) };
+
+		std::transform( name.begin(), name.end(), name.begin(), []( char& ch ){ return ( ch == '.' )? '/' : ch; } );
+		return name;
+	}
+
+	std::string JniConnection::GetSimpleClassName( const Black::JniClass& class_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		return GetInstance().m_get_simple_name_func.Call( local_env, *class_handle );
+	}
+
+	std::string JniConnection::GetCanonicalClassName( const Black::JniClass& class_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		return GetInstance().m_get_canonical_name_func.Call( local_env, *class_handle );
+	}
+
+	JniClass JniConnection::GetParentClass( const Black::JniClass& class_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		return GetInstance().m_get_super_class_func.Call( local_env, *class_handle );
+	}
+
 	const bool JniConnection::InitEnvDetacher()
 	{
 		CRETD( m_main_thread_id != 0, false, LOG_CHANNEL, "Double initialization of environment detacher blocked." );
@@ -124,6 +165,26 @@ inline namespace VirtualMachine
 		m_main_thread_id = pthread_self();
 
 		ENSURES( pthread_key_create( reinterpret_cast<pthread_key_t*>( &m_thread_detach_key ), JniConnection::DetachLocalEnv ) == 0 );
+
+		return true;
+	}
+
+	const bool JniConnection::AcquireClassInterface()
+	{
+		const Black::JniClass class_handle{ "java/lang/Class" };
+		CRETM( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Class` class." );
+
+		m_get_super_class_func = { class_handle, "getSuperclass" };
+		CRETM( !m_get_super_class_func, false, LOG_CHANNEL, "Failed to locate `Class Class::getSuperclass()` function." );
+
+		m_get_canonical_name_func = { class_handle, "getCanonicalName" };
+		CRETM( !m_get_canonical_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getCanonicalName()` function." );
+
+		m_get_name_func = { class_handle, "getName" };
+		CRETM( !m_get_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getName()` function." );
+
+		m_get_simple_name_func = { class_handle, "getSimpleName" };
+		CRETM( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
 
 		return true;
 	}
