@@ -11,7 +11,8 @@ inline namespace Handles
 	template< typename TResult, typename... TArguments >
 	class JniMemberFunction final
 	{
-		friend class Black::Jni::VirtualMachine::JniEnvironment; // Grant access to function calls.
+		friend class Black::Jni::VirtualMachine::JniConnection;		// Grant access to function calls.
+		friend class Black::Jni::VirtualMachine::JniEnvironment;	// Grant access to function calls.
 
 	// Construction and assignment.
 	public:
