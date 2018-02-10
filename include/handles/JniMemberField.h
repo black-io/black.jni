@@ -11,7 +11,8 @@ inline namespace Handles
 	template< typename TNativeType >
 	class JniMemberField final
 	{
-		friend class Black::Jni::VirtualMachine::JniEnvironment; // Grant access to private `GetValue` functions.
+		friend class Black::Jni::VirtualMachine::JniConnection;		// Grant access to function calls.
+		friend class Black::Jni::VirtualMachine::JniEnvironment;	// Grant access to function calls.
 
 	// Construction and assignment.
 	public:
