@@ -1,6 +1,6 @@
 #include <black.jni.h>
-#include <android/java.lang.Thread.h>
-#include <android/java.lang.ClassLoader.h>
+#include <black.java.lang.Thread.h>
+#include <black.java.lang.ClassLoader.h>
 
 
 namespace Black
