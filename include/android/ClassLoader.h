@@ -8,7 +8,7 @@ inline namespace Java
 inline namespace Lang
 {
 	// Handle for `java.lang.ClassLoader` objects.
-	class ClassLoader : public Black::JniObject
+	class ClassLoader final : public Black::JniObject
 	{
 	public:
 		// Class path.
