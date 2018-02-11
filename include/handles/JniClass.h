@@ -14,16 +14,17 @@ inline namespace Handles
 
 	// Construction and assignment.
 	public:
-		JniClass()														= default;
-		JniClass( const JniClass& other )								= default;
-		JniClass( JniClass&& other )									= default;
+		JniClass()									= default;
+		JniClass( const JniClass& other )			= default;
+		JniClass( JniClass&& other )				= default;
 		JniClass( Black::StringView class_name );
+		explicit JniClass( jclass class_ref );
 
 
 		inline JniClass& operator = ( const JniClass& other )			= default;
 		inline JniClass& operator = ( JniClass&& other )				= default;
 		inline JniClass& operator = ( Black::StringView class_name )	{ return Black::CopyAndSwap( *this, class_name ); };
-		JniClass& operator = ( jclass class_ref );
+		inline JniClass& operator = ( jclass class_ref )				{ return Black::CopyAndSwap( *this, class_ref ); };
 
 	// Public interface.
 	public:
