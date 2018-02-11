@@ -8,7 +8,7 @@ inline namespace Java
 inline namespace Lang
 {
 	// Handle for `java.lang.Thread` objects.
-	class Thread : public Black::JniObject
+	class Thread final : public Black::JniObject
 	{
 	public:
 		// Class path.
