@@ -22,19 +22,19 @@ inline namespace Handles
 		static JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
 
 
-		JniObject() = default;
-		JniObject( jobject object_ref );
+		JniObject()									= default;
+		JniObject( const JniObject& other )			= default;
+		JniObject( JniObject&& other )				= default;
 		JniObject( const JniClass& class_handle );
 		JniObject( JniClass&& class_handle );
-		JniObject( const JniObject& other );
-		JniObject( JniObject&& other );
+		explicit JniObject( jobject object_ref );
 
 
-		const JniObject& operator = ( jobject object_ref );
-		const JniObject& operator = ( const JniClass& class_handle );
-		const JniObject& operator = ( JniClass&& class_handle );
-		const JniObject& operator = ( const JniObject& other );
-		const JniObject& operator = ( JniObject&& other );
+		inline JniObject& operator = ( const JniObject& other )			= default;
+		inline JniObject& operator = ( JniObject&& other )				= default;
+		inline JniObject& operator = ( jobject object_ref )				{ return Black::CopyAndSwap( *this, object_ref ); };
+		inline JniObject& operator = ( const JniClass& class_handle )	{ return Black::CopyAndSwap( *this, class_handle ); };
+		inline JniObject& operator = ( JniClass&& class_handle )		{ return Black::CopyAndSwap( *this, std::move( class_handle ) ); };
 
 	// Public interface.
 	public:
@@ -49,7 +49,7 @@ inline namespace Handles
 		inline const bool IsValid() const					{ return m_object_ref != nullptr; };
 
 		// Get the handle to class of stored object.
-		inline const JniClass& GetJniClass() const			{ RetrieveClass(); return m_class_handle; };
+		inline const JniClass& GetClass() const				{ EnsureClassHandle(); return m_class_handle; };
 
 		// Get the JNI representation of Java object reference.
 		inline jobject GetJniReference() const				{ return m_object_ref.get(); };
@@ -65,7 +65,7 @@ inline namespace Handles
 
 
 		// Lazy initialization of `m_class_handle`.
-		void RetrieveClass() const;
+		void EnsureClassHandle() const;
 
 		// Acquire the global ref to object.
 		void AcquireObjectRef( jobject object_ref );
@@ -78,8 +78,8 @@ inline namespace Handles
 	};
 
 
-	const bool operator == ( const JniObject& left, const JniObject& right );
-	const bool operator != ( const JniObject& left, const JniObject& right );
+	inline const bool operator == ( const JniObject& left, const JniObject& right );
+	inline const bool operator != ( const JniObject& left, const JniObject& right );
 }
 }
 }

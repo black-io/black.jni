@@ -39,6 +39,18 @@ inline namespace Handles
 		local_env->PopLocalFrame( nullptr );
 		return result;
 	}
+
+	inline const bool operator == ( const JniObject& left, const JniObject& right )
+	{
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		return local_env->IsSameObject( *left, *right );
+	}
+
+	inline const bool operator != ( const JniObject& left, const JniObject& right )
+	{
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		return !local_env->IsSameObject( *left, *right );
+	}
 }
 }
 }

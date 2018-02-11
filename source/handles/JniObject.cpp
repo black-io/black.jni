@@ -1,115 +1,70 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
-#include <jnipp/jnipp.h>
+#include <black.jni.h>
 
 
-namespace Jni
+namespace Black
 {
-	Object::Object( jobject object_ref )
-	{
-		AcquireObjectRef( object_ref );
-	}
-
-	Object::Object( const Class& class_handle )
+inline namespace Jni
+{
+inline namespace Handles
+{
+	JniObject::JniObject( const JniClass& class_handle )
 		: m_object_ref( class_handle.m_class_ref )
 	{
 
 	}
 
-	Object::Object( Class&& class_handle )
+	JniObject::JniObject( JniClass&& class_handle )
 		: m_object_ref( std::move( class_handle.m_class_ref ) )
 	{
 
 	}
 
-	Object::Object( const Object& other )
-		: m_object_ref( other.m_object_ref )
-		, m_class_handle( other.m_class_handle )
-	{
-
-	}
-
-	Object::Object( Object&& other )
-		: m_object_ref( std::move( other.m_object_ref ) )
-		, m_class_handle( std::move( other.m_class_handle ) )
-	{
-
-	}
-
-	void Object::Invalidate()
-	{
-		m_object_ref.reset();
-		m_class_handle.Invalidate();
-	}
-
-	const bool Object::IsInstanceOf( const Class& base_class ) const
-	{
-		JNI_RETURN_IF( !IsValid() || !base_class, false );
-		return VirtualMachine::GetLocalEnvironment()->IsInstanceOf( m_object_ref.get(), *base_class );
-	}
-
-	const Object& Object::operator=( jobject object_ref )
+	JniObject::JniObject( jobject object_ref )
 	{
 		AcquireObjectRef( object_ref );
-		return *this;
 	}
 
-	const Object& Object::operator=( const Class& class_handle )
+	void JniObject::Invalidate()
 	{
-		m_object_ref	= class_handle.m_class_ref;
 		m_class_handle.Invalidate();
-		return *this;
+		m_object_ref.reset();
 	}
 
-	const Object& Object::operator=( Class&& class_handle )
+	const bool JniObject::IsInstanceOf( const JniClass& base_class ) const
 	{
-		m_object_ref	= std::move( class_handle.m_class_ref );
-		m_class_handle.Invalidate();
-		return *this;
+		CRET( !( IsValid() && base_class ), false );
+
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		return local_env->IsInstanceOf( GetJniReference(), *base_class );
 	}
 
-	const Object& Object::operator=( const Object& other )
+	void JniObject::DeleteObjectRef( jobject object_ref )
 	{
-		m_object_ref	= other.m_object_ref;
-		m_class_handle.Invalidate();
-		return *this;
+		CRET( object_ref == nullptr );
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		local_env->DeleteGlobalRef( object_ref );
 	}
 
-	const Object& Object::operator=( Object&& other )
+	void JniObject::EnsureClassHandle() const
 	{
-		m_object_ref	= std::move( other.m_object_ref );
-		m_class_handle.Invalidate();
-		return *this;
+		CRET( !IsValid() );
+		CRET( m_class_handle );
+
+		m_class_handle.AcquireClassReference( GetJniReference() );
 	}
 
-	void Object::DeleteObjectRef( jobject object_ref )
+	void JniObject::AcquireObjectRef( jobject object_ref )
 	{
-		JNI_RETURN_IF_E( !VirtualMachine::IsValid(), , "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		VirtualMachine::GetLocalEnvironment()->DeleteGlobalRef( object_ref );
-	}
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
-	void Object::RetrieveClass() const
-	{
-		JNI_RETURN_IF( !m_object_ref || m_class_handle.IsValid() );
-		m_class_handle.AcquireClassReference( m_object_ref.get() );
-	}
+		Invalidate();
+		CRET( object_ref == nullptr );
 
-	void Object::AcquireObjectRef( jobject object_ref )
-	{
-		JNI_RETURN_IF_E( !VirtualMachine::IsValid(), , "%s:%d - Attempt to use Uninitialized virtual machine.", __func__, __LINE__ );
-		JNI_RETURN_IF_W( object_ref == nullptr, , "Attempt to get global ref of null object." );
-
-		m_object_ref = { VirtualMachine::GetLocalEnvironment()->NewGlobalRef( object_ref ), Object::DeleteObjectRef };
-		m_class_handle.Invalidate();
+		JNIEnv* local_env	= Black::JniConnection::GetLocalEnvironment();
+		m_object_ref		= { local_env->NewGlobalRef( object_ref ), JniObject::DeleteObjectRef };
 	}
-
-	const bool operator==( const Object& left, const Object& right )
-	{
-		return VirtualMachine::GetLocalEnvironment()->IsSameObject( *left, *right );
-	}
-
-	const bool operator!=( const Object& left, const Object& right )
-	{
-		return !VirtualMachine::GetLocalEnvironment()->IsSameObject( *left, *right );
-	}
+}
+}
 }
