@@ -42,6 +42,7 @@ inline namespace Jni
 #include "virtual-machine/forwards.h"
 
 // JNI handles.
+#include "handles/forwards.h"
 #include "handles/JniClass.h"
 #include "marshaling/NativeTypeContext.JniClass.h"
 
