@@ -1,7 +1,5 @@
 #pragma once
 
-#include <black.jni.h>
-
 
 namespace Android
 {
