@@ -12,12 +12,10 @@ inline namespace Handles
 		AcquireClassReference( class_name );
 	}
 
-	JniClass& JniClass::operator=( jclass class_ref )
+	JniClass::JniClass( jclass class_ref )
+		: m_class_ref{ Black::JniConnection::GetClassStorage().GetClassReference( class_ref ) }
 	{
-		auto new_ref = Black::JniConnection::GetClassStorage().GetClassReference( class_ref );
-		std::swap( m_class_ref, new_ref );
 
-		return *this;
 	}
 
 	void JniClass::Invalidate()
@@ -65,6 +63,18 @@ inline namespace Handles
 
 		m_class_ref = Black::JniConnection::GetClassStorage().GetClassReference( object_ref );
 		ENSURES( IsValid() );
+	}
+
+	const bool operator == ( const JniClass& left, const JniClass& right )
+	{
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		return local_env->IsSameObject( *left, *right );
+	}
+
+	const bool operator != ( const JniClass& left, const JniClass& right )
+	{
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		return !local_env->IsSameObject( *left, *right );
 	}
 }
 }
