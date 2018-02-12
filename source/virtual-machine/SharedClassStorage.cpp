@@ -1,6 +1,6 @@
 #include <black.jni.h>
-#include <black.java.lang.Thread.h>
-#include <black.java.lang.ClassLoader.h>
+#include <jni.java.lang.Thread.h>
+#include <jni.java.lang.ClassLoader.h>
 
 
 namespace Black
@@ -81,13 +81,13 @@ namespace Traits
 		const Black::JniClass thread_class{ "java/lang/Thread" };
 		CRETM( !thread_class, false, LOG_CHANNEL, "Failed to locate `java.lang.Thread` class." );
 
-		const Black::JniStaticFunction<::Android::Thread> current_thread_func{ thread_class, "currentThread" };
+		const Black::JniStaticFunction<::Jni::Thread> current_thread_func{ thread_class, "currentThread" };
 		CRETM( !current_thread_func, false, LOG_CHANNEL, "Failed to locate `Thread Thread::currentThread()` function." );
 
-		const ::Android::Thread current_thread{ current_thread_func.Call() };
+		const ::Jni::Thread current_thread{ current_thread_func.Call() };
 		CRETM( !current_thread, false, LOG_CHANNEL, "Failed to get object of current thread." );
 
-		const Black::JniMemberFunction<::Android::ClassLoader> get_class_loader_func{ thread_class, "getContextClassLoader" };
+		const Black::JniMemberFunction<::Jni::ClassLoader> get_class_loader_func{ thread_class, "getContextClassLoader" };
 		CRETM( !get_class_loader_func, false, LOG_CHANNEL, "Failed to locate `ClassLoader Thread::getContextClassLoader()` function." );
 
 		m_class_loader = get_class_loader_func.Call( current_thread );
