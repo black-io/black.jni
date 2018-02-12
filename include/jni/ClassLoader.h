@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace Android
+namespace Jni
 {
 inline namespace Java
 {
@@ -41,7 +41,7 @@ namespace Traits
 {
 	// JNI context specification for handles to `java.lang.Thread` class.
 	template<>
-	struct NativeContext<::Android::Java::Lang::ClassLoader> : public Black::NativeObjectContext<::Android::Java::Lang::ClassLoader>
+	struct NativeContext<::Jni::Java::Lang::ClassLoader> : public Black::NativeObjectContext<::Jni::Java::Lang::ClassLoader>
 	{
 
 	};
