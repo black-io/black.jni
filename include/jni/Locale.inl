@@ -1,30 +1,30 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Java
 {
-	struct Locale::LocaleHandles
+inline namespace Util
+{
+	struct Locale::LocaleState
 	{
-		Class	jni_class	= { ClassPath::GetString() };
+		Black::JniClass	class_handle	= { ClassPath::GetData() };
 
-		MemberFunction<std::string>			get_country				= { jni_class, "getCountry" };
-		MemberFunction<std::string>			get_display_country		= { jni_class, "getDisplayCountry" };
-		MemberFunction<std::string>			get_display_lang		= { jni_class, "getDisplayLanguage" };
-		MemberFunction<std::string>			get_display_name		= { jni_class, "getDisplayName" };
-		MemberFunction<std::string>			get_display_script		= { jni_class, "getDisplayScript" };
-		MemberFunction<std::string>			get_display_variant		= { jni_class, "getDisplayVariant" };
-		MemberFunction<std::string, Locale>	get_display_country_for	= { jni_class, "getDisplayCountry" };
-		MemberFunction<std::string, Locale>	get_display_lang_for	= { jni_class, "getDisplayLanguage" };
-		MemberFunction<std::string, Locale>	get_display_name_for	= { jni_class, "getDisplayName" };
-		MemberFunction<std::string, Locale>	get_display_script_for	= { jni_class, "getDisplayScript" };
-		MemberFunction<std::string, Locale>	get_display_variant_for	= { jni_class, "getDisplayVariant" };
-		MemberFunction<std::string>			get_language			= { jni_class, "getLanguage" };
-		MemberFunction<std::string>			get_script				= { jni_class, "getScript" };
-		MemberFunction<std::string>			get_variant				= { jni_class, "getVariant" };
+		Black::JniMemberFunction<std::string>			get_country				= { class_handle,	"getCountry" };
+		Black::JniMemberFunction<std::string>			get_display_country		= { class_handle,	"getDisplayCountry" };
+		Black::JniMemberFunction<std::string>			get_display_lang		= { class_handle,	"getDisplayLanguage" };
+		Black::JniMemberFunction<std::string>			get_display_name		= { class_handle,	"getDisplayName" };
+		Black::JniMemberFunction<std::string>			get_display_script		= { class_handle,	"getDisplayScript" };
+		Black::JniMemberFunction<std::string>			get_display_variant		= { class_handle,	"getDisplayVariant" };
+		Black::JniMemberFunction<std::string, Locale>	get_display_country_for	= { class_handle,	"getDisplayCountry" };
+		Black::JniMemberFunction<std::string, Locale>	get_display_lang_for	= { class_handle,	"getDisplayLanguage" };
+		Black::JniMemberFunction<std::string, Locale>	get_display_name_for	= { class_handle,	"getDisplayName" };
+		Black::JniMemberFunction<std::string, Locale>	get_display_script_for	= { class_handle,	"getDisplayScript" };
+		Black::JniMemberFunction<std::string, Locale>	get_display_variant_for	= { class_handle,	"getDisplayVariant" };
+		Black::JniMemberFunction<std::string>			get_language			= { class_handle,	"getLanguage" };
+		Black::JniMemberFunction<std::string>			get_script				= { class_handle,	"getScript" };
+		Black::JniMemberFunction<std::string>			get_variant				= { class_handle,	"getVariant" };
 	};
 
 
@@ -99,5 +99,4 @@ namespace Android
 	}
 }
 }
-
-#include "Locale.inl"
+}

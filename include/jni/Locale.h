@@ -1,88 +1,101 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
-
-#include <jnipp/jnipp.h>
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Java
 {
-	/// @brief	Handle to `java.util.Locale` object.
-	class Locale : public Object
+inline namespace Util
+{
+	// Handle for `java.util.Locale` objects.
+	class Locale final : public Black::JniObject
 	{
 	public:
-		/// @brief	Class path.
-		using ClassPath = Jni::StaticString<'j', 'a', 'v', 'a', '/', 'u', 't', 'i', 'l', '/', 'L', 'o', 'c', 'a', 'l', 'e'>;
+		// Class path.
+		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'u', 't', 'i', 'l', '/', 'L', 'o', 'c', 'a', 'l', 'e'>;
 
-
+	// Construction and assignation.
+	public:
 		Locale() = default;
-		Locale( jobject object_ref ) : Object( object_ref ) {};
-		Locale( const Locale& other ) : Object( other ) {};
-		Locale( Locale&& other ) : Object( other ) {};
+		Locale( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		Locale( const Locale& other ) : Black::JniObject( other ) {};
+		Locale( Locale&& other ) : Black::JniObject( std::move( other ) ) {};
 
 
-		/// @brief	Cal the `java.util.Locale.getCountry` function.
+		const Locale& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
+		const Locale& operator = ( const Locale& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const Locale& operator = ( Locale&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+
+	// Public interface.
+	public:
+		// Call the `java.util.Locale.getCountry` function.
 		inline std::string GetCountry() const;
 
-		/// @brief	Cal the `java.util.Locale.getLanguage` function.
+		// Call the `java.util.Locale.getLanguage` function.
 		inline std::string GetLanguage() const;
 
-		/// @brief	Cal the `java.util.Locale.getScript` function.
+		// Call the `java.util.Locale.getScript` function.
 		inline std::string GetScript() const;
 
-		/// @brief	Cal the `java.util.Locale.getVariant` function.
+		// Call the `java.util.Locale.getVariant` function.
 		inline std::string GetVariant() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayCountry` function.
+		// Call the `java.util.Locale.getDisplayCountry` function.
 		inline std::string GetDisplayCountry() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayLanguage` function.
+		// Call the `java.util.Locale.getDisplayLanguage` function.
 		inline std::string GetDisplayLanguage() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayName` function.
+		// Call the `java.util.Locale.getDisplayName` function.
 		inline std::string GetDisplayName() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayScript` function.
+		// Call the `java.util.Locale.getDisplayScript` function.
 		inline std::string GetDisplayScript() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayVariant` function.
+		// Call the `java.util.Locale.getDisplayVariant` function.
 		inline std::string GetDisplayVariant() const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayCountry` function.
+		// Call the `java.util.Locale.getDisplayCountry` function.
 		inline std::string GetDisplayCountry( const Locale& other ) const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayLanguage` function.
+		// Call the `java.util.Locale.getDisplayLanguage` function.
 		inline std::string GetDisplayLanguage( const Locale& other ) const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayName` function.
+		// Call the `java.util.Locale.getDisplayName` function.
 		inline std::string GetDisplayName( const Locale& other ) const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayScript` function.
+		// Call the `java.util.Locale.getDisplayScript` function.
 		inline std::string GetDisplayScript( const Locale& other ) const;
 
-		/// @brief	Cal the `java.util.Locale.getDisplayVariant` function.
+		// Call the `java.util.Locale.getDisplayVariant` function.
 		inline std::string GetDisplayVariant( const Locale& other ) const;
 
-
-		const Locale& operator = ( jobject object_ref )						{ Object::operator=( object_ref ); return *this; };
-		const Locale& operator = ( const Locale& other )					{ Object::operator=( other ); return *this; };
-		const Locale& operator = ( Locale&& other )							{ Object::operator=( other ); return *this; };
-
+	// Private state.
 	private:
-		struct LocaleHandles;
+		struct LocaleState;
 
-		CachedHandles<LocaleHandles>	m_handles;	// Temporally cached and shared handles for object.
+		SharedState<LocaleState>	m_handles;	// Shared JNI handles.
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::Locale` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `java.util.Locale` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::Locale> : ObjectTypeTraits<Jni::Android::Locale> {};
-}
-}
+	struct NativeContext<::Jni::Java::Util::Locale> : public Black::NativeObjectContext<::Jni::Java::Util::Locale>
+	{
 
-#include "Locale.inl"
+	};
+}
+}
+}
+}
