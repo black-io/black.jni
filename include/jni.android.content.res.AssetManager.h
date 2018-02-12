@@ -6,5 +6,5 @@
 
 
 // Implementation.
-#include "android/AssetManager.const.h"
-#include "android/AssetManager.h"
+#include "jni/AssetManager.const.h"
+#include "jni/AssetManager.h"
