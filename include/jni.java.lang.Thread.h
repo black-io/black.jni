@@ -5,4 +5,4 @@
 
 
 // Implementation.
-#include "android/Thread.h"
+#include "jni/Thread.h"
