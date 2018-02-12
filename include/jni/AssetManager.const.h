@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace Android
+namespace Jni
 {
 inline namespace Android
 {

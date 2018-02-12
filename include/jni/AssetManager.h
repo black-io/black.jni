@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace Android
+namespace Jni
 {
 inline namespace Android
 {
@@ -62,7 +62,7 @@ inline namespace Res
 		};
 
 		AAssetManager*							m_assets	= nullptr;	// Low-level representation of assets manager.
-		SharedState<AssetManagerState, true>	m_handles;				// Temporally cached and shared handles for object.
+		SharedState<AssetManagerState, true>	m_handles;				// Shared JNI handles.
 	};
 }
 }
@@ -80,7 +80,7 @@ namespace Traits
 {
 	// JNI context specification for handles to `android.content.res.AssetManager` class.
 	template<>
-	struct NativeContext<::Android::Android::Context::Res::AssetManager> : public Black::NativeObjectContext<::Android::Android::Context::Res::AssetManager>
+	struct NativeContext<::Jni::Android::Context::Res::AssetManager> : public Black::NativeObjectContext<::Jni::Android::Context::Res::AssetManager>
 	{
 
 	};
