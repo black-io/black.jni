@@ -1,19 +1,26 @@
-#include <jnipp/jnipp.h>
-#include <jnipp/android/Configuration.h>
+#include <jni.android.content.res.Configuration.h>
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	Locale Configuration::GetLocale() const
+inline namespace Context
+{
+inline namespace Res
+{
+	Jni::Locale Configuration::GetLocale() const
 	{
-		JNI_RETURN_IF( m_handles->locale, m_handles->locale.GetValue( *this, {} ) );
+		// When running on platforms below 24, the `locale` field will be valid.
+		CRET( m_handles->locale, m_handles->locale.GetValue( *this, {} ) );
 
+		// For 24+ platform the `get_locales` function will be valid.
 		auto locales = m_handles->get_locales.Call( *this );
-		JNI_RETURN_IF( locales.IsEmpty(), {} );
+		CRET( locales.IsEmpty(), {} );
 
 		return locales.GetLocale( 0 );
 	}
+}
+}
 }
 }

@@ -48,7 +48,7 @@ inline namespace Res
 		inline const KeyboardState GetKeyboardState() const				{ return m_handles->keyboard_hidden.GetValue( *this, KeyboardState::Undefined ); };
 
 		// Platform-independent accessor to current locale.
-		Locale GetLocale() const;
+		Jni::Locale GetLocale() const;
 
 		// Getter for `android.content.res.Configuration.orientation` field.
 		inline const ScreenOrientation GetOrientation() const			{ return m_handles->screen_orientation.GetValue( *this, ScreenOrientation::Undefined ); };
@@ -78,7 +78,7 @@ inline namespace Res
 			Black::JniMemberField<float>				font_scale				{ class_handle, "fontScale" };
 			Black::JniMemberField<KeyboardType>			keyboard				{ class_handle, "keyboard" };
 			Black::JniMemberField<KeyboardState>		keyboard_hidden			{ class_handle, "keyboardHidden" };
-			Black::JniMemberField<Locale>				locale					{ class_handle, "locale", Black::IGNORE_FALURES }; // till android-24
+			Black::JniMemberField<Jni::Locale>			locale					{ class_handle, "locale", Black::IGNORE_FALURES }; // till android-24
 			Black::JniMemberField<ScreenOrientation>	screen_orientation		{ class_handle, "orientation" };
 			Black::JniMemberField<ScreenLayoutState>	scren_layout			{ class_handle, "screenLayout" };
 			Black::JniMemberField<int32_t>				scren_width_dp			{ class_handle, "screenWidthDp" };
@@ -86,7 +86,7 @@ inline namespace Res
 			Black::JniMemberField<int32_t>				scren_smallest_width_dp	{ class_handle, "smallestScreenWidthDp" };
 			Black::JniMemberField<ScreenUiMode>			ui_mode					{ class_handle, "uiMode" };
 
-			Black::JniMemberFunction<LocaleList>		get_locales				{ class_handle, "getLocales", Black::IGNORE_FALURES }; // since android-24
+			Black::JniMemberFunction<Jni::LocaleList>	get_locales				{ class_handle, "getLocales", Black::IGNORE_FALURES }; // since android-24
 		};
 
 		SharedState<ConfigurationState, true>	m_handles;	// Shared JNI handles.
