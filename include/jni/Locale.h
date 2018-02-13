@@ -72,6 +72,7 @@ inline namespace Util
 
 	// Private state.
 	private:
+		// The external declaration is forced by necessary of using the `Locale` class itself as well-defined one.
 		struct LocaleState;
 
 		SharedState<LocaleState>	m_handles;	// Shared JNI handles.
