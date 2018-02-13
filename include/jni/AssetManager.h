@@ -58,7 +58,7 @@ inline namespace Res
 		{
 			Black::JniClass		class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<std::vector<std::string>, std::string>	list_path	= { class_handle,	"list" };
+			Black::JniMemberFunction<std::vector<std::string>, std::string>	list_path	{ class_handle,	"list" };
 		};
 
 		AAssetManager*							m_assets	= nullptr;	// Low-level representation of assets manager.
