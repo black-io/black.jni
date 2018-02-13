@@ -1,46 +1,42 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
-namespace Jni
+namespace Black
 {
-namespace Utils
+inline namespace Jni
 {
-	template< typename TSenderType, typename TNativeReturnType, typename... TNativeArgumentTypes >
-	template< TNativeReturnType (*NATIVE_FUNCTION)( JNIEnv*, TSenderType, const TNativeArgumentTypes&... ) >
-	Jni::Marshaling::JavaType<TNativeReturnType> NativeFunctionWrapper<TSenderType, TNativeReturnType, TNativeArgumentTypes...>::Wrap(
+inline namespace VirtualMachine
+{
+namespace Traits
+{
+	template< typename TSender, typename TResult, typename... TArguments >
+	template< TResult (*NATIVE_HANDLER)( JNIEnv*, TSender, const TArguments&... ) >
+	Black::JniType<TResult> NativeFunctionWrap<TSender, TResult, TArguments...>::Handle(
 		JNIEnv* local_env,
-		TSenderType sender,
-		Jni::Marshaling::JavaType<TNativeArgumentTypes>... arguments
+		TSender sender,
+		Black::JniType<TArguments>... arguments
 	)
 	{
-		return (Jni::Marshaling::JavaType<TNativeReturnType>)Jni::Marshaling::ToJava<TNativeReturnType>(
-			NATIVE_FUNCTION( local_env, sender, Jni::Marshaling::FromJava<TNativeArgumentTypes>( arguments )... )
-		);
+		return static_cast<Black::JniType<TResult>>( Black::ToJni<TResult>(
+			NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... );
+		) );
 	}
 
-	template< typename TSenderType, typename... TNativeArgumentTypes >
-	template< void (*NATIVE_FUNCTION)( JNIEnv*, TSenderType, const TNativeArgumentTypes&... ) >
-	void NativeFunctionWrapper<TSenderType, void, TNativeArgumentTypes...>::Wrap(
-		JNIEnv* local_env,
-		TSenderType sender,
-		Jni::Marshaling::JavaType<TNativeArgumentTypes>... arguments
-	)
+	template< typename TSender, typename... TArguments >
+	template< void (*NATIVE_HANDLER)( JNIEnv*, TSender, const TArguments&... ) >
+	void NativeFunctionWrap<TSender, void, TArguments...>::Handle( JNIEnv* local_env, TSender sender, Black::JniType<TArguments>... arguments )
 	{
-		NATIVE_FUNCTION( local_env, sender, Jni::Marshaling::FromJava<TNativeArgumentTypes>( arguments )... );
+		NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... );
 	}
 
-	template< typename TSenderType, typename TNativeReturnType, typename... TNativeArgumentTypes >
-	template< TNativeReturnType (*NATIVE_FUNCTION)( JNIEnv*, TSenderType, const TNativeArgumentTypes&... ) >
-	inline NativeFunction NativeFunctionBuilder<TNativeReturnType (*)( JNIEnv*, TSenderType, const TNativeArgumentTypes&... )>::GetNativeFunction( const char* function_name )
+	template< typename TSender, typename TResult, typename... TArguments >
+	template< TResult (*NATIVE_HANDLER)( JNIEnv*, TSender, const TArguments&... ) >
+	constexpr NativeFunction NativeFunctionWrapper<TResult (*)( JNIEnv*, TSender, const TArguments&... )>::GetNativeFunction( const char* function_name )
 	{
-		WrapperFunction func = &Wrapper::template Wrap<NATIVE_FUNCTION>;
-		return {
-			reinterpret_cast<void*>( func ),
-			Signature::GetString(),
-			function_name
-		};
+		constexpr auto wrapped_handler = &Wrap::template Handle<NATIVE_HANDLER>;
+		return { (void*)wrapped_handler, Signature::GetData(), function_name };
 	}
+}
+}
 }
 }
