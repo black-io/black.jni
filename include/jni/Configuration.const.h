@@ -1,13 +1,15 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	/// @brief	Translation of keyboard types.
+inline namespace Context
+{
+inline namespace Res
+{
+	// Translation of keyboard types.
 	enum class KeyboardType : int32_t
 	{
 		Undefined		= ACONFIGURATION_KEYBOARD_ANY,			// android.content.res.Configuration.KEYBOARD_UNDEFINED
@@ -16,7 +18,7 @@ namespace Android
 		PhoneStyle		= ACONFIGURATION_KEYBOARD_12KEY,		// android.content.res.Configuration.KEYBOARD_12KEY
 	};
 
-	/// @brief	Translation of keyboard state.
+	// Translation of keyboard state.
 	enum class KeyboardState : int32_t
 	{
 		Undefined		= ACONFIGURATION_KEYSHIDDEN_ANY,		// android.content.res.Configuration.KEYBOARDHIDDEN_UNDEFINED
@@ -25,7 +27,7 @@ namespace Android
 		OnscreenExposed	= ACONFIGURATION_KEYSHIDDEN_SOFT,		// android.content.res.Configuration.???
 	};
 
-	/// @brief	Translation of screen orientation.
+	// Translation of screen orientation.
 	enum class ScreenOrientation : int32_t
 	{
 		Undefined		= ACONFIGURATION_ORIENTATION_ANY,		// android.content.res.Configuration.ORIENTATION_UNDEFINED
@@ -34,19 +36,40 @@ namespace Android
 		Square			= ACONFIGURATION_ORIENTATION_SQUARE,	// android.content.res.Configuration.ORIENTATION_SQUARE
 	};
 }
+}
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::KeyboardType` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `Jni::Android::Context::KeyboardType` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::KeyboardType> : EnumTypeTraits<Jni::Android::KeyboardType> {};
+	struct NativeContext<::Jni::Android::Context::KeyboardType> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardType>
+	{
 
-	/// @brief	Traits specification for native `Jni::Android::KeyboardState` type.
-	template<>
-	struct NativeTypeTraits<Jni::Android::KeyboardState> : EnumTypeTraits<Jni::Android::KeyboardState> {};
+	};
 
-	/// @brief	Traits specification for native `Jni::Android::ScreenOrientation` type.
+	// JNI context specification for handles to `Jni::Android::Context::KeyboardState` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::ScreenOrientation> : EnumTypeTraits<Jni::Android::ScreenOrientation> {};
+	struct NativeContext<::Jni::Android::Context::KeyboardState> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardState>
+	{
+
+	};
+
+	// JNI context specification for handles to `Jni::Android::Context::ScreenOrientation` class.
+	template<>
+	struct NativeContext<::Jni::Android::Context::ScreenOrientation> : public Black::NativeEnumContext<::Jni::Android::Context::ScreenOrientation>
+	{
+
+	};
+}
+}
 }
 }

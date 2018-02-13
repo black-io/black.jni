@@ -1,13 +1,15 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	/// @brief	Representation of screen layout state.
+inline namespace Context
+{
+inline namespace Res
+{
+	// Representation of screen layout state.
 	union ScreenLayoutState
 	{
 		int32_t		bits;				// Usable bit-set.
@@ -25,7 +27,7 @@ namespace Android
 			bool	is_small : 1;		// Result of `android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL` mask.
 			bool	is_normal : 1;		// Result of `android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL` mask.
 			bool	is_xlarge : 1;		// Result of `android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE` mask.
-			bool	bit_4 : 1;			// Part of mask `android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK`.
+			bool	: 1;
 			bool	is_not_long : 1;	// Result of `android.content.res.Configuration.SCREENLAYOUT_LONG_NO` mask.
 			bool	is_long : 1;		// Result of `android.content.res.Configuration.SCREENLAYOUT_LONG_YES` mask.
 			bool	is_ltr : 1;			// Result of `android.content.res.Configuration.SCREENLAYOUT_LAYOUTDIR_LTR` mask.
@@ -35,7 +37,7 @@ namespace Android
 		};
 	};
 
-	/// @brief	Representation of screen UI mode.
+	// Representation of screen UI mode.
 	union ScreenUiMode
 	{
 		int32_t		bits;				// Usable bit-set.
@@ -51,21 +53,39 @@ namespace Android
 			bool	is_handed : 1;		// Result of `android.content.res.Configuration.UI_MODE_TYPE_NORMAL` mask.
 			bool	is_docked : 1;		// Result of `android.content.res.Configuration.UI_MODE_TYPE_DESK` mask.
 			bool	is_television : 1;	// Result of `android.content.res.Configuration.UI_MODE_TYPE_TELEVISION` mask.
-			bool	bit_4 : 1;			// Part of mask `android.content.res.Configuration.`.
+			bool	: 1;
 			bool	is_day_mode : 1;	// Result of `android.content.res.Configuration.UI_MODE_NIGHT_NO` mask.
 			bool	is_night_mode : 1;	// Result of `android.content.res.Configuration.UI_MODE_NIGHT_YES` mask.
 		};
 	};
 }
+}
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::ScreenLayoutState` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `Jni::Android::Context::ScreenLayoutState` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::ScreenLayoutState> : BitfieldTypeTraits<Jni::Android::ScreenLayoutState> {};
+	struct NativeContext<::Jni::Android::Context::ScreenLayoutState> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenLayoutState>
+	{
 
-	/// @brief	Traits specification for native `Jni::Android::ScreenLayoutState` type.
+	};
+
+	// JNI context specification for handles to `Jni::Android::Context::ScreenUiMode` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::ScreenUiMode> : BitfieldTypeTraits<Jni::Android::ScreenUiMode> {};
+	struct NativeContext<::Jni::Android::Context::ScreenUiMode> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenUiMode>
+	{
+
+	};
+}
+}
 }
 }
