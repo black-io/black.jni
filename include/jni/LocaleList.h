@@ -7,7 +7,7 @@ inline namespace Android
 {
 inline namespace Os
 {
-	// Handle for `java.util.Locale` objects.
+	// Handle for `android.os.LocaleList` objects.
 	class LocaleList final : Black::JniObject
 	{
 	public:
@@ -63,7 +63,7 @@ inline namespace Marshaling
 {
 namespace Traits
 {
-	// JNI context specification for handles to `java.util.Locale` class.
+	// JNI context specification for handles to `android.os.LocaleList` class.
 	template<>
 	struct NativeContext<::Jni::Android::Os::LocaleList> : public Black::NativeObjectContext<::Jni::Android::Os::LocaleList>
 	{
