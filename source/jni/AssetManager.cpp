@@ -1,6 +1,6 @@
-#include <jnipp/jnipp.h>
-#include <jnipp/android/AssetManager.h>
+#include <jni.android.content.res.AssetManager.h>
 #include <android/asset_manager_jni.h>
+
 
 namespace
 {
@@ -33,58 +33,68 @@ namespace
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	void AssetManager::AcquireAssets()
-	{
-		m_assets = nullptr;
-		JNI_RETURN_IF( !IsValid() );
-		JNI_EXPECTS( IsInstanceOf( m_handles->jni_class ) );
-
-		auto local_env	= VirtualMachine::GetLocalEnvironment();
-		m_assets		= AAssetManager_fromJava( local_env, GetJniReference() );
-		JNI_ENSURES( m_assets != nullptr );
-	}
-
+inline namespace Context
+{
+inline namespace Res
+{
 	const bool AssetManager::IsValidFolder( const std::string& path ) const
 	{
-		ScopedAssetFolder folder{ AAssetManager_openDir( m_assets, path.c_str() ) };
+		ScopedAssetFolder folder{ AAssetManager_openDir( m_assets, path.data() ) };
 		return AAssetDir_getNextFileName( folder.Get() ) != nullptr;
 	}
 
 	const bool AssetManager::IsValidFile( const std::string& path ) const
 	{
-		ScopedAsset asset{ AAssetManager_open( m_assets, path.c_str(), static_cast<int32_t>( AssetOpenMode::Default ) ) };
+		ScopedAsset asset{ AAssetManager_open( m_assets, path.data(), Black::GetEnumValue( AssetOpenMode::Default ) ) };
 		return asset.Get() != nullptr;
 	}
 
 	std::shared_ptr<AAsset> AssetManager::OpenAsset( const std::string& path, const AssetOpenMode open_mode ) const
 	{
 		return {
-			AAssetManager_open( m_assets, path.c_str(), static_cast<int32_t>( open_mode ) ),
-			[]( AAsset* asset ) { AAsset_close( asset ); }
+			AAssetManager_open( m_assets, path.data(), Black::GetEnumValue( open_mode ) ),
+			[]( AAsset* asset )
+			{
+				CRET( asset == nullptr );
+				AAsset_close( asset );
+			}
 		};
 	}
 
 	void AssetManager::ListFolder( std::deque<std::string>* files, std::deque<std::string>* folders, const std::string& path ) const
 	{
-		JNI_RETURN_IF( !files && !folders );
-		auto found_entities = m_handles->list_path.Call( *this, path );
+		CRET( ( files == nullptr ) && ( folders == nullptr ) );
 
-		for( auto& entity : found_entities )
+		auto found_assets = m_handles->list_path.Call( *this, path );
+		for( auto& found_asset : found_assets )
 		{
-			const std::string entity_path{ path + '/' + entity };
-			if( IsValidFile( entity_path ) )
+			const std::string asset_path{ path + '/' + found_asset };
+			if( IsValidFile( asset_path ) )
 			{
-				JNI_CONTINUE_IF( files == nullptr );
-				files->push_back( std::move( entity ) );
+				CCON( files == nullptr );
+				files->push_back( std::move( found_asset ) );
 			}
 			else
 			{
-				JNI_CONTINUE_IF( folders == nullptr );
-				folders->push_back( std::move( entity ) );
+				CCON( folders == nullptr );
+				folders->push_back( std::move( found_asset ) );
 			}
 		}
 	}
+
+	void AssetManager::AcquireAssets()
+	{
+		m_assets = nullptr;
+		CRET( !IsValid() );
+		EXPECTS( IsInstanceOf( m_handles->class_handle ) );
+
+		JNIEnv* local_env	= Black::JniConnection::GetLocalEnvironment();
+		m_assets			= AAssetManager_fromJava( local_env, GetJniReference() );
+		ENSURES( m_assets != nullptr );
+	}
+}
+}
 }
 }
