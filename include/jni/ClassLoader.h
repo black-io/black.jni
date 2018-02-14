@@ -39,7 +39,7 @@ inline namespace Marshaling
 {
 namespace Traits
 {
-	// JNI context specification for handles to `java.lang.Thread` class.
+	// JNI context specification for handles to `java.lang.ClassLoader` class.
 	template<>
 	struct NativeContext<::Jni::Java::Lang::ClassLoader> : public Black::NativeObjectContext<::Jni::Java::Lang::ClassLoader>
 	{
