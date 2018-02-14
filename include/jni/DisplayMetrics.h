@@ -1,80 +1,95 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
-
-#include <jnipp/jnipp.h>
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	/// @brief	Handle to `android.util.DisplayMetrics` object.
-	class DisplayMetrics : public Object
+inline namespace Util
+{
+	// Handle for `android.util.DisplayMetrics` objects.
+	class DisplayMetrics final : public Black::JniObject
 	{
 	public:
-		/// @brief	Class path.
-		using ClassPath = Jni::StaticString<
+		// Class path.
+		using ClassPath = Black::StaticString<
 			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
 			'u', 't', 'i', 'l', '/',
 			'D', 'i', 's', 'p', 'l', 'a', 'y', 'M', 'e', 't', 'r', 'i', 'c', 's'
 		>;
 
-
+	// Construction and assignation.
+	public:
 		DisplayMetrics() = default;
-		DisplayMetrics( jobject object_ref ) : Object( object_ref ) {};
-		DisplayMetrics( const DisplayMetrics& other ) : Object( other ) {};
-		DisplayMetrics( DisplayMetrics&& other ) : Object( other ) {};
+		DisplayMetrics( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		DisplayMetrics( const DisplayMetrics& other ) : Black::JniObject( other ) {};
+		DisplayMetrics( DisplayMetrics&& other ) : Black::JniObject( std::move( other ) ) {};
 
 
-		/// @brief	Getter for `android.util.DisplayMetrics.density` field.
+		const DisplayMetrics& operator = ( jobject object_ref )				{ Black::JniObject::operator=( object_ref ); return *this; };
+		const DisplayMetrics& operator = ( const DisplayMetrics& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const DisplayMetrics& operator = ( DisplayMetrics&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+
+	// Public interface.
+	public:
+		// Getter for `android.util.DisplayMetrics.density` field.
 		inline const float GetDensity() const								{ return m_handles->density.GetValue( *this, 0.0f ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.densityDpi` field.
+		// Getter for `android.util.DisplayMetrics.densityDpi` field.
 		inline const int32_t GetDensityDpi() const							{ return m_handles->density_dpi.GetValue( *this, 0 ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.scaledDensity` field.
+		// Getter for `android.util.DisplayMetrics.scaledDensity` field.
 		inline const float GetScaldDensity() const							{ return m_handles->scaled_density.GetValue( *this, 0.0f ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.widthPixels` field.
+		// Getter for `android.util.DisplayMetrics.widthPixels` field.
 		inline const int32_t GetWidth() const								{ return m_handles->width_pixels.GetValue( *this, 0 ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.heightPixels` field.
+		// Getter for `android.util.DisplayMetrics.heightPixels` field.
 		inline const int32_t GetHeight() const								{ return m_handles->height_pixels.GetValue( *this, 0 ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.xdpi` field.
+		// Getter for `android.util.DisplayMetrics.xdpi` field.
 		inline const float GetWidthDpi() const								{ return m_handles->width_dpi.GetValue( *this, 0.0f ); };
 
-		/// @brief	Getter for `android.util.DisplayMetrics.ydpi` field.
+		// Getter for `android.util.DisplayMetrics.ydpi` field.
 		inline const float GetHeightDpi() const								{ return m_handles->height_dpi.GetValue( *this, 0.0f ); };
 
-
-		const DisplayMetrics& operator = ( jobject object_ref )				{ Object::operator=( object_ref ); return *this; };
-		const DisplayMetrics& operator = ( const DisplayMetrics& other )	{ Object::operator=( other ); return *this; };
-		const DisplayMetrics& operator = ( DisplayMetrics&& other )			{ Object::operator=( other ); return *this; };
-
+	// Private state.
 	private:
-		struct DisplayMetricsHandles
+		struct DisplayMetricsState final
 		{
-			Class	jni_class	= { ClassPath::GetString() };
+			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			MemberField<float>		density			= { jni_class,	"density" };
-			MemberField<int32_t>	density_dpi		= { jni_class,	"densityDpi" };
-			MemberField<float>		scaled_density	= { jni_class,	"scaledDensity" };
-			MemberField<int32_t>	width_pixels	= { jni_class,	"widthPixels" };
-			MemberField<int32_t>	height_pixels	= { jni_class,	"heightPixels" };
-			MemberField<float>		width_dpi		= { jni_class,	"xdpi" };
-			MemberField<float>		height_dpi		= { jni_class,	"ydpi" };
+			Black::JniMemberField<float>	density			{ class_handle,	"density" };
+			Black::JniMemberField<int32_t>	density_dpi		{ class_handle,	"densityDpi" };
+			Black::JniMemberField<float>	scaled_density	{ class_handle,	"scaledDensity" };
+			Black::JniMemberField<int32_t>	width_pixels	{ class_handle,	"widthPixels" };
+			Black::JniMemberField<int32_t>	height_pixels	{ class_handle,	"heightPixels" };
+			Black::JniMemberField<float>	width_dpi		{ class_handle,	"xdpi" };
+			Black::JniMemberField<float>	height_dpi		{ class_handle,	"ydpi" };
 		};
 
-		CachedHandles<DisplayMetricsHandles>	m_handles;	// Temporally cached and shared handles for object.
+		SharedState<DisplayMetricsState>	m_handles;
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::DisplayMetrics` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for handles to `android.util.DisplayMetrics` class.
 	template<>
-	struct NativeTypeTraits<Jni::Android::DisplayMetrics> : ObjectTypeTraits<Jni::Android::DisplayMetrics> {};
+	struct NativeContext<::Jni::Android::Util::DisplayMetrics> : public Black::NativeObjectContext<::Jni::Android::Util::DisplayMetrics>
+	{
+
+	};
+}
+}
 }
 }
