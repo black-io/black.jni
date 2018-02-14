@@ -72,14 +72,14 @@ inline namespace Marshaling
 {
 namespace Traits
 {
-	// JNI context specification for handles to `Jni::Android::Context::ScreenLayoutState` class.
+	// JNI context specification for `android.content.res.Configuration.SCREENLAYOUT_*` mask.
 	template<>
 	struct NativeContext<::Jni::Android::Context::ScreenLayoutState> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenLayoutState>
 	{
 
 	};
 
-	// JNI context specification for handles to `Jni::Android::Context::ScreenUiMode` class.
+	// JNI context specification for `android.content.res.Configuration.UI_MODE_*` mask.
 	template<>
 	struct NativeContext<::Jni::Android::Context::ScreenUiMode> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenUiMode>
 	{
