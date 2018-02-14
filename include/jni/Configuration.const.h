@@ -49,21 +49,21 @@ inline namespace Marshaling
 {
 namespace Traits
 {
-	// JNI context specification for handles to `Jni::Android::Context::KeyboardType` class.
+	// JNI context specification for `android.content.res.Configuration.KEYBOARD_*` values.
 	template<>
 	struct NativeContext<::Jni::Android::Context::KeyboardType> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardType>
 	{
 
 	};
 
-	// JNI context specification for handles to `Jni::Android::Context::KeyboardState` class.
+	// JNI context specification for `android.content.res.Configuration.KEYBOARDHIDDEN_*` values.
 	template<>
 	struct NativeContext<::Jni::Android::Context::KeyboardState> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardState>
 	{
 
 	};
 
-	// JNI context specification for handles to `Jni::Android::Context::ScreenOrientation` class.
+	// JNI context specification for `android.content.res.Configuration.ORIENTATION_*` values.
 	template<>
 	struct NativeContext<::Jni::Android::Context::ScreenOrientation> : public Black::NativeEnumContext<::Jni::Android::Context::ScreenOrientation>
 	{
