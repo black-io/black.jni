@@ -1,13 +1,13 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	/// @brief	Translation of input device class.
+inline namespace View
+{
+	// Translation of input device class.
 	enum class InputSourceClass : int32_t
 	{
 		None		= AINPUT_SOURCE_CLASS_NONE,				// android.view.InputDevice.SOURCE_CLASS_NONE
@@ -18,11 +18,25 @@ namespace Android
 		Joystick	= AINPUT_SOURCE_CLASS_JOYSTICK,			// android.view.InputDevice.SOURCE_CLASS_JOYSTICK
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::InputSourceClass` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for `android.view.InputDevice.SOURCE_CLASS_*` values.
 	template<>
-	struct NativeTypeTraits<Jni::Android::InputSourceClass> : EnumTypeTraits<Jni::Android::InputSourceClass> {};
+	struct NativeContext<::Jni::Android::View::InputSourceClass> : public Black::NativeEnumContext<::Jni::Android::View::InputSourceClass>
+	{
+
+	};
+}
+}
 }
 }
