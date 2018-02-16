@@ -1,13 +1,13 @@
-// Copyright since 2016 : Evgenii Shatunov (github.com/FrankStain/jnipp)
-// Apache 2.0 License
 #pragma once
 
 
 namespace Jni
 {
-namespace Android
+inline namespace Android
 {
-	/// @brief	Translation of motion actions.
+inline namespace View
+{
+	// Translation of motion actions.
 	enum class MotionActionType : int32_t
 	{
 		Down		= AMOTION_EVENT_ACTION_DOWN,			// android.view.MotionEvent.ACTION_DOWN
@@ -23,11 +23,25 @@ namespace Android
 		HoverExit	= AMOTION_EVENT_ACTION_HOVER_EXIT,		// android.view.MotionEvent.ACTION_HOVER_EXIT
 	};
 }
+}
+}
 
-namespace Marshaling
+
+namespace Black
 {
-	/// @brief	Traits specification for native `Jni::Android::MotionActionType` type.
+inline namespace Jni
+{
+inline namespace Marshaling
+{
+namespace Traits
+{
+	// JNI context specification for `android.view.MotionEvent.ACTION_*` values.
 	template<>
-	struct NativeTypeTraits<Jni::Android::MotionActionType> : EnumTypeTraits<Jni::Android::MotionActionType> {};
+	struct NativeContext<::Jni::Android::View::MotionActionType> : public Black::NativeEnumContext<::Jni::Android::View::MotionActionType>
+	{
+
+	};
+}
+}
 }
 }
