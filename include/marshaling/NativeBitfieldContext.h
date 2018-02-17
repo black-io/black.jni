@@ -21,7 +21,7 @@ namespace Traits
 		using UnderlyingType	= decltype( std::declval<TNativeBitfield>().bits );
 
 		// JNI context for underlying type.
-		using UnderlyingContext	= NativeTypeTraits<UnderlyingType>;
+		using UnderlyingContext	= NativeContext<UnderlyingType>;
 
 
 		// C++ native type.
