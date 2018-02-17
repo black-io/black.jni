@@ -52,6 +52,8 @@ inline namespace VirtualMachine
 		connection.m_main_env			= nullptr;
 		connection.m_main_thread_id		= 0;
 		connection.m_thread_detach_key	= 0;
+
+		return true;
 	}
 
 	const bool JniConnection::RegisterClassNatives( const Black::NativeBindingTable& bindings )
