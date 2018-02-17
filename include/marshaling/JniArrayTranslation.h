@@ -14,10 +14,10 @@ namespace Traits
 	struct JniArrayTranslation
 	{
 		// JNI regular type of single element.
-		using JniValue		= typename TElementContext::JniValue;
+		using JniValue		= typename TElementContext::JniType;
 
 		// JNI regular type of array.
-		using JniArray		= typename TElementContext::JniArray;
+		using JniArray		= typename TElementContext::ArrayType;
 
 		// Native regular type of single element.
 		using NativeValue	= typename TElementContext::NativeType;
@@ -41,10 +41,10 @@ namespace Traits
 	struct JniArrayTranslation<TElementContext, true>
 	{
 		// JNI regular type of single element.
-		using JniValue		= typename TElementContext::JniValue;
+		using JniValue		= typename TElementContext::JniType;
 
 		// JNI regular type of array.
-		using JniArray		= typename TElementContext::JniArray;
+		using JniArray		= typename TElementContext::ArrayType;
 
 		// Native regular type of single element.
 		using NativeValue	= typename TElementContext::NativeType;
