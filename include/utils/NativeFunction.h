@@ -65,7 +65,7 @@ namespace Traits
 	template< typename TFunction, TFunction FUNCTION_HANDLER >
 	constexpr Traits::NativeFunction MakeNativeFunction( const char* function_name )
 	{
-		return Traits::NativeFunctionWrapper<TFunction>::GetNativeFunction<FUNCTION_HANDLER>( function_name );
+		return Traits::NativeFunctionWrapper<TFunction>::template GetNativeFunction<FUNCTION_HANDLER>( function_name );
 	}
 }
 }
