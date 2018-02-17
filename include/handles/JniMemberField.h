@@ -47,7 +47,7 @@ inline namespace Handles
 
 
 		// Set the value of field to given object by its handle.
-		inline const bool SetValue( const Object& object_handle, const TNativeType& value_storage ) const;
+		inline const bool SetValue( const JniObject& object_handle, const TNativeType& value_storage ) const;
 
 		// Set the value of field to given object by its ref.
 		inline const bool SetValue( jobject object_ref, const TNativeType& value_storage ) const;

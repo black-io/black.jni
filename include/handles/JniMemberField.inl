@@ -74,7 +74,7 @@ inline namespace Handles
 	}
 
 	template< typename TNativeType >
-	inline const bool JniMemberField<TNativeType>::SetValue( const Object& object_handle, const TNativeType& value_storage ) const
+	inline const bool JniMemberField<TNativeType>::SetValue( const JniObject& object_handle, const TNativeType& value_storage ) const
 	{
 		return SetValue( Black::JniConnection::GetLocalEnvironment(), *object_handle, value_storage );
 	}
