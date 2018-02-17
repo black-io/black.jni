@@ -11,12 +11,14 @@ namespace Traits
 {
 	const bool SharedStateCache::Initialize()
 	{
-
+		return true;
 	}
 
 	const bool SharedStateCache::Finalize()
 	{
 		EnsureStorageReleased<Black::BUILD_CONFIGURATION>();
+
+		return true;
 	}
 
 	template< Black::BuildMode >
