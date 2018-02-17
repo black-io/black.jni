@@ -24,7 +24,7 @@ namespace Traits
 		destination = (local_env->*ARRAY_CONSTRUCT_HANDLER)( static_cast<jsize>( source.size() ), *element_class, nullptr );
 		CRET( source.empty() );
 
-		EXPECTS( local_env->PushLocalFrame( TElementContext::LOCAL_FRAME_SIZE * array_length ) == JNI_OK );
+		EXPECTS( local_env->PushLocalFrame( TElementContext::LOCAL_FRAME_SIZE * source.size() ) == JNI_OK );
 
 		jsize index = 0;
 		for( const auto& source_element : source )
@@ -45,7 +45,7 @@ namespace Traits
 		constexpr auto ARRAY_ELEMENTS_ACQUIRE_HANDLER	= TElementContext::ARRAY_ELEMENTS_ACQUIRE_HANDLER;
 		constexpr auto ARRAY_ELEMENTS_RELEASE_HANDLER	= TElementContext::ARRAY_ELEMENTS_RELEASE_HANDLER;
 
-		destination = (local_env->*ARRAY_CONSTRUCT_HANDLER)( static_cast<jsize>( source.size() ), *element_class, nullptr );
+		destination = (local_env->*ARRAY_CONSTRUCT_HANDLER)( static_cast<jsize>( source.size() ) );
 		CRET( source.empty() );
 
 		auto destination_data = (local_env->*ARRAY_ELEMENTS_ACQUIRE_HANDLER)( destination, nullptr );
