@@ -45,7 +45,7 @@ namespace Traits
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
-	using JniClassPath			= typename ClassPathExtractor<TClassSignature>::Signature;
+	using JniClassPath			= typename Traits::ClassPathExtractor<TClassSignature>::Signature;
 }
 }
 }
