@@ -25,6 +25,7 @@ namespace Traits
 
 	};
 
+	// Get the total size of local frame for JNI environment.
 	template< size_t FRAME_SIZE >
 	constexpr size_t GetLocalFrameSize()
 	{
@@ -36,6 +37,13 @@ namespace Traits
 	constexpr size_t GetLocalFrameSize( BLACK_SFINAE( sizeof...( REST_SIZES ) > 0 ) )
 	{
 		return FRAME_SIZE + GetLocalFrameSize<REST_SIZES...>();
+	}
+
+	// Shortcut for empty list of frame sizes. Returns null.
+	template< size_t... FRAME_SIZES >
+	constexpr size_t GetLocalFrameSize( BLACK_SFINAE( sizeof...( FRAME_SIZES ) == 0 ) )
+	{
+		return 0;
 	}
 }
 
