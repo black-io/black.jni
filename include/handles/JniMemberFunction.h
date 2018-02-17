@@ -36,8 +36,14 @@ inline namespace Handles
 		// Call the function for given object, using given arguments.
 		inline TResult Call( const Black::JniObject& object_handle, const TArguments&... arguments ) const;
 
+		// Call the function for given object, using given arguments.
+		inline TResult Call( Black::NotNull<_jobject> object_ref, const TArguments&... arguments ) const;
+
 		// Call the non-virtual function for given object, using given arguments.
 		inline TResult CallNonVirtual( const Black::JniObject& object_handle, const TArguments&... arguments ) const;
+
+		// Call the non-virtual function for given object, using given arguments.
+		inline TResult CallNonVirtual( Black::NotNull<_jobject> object_ref, const TArguments&... arguments ) const;
 
 
 		// Check the field handle carries valid value.

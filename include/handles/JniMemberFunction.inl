@@ -52,9 +52,21 @@ inline namespace Handles
 	}
 
 	template< typename TResult, typename... TArguments >
+	inline TResult JniMemberFunction<TResult, TArguments...>::Call( Black::NotNull<_jobject> object_ref, const TArguments&... arguments ) const
+	{
+		return Call( Black::JniConnection::GetLocalEnvironment(), object_ref, arguments... );
+	}
+
+	template< typename TResult, typename... TArguments >
 	inline TResult JniMemberFunction<TResult, TArguments...>::CallNonVirtual( const Black::JniObject& object_handle, const TArguments&... arguments ) const
 	{
 		return CallNonVirtual( Black::JniConnection::GetLocalEnvironment(), *object_handle, arguments... );
+	}
+
+	template< typename TResult, typename... TArguments >
+	inline TResult JniMemberFunction<TResult, TArguments...>::CallNonVirtual( Black::NotNull<_jobject> object_ref, const TArguments&... arguments ) const
+	{
+		return CallNonVirtual( Black::JniConnection::GetLocalEnvironment(), object_ref, arguments... );
 	}
 
 	template< typename TResult, typename... TArguments >
