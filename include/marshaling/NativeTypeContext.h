@@ -403,7 +403,7 @@ namespace Traits
 	template< typename TNativeType >
 	inline void FromJni( const JniType<TNativeType>& source, TNativeType& destination )
 	{
-		NativeTypeTraits<TNativeType>::FromJni( source, destination );
+		NativeTypeContext<TNativeType>::FromJni( source, destination );
 	}
 
 	/**
@@ -415,7 +415,7 @@ namespace Traits
 	template< typename TNativeType >
 	inline void ToJni( const TNativeType& source, JniType<TNativeType>& destination )
 	{
-		NativeTypeTraits<TNativeType>::ToJni( source, destination );
+		NativeTypeContext<TNativeType>::ToJni( source, destination );
 	}
 
 	/**
@@ -428,7 +428,7 @@ namespace Traits
 	inline TNativeType FromJni( const JniType<TNativeType>& source )
 	{
 		TNativeType destination;
-		NativeTypeTraits<TNativeType>::FromJni( source, destination );
+		NativeTypeContext<TNativeType>::FromJni( source, destination );
 		return destination;
 	}
 
@@ -442,7 +442,7 @@ namespace Traits
 	inline JniType<TNativeType> ToJni( const TNativeType& source )
 	{
 		JniType<TNativeType> destination;
-		NativeTypeTraits<TNativeType>::ToJni( source, destination );
+		NativeTypeContext<TNativeType>::ToJni( source, destination );
 		return destination;
 	}
 }
