@@ -54,7 +54,7 @@ namespace Traits
 			source.begin(), source.end(), destination_data,
 			[]( const NativeValue& source_element ) -> JniValue
 			{
-				return Black::ToJni( source_element )
+				return Black::ToJni( source_element );
 			}
 		);
 
