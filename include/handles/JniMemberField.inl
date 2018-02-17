@@ -87,9 +87,8 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline const bool JniMemberField<TNativeType>::GetValue( JNIEnv* local_env, jobject object_ref, TNativeType& value_storage ) const
 	{
-		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use static field with invalid JNI connection." );
-		CRETD( m_class_handle == nullptr, false, LOG_CHANNEL, "Invalid static field - no class specified." );
-		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
+		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use member field with invalid JNI connection." );
+		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid member field - field not found for specified class." );
 
 		if( LOCAL_FRAME_SIZE != 0 )
 		{
@@ -107,9 +106,8 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline const bool JniMemberField<TNativeType>::SetValue( JNIEnv* local_env, jobject object_ref, const TNativeType& value_storage ) const
 	{
-		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use static field with invalid JNI connection." );
-		CRETD( m_class_handle == nullptr, false, LOG_CHANNEL, "Invalid static field - no class specified." );
-		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
+		CRETD( local_env == nullptr, false, LOG_CHANNEL, "Attempt to use member field with invalid JNI connection." );
+		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid member field - field not found for specified class." );
 
 		if( LOCAL_FRAME_SIZE != 0 )
 		{
