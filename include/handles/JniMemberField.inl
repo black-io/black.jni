@@ -30,13 +30,12 @@ inline namespace Handles
 
 	template< typename TNativeType >
 	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure )
-		: m_class_handle{ class_handle }
 	{
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 		JNIEnv* local_env = Black::JniConnection().GetLocalEnvironment();
 
-		ENSURES( m_class_handle );
-		m_field_id = local_env->GetFieldID( *m_class_handle, field_name.data(), Signature::GetData() );
+		ENSURES( class_handle );
+		m_field_id = local_env->GetFieldID( *class_handle, field_name.data(), Signature::GetData() );
 
 		CRET( local_env->ExceptionCheck() != JNI_TRUE );
 
