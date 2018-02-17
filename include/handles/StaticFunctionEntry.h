@@ -29,7 +29,7 @@ namespace Traits
 
 	private:
 		static constexpr auto	FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
-		static const char		LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
+		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jclass		m_class_ref;	// JNI class reference.
@@ -53,7 +53,7 @@ namespace Traits
 
 	private:
 		static constexpr auto	FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
-		static const char		LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
+		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jclass		m_class_ref;	// JNI class reference.

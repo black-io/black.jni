@@ -33,7 +33,7 @@ namespace Traits
 	private:
 		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
 		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
-		static const char		LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
+		static constexpr char	LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jmethodID	m_function_id;	// Id of function.
@@ -61,7 +61,7 @@ namespace Traits
 	private:
 		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
 		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
-		static const char		LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
+		static constexpr char	LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jmethodID	m_function_id;	// Id of function.

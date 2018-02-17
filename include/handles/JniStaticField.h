@@ -74,7 +74,7 @@ inline namespace Handles
 		static constexpr size_t	LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
 		static constexpr auto	FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
 		static constexpr auto	FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
-		static const char		LOG_CHANNEL[]		= "Black/Jni/StaticField";
+		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/StaticField";
 
 		Black::JniClass	m_class_handle;				// Handle to class of field.
 		jfieldID		m_field_id		= nullptr;	// Field id for JNI.
