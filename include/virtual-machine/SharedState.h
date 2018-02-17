@@ -27,9 +27,9 @@ namespace Traits
 	// Public interface.
 	public:
 		// Get the shared state.
-		inline const TState& GetState() const		{ return *GetStorage().GeState(); };
+		inline const TState& GetState() const		{ return *GetStorage().GetState(); };
 
-		inline const TState* operator -> () const	{ return GetStorage().GeState(); };
+		inline const TState* operator -> () const	{ return GetStorage().GetState(); };
 
 	// Private interface.
 	private:
