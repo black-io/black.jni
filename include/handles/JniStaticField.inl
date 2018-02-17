@@ -74,7 +74,8 @@ inline namespace Handles
 
 		if( LOCAL_FRAME_SIZE != 0 )
 		{
-			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", LOCAL_FRAME_SIZE );
+			const size_t frame_size = LOCAL_FRAME_SIZE;
+			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
 		auto jni_value = (JniType)(local_env->*FIELD_READ_HANDLER)( *m_class_handle, m_field_id );
@@ -94,7 +95,8 @@ inline namespace Handles
 
 		if( LOCAL_FRAME_SIZE != 0 )
 		{
-			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", LOCAL_FRAME_SIZE );
+			const size_t frame_size = LOCAL_FRAME_SIZE;
+			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
 		JniType jni_value;
