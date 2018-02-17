@@ -28,8 +28,8 @@ inline namespace Handles
 		JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
 
 
-		inline const JniStaticField& operator = ( const JniStaticField& other )	= default;
-		inline const JniStaticField& operator = ( JniStaticField&& other )		= default;
+		inline JniStaticField& operator = ( const JniStaticField& other )	= default;
+		inline JniStaticField& operator = ( JniStaticField&& other )		= default;
 
 	// Public interface.
 	public:
