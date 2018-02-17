@@ -102,7 +102,7 @@ namespace Traits
 		CRET( source == nullptr );
 
 		using ElementContext	= NativeContext<TNativeValue>;
-		using JniArray			= typename ValueContext::ArrayType;
+		using JniArray			= typename ElementContext::ArrayType;
 		using ArrayTrnslation	= Black::JniArrayTranslation<ElementContext>;
 
 		ArrayTrnslation::FromJni( static_cast<JniArray>( source ), destination );
