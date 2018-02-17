@@ -25,7 +25,7 @@ namespace Traits
 		for( jsize index = 0; index < array_length; ++index )
 		{
 			auto source_element = static_cast<JniValue>( (local_env->*ARRAY_ELEMENT_READ_HANDLER)( source, index ) );
-			destination.emplace_back( Black::FromJni( source_element ) );
+			destination.emplace_back( Black::FromJni<NativeValue>( source_element ) );
 		}
 
 		local_env->PopLocalFrame( nullptr );
@@ -51,7 +51,7 @@ namespace Traits
 			array_data, array_data + array_length, std::back_inserter( destination ),
 			[]( const JniValue& data ) -> NativeValue
 			{
-				return Black::FromJni( data );
+				return Black::FromJni<NativeValue>( data );
 			}
 		);
 
