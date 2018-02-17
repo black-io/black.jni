@@ -76,7 +76,7 @@ inline namespace Handles
 
 	// Private state.
 	private:
-		static constexpr char	LOG_CHANNEL[]	= "Black/Jni/MemberFunction";
+		static constexpr const char* LOG_CHANNEL	= "Black/Jni/MemberFunction";
 
 		Black::JniClass		m_class_handle;				// Handle to class owning the static method.
 		jmethodID			m_function_id	= nullptr;	// Id of Java object method.

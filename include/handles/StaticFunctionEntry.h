@@ -28,8 +28,8 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<TResult>;
 
 	private:
-		static constexpr auto	FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
-		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
+		static constexpr auto			FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
+		static constexpr const char*	LOG_CHANNEL			= "Black/Jni/StaticFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jclass		m_class_ref;	// JNI class reference.
@@ -52,8 +52,8 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<void>;
 
 	private:
-		static constexpr auto	FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
-		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/StaticFunction/EntryPoint";
+		static constexpr auto			FUNCTION_HANDLER	= JniContext::STATIC_FUNCTION_HANDLER;
+		static constexpr const char*	LOG_CHANNEL			= "Black/Jni/StaticFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jclass		m_class_ref;	// JNI class reference.

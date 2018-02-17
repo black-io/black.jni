@@ -8,7 +8,10 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-	static constexpr char LOG_CHANNEL[] = "Black/Jni/Connection";
+	namespace
+	{
+		static constexpr char LOG_CHANNEL[] = "Black/Jni/Connection";
+	}
 
 	const bool JniConnection::Initialize( Black::NotNull<JavaVM> jvm )
 	{

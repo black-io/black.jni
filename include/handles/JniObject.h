@@ -71,7 +71,7 @@ inline namespace Handles
 		void AcquireObjectRef( jobject object_ref );
 
 	private:
-		static constexpr char		LOG_CHANNEL[]	= "Black/Jni/Object";
+		static constexpr const char*	LOG_CHANNEL	= "Black/Jni/Object";
 
 		std::shared_ptr<_jobject>	m_object_ref;	// Shared JNI representation of Java object global reference.
 		mutable JniClass			m_class_handle;	// Handle to class of stored object.

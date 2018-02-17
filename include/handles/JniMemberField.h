@@ -82,10 +82,10 @@ inline namespace Handles
 		inline const bool SetValue( JNIEnv* local_env, jobject object_ref, const TNativeType& value_storage ) const;
 
 	private:
-		static constexpr size_t	LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
-		static constexpr auto	FIELD_READ_HANDLER	= JniContext::FIELD_READ_HANDLER;
-		static constexpr auto	FIELD_WRITE_HANDLER	= JniContext::FIELD_WRITE_HANDLER;
-		static constexpr char	LOG_CHANNEL[]		= "Black/Jni/MemberField";
+		static constexpr size_t			LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
+		static constexpr auto			FIELD_READ_HANDLER	= JniContext::FIELD_READ_HANDLER;
+		static constexpr auto			FIELD_WRITE_HANDLER	= JniContext::FIELD_WRITE_HANDLER;
+		static constexpr const char*	LOG_CHANNEL			= "Black/Jni/MemberField";
 
 		jfieldID	m_field_id	= nullptr;	// Field id for JNI.
 	};

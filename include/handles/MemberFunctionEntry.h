@@ -31,9 +31,9 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<TResult>;
 
 	private:
-		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
-		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
-		static constexpr char	LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
+		static constexpr auto			FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
+		static constexpr auto			NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
+		static constexpr const char*	LOG_CHANNEL					= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jmethodID	m_function_id;	// Id of function.
@@ -59,9 +59,9 @@ namespace Traits
 		using JniContext	= Black::NativeTypeContext<void>;
 
 	private:
-		static constexpr auto	FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
-		static constexpr auto	NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
-		static constexpr char	LOG_CHANNEL[]				= "Black/Jni/MemberFunction/EntryPoint";
+		static constexpr auto			FUNCTION_HANDLER			= JniContext::FUNCTION_HANDLER;
+		static constexpr auto			NONVIRTUAL_FUNCTION_HANDLER	= JniContext::NONVIRTUAL_FUNCTION_HANDLER;
+		static constexpr const char*	LOG_CHANNEL					= "Black/Jni/MemberFunction/EntryPoint";
 
 		JNIEnv*		m_local_env;	// Current thread-local JNI environment.
 		jmethodID	m_function_id;	// Id of function.
