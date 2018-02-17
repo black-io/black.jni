@@ -18,7 +18,7 @@ namespace Traits
 	struct ObjectContext<TObjectHandle, true> : JniContext<jobject>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t	LOCAL_FRAME_SIZE = 1;
 
 		// JNI type signature.
 		using Signature		= Black::StaticStrings::Join<Black::StaticString<'L'>, typename TObjectHandle::ClassPath, Black::StaticString<';'>>;

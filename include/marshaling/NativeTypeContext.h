@@ -18,7 +18,7 @@ namespace Traits
 	struct NativeContext<void> : JniContext<void>, JniSignature<void>
 	{
 		// Count of local references required to store this type in Dalvik local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= void;
@@ -38,7 +38,7 @@ namespace Traits
 	struct NativeContext<bool> : JniContext<jboolean>, JniSignature<jboolean>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= bool;
@@ -58,7 +58,7 @@ namespace Traits
 	struct NativeContext<char16_t> : JniContext<jchar>, JniSignature<jchar>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= char16_t;
@@ -78,7 +78,7 @@ namespace Traits
 	struct NativeContext<int8_t> : JniContext<jbyte>, JniSignature<jbyte>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= int8_t;
@@ -98,7 +98,7 @@ namespace Traits
 	struct NativeContext<int16_t> : JniContext<jshort>, JniSignature<jshort>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= int16_t;
@@ -118,7 +118,7 @@ namespace Traits
 	struct NativeContext<int32_t> : JniContext<jint>, JniSignature<jint>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= int32_t;
@@ -138,7 +138,7 @@ namespace Traits
 	struct NativeContext<int64_t> : JniContext<jlong>, JniSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= int64_t;
@@ -158,7 +158,7 @@ namespace Traits
 	struct NativeContext<uint8_t> : JniContext<jshort>, JniSignature<jshort>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= uint8_t;
@@ -178,7 +178,7 @@ namespace Traits
 	struct NativeContext<uint16_t> : JniContext<jint>, JniSignature<jint>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= uint16_t;
@@ -198,7 +198,7 @@ namespace Traits
 	struct NativeContext<uint32_t> : JniContext<jlong>, JniSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= uint32_t;
@@ -218,7 +218,7 @@ namespace Traits
 	struct NativeContext<uint64_t> : JniContext<jlong>, JniSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= uint64_t;
@@ -238,7 +238,7 @@ namespace Traits
 	struct NativeContext<float> : JniContext<jfloat>, JniSignature<jfloat>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= float;
@@ -258,7 +258,7 @@ namespace Traits
 	struct NativeContext<double> : JniContext<jdouble>, JniSignature<jdouble>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 0;
+		static constexpr size_t LOCAL_FRAME_SIZE = 0;
 
 		// C++ native type.
 		using NativeType	= double;
@@ -278,7 +278,7 @@ namespace Traits
 	struct NativeContext<const char*> : JniContext<jobject>, JniSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// C++ native type.
 		using NativeType	= const char*;
@@ -298,7 +298,7 @@ namespace Traits
 	struct NativeContext<const char16_t*> : JniContext<jobject>, JniSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// C++ native type.
 		using NativeType	= const char16_t*;
@@ -318,7 +318,7 @@ namespace Traits
 	struct NativeContext<std::string> : JniContext<jobject>, JniSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// C++ native type.
 		using NativeType	= std::string;
@@ -338,7 +338,7 @@ namespace Traits
 	struct NativeContext<std::u16string> : JniContext<jobject>, JniSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// C++ native type.
 		using NativeType	= std::u16string;
@@ -358,7 +358,7 @@ namespace Traits
 	struct NativeContext<std::vector<TNativeValue, TAllocator>> : JniContext<jobject>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// JNI type signature.
 		using Signature		= Black::JniArraySignature<typename NativeContext<TNativeValue>::Signature>;
