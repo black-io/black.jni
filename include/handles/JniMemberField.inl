@@ -95,7 +95,7 @@ inline namespace Handles
 			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", LOCAL_FRAME_SIZE );
 		}
 
-		auto jni_value = (JavaType)(local_env->*FIELD_READ_HANDLER)( object_ref, m_field_id );
+		auto jni_value = (JniType)(local_env->*FIELD_READ_HANDLER)( object_ref, m_field_id );
 		Black::FromJni( jni_value, value_storage );
 
 		CRET( LOCAL_FRAME_SIZE == 0, true );
