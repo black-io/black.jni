@@ -33,7 +33,7 @@ inline namespace Handles
 		: m_class_handle{ class_handle }
 	{
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
-		JNIEnv* local_env = Black::JniConnection().GetLocalEnvironment();
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 
 		ENSURES( m_class_handle );
 		m_function_id = local_env->GetMethodID( *m_class_handle, function_name.data(), Signature::GetData() );
