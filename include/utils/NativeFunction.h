@@ -63,7 +63,10 @@ namespace Traits
 
 	// Get the JNI native function for some handler.
 	template< typename TFunction, TFunction FUNCTION_HANDLER >
-	constexpr Traits::NativeFunction MakeNativeFunction( const char* function_name );
+	constexpr Traits::NativeFunction MakeNativeFunction( const char* function_name )
+	{
+		return Traits::NativeFunctionWrapper<TFunction>::GetNativeFunction<FUNCTION_HANDLER>( function_name );
+	}
 }
 }
 }
