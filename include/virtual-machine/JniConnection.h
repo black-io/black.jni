@@ -15,6 +15,10 @@ inline namespace VirtualMachine
 	{
 		friend class Black::Jni::Handles::JniClass;	// Intensively uses `m_stored_classes`.
 
+		// Instant access to `GetSharedStateStorage` function.
+		template< typename TState, bool IS_PERSISTENT >
+		friend class Black::Jni::VirtualMachine::Traits::SharedState;
+
 	// Public interface.
 	public:
 		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
