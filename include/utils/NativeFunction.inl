@@ -18,7 +18,7 @@ namespace Traits
 	)
 	{
 		return static_cast<Black::JniType<TResult>>( Black::ToJni<TResult>(
-			NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... );
+			NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... )
 		) );
 	}
 
