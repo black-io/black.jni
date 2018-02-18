@@ -53,7 +53,7 @@ namespace Traits
 		inline TState* GetState() const					{ return m_state; };
 
 		// Check that the entity is currently allocated.
-		virtual const bool IsAllocated() const override	{ return m_state != nullptr; };
+		virtual const bool IsAllocated() const override	{ return m_presence > 0; };
 
 	private:
 		// Create the state.
