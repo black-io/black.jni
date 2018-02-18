@@ -14,13 +14,6 @@ namespace Traits
 		return true;
 	}
 
-	const bool SharedStateCache::Finalize()
-	{
-		EnsureStorageReleased<Black::BUILD_CONFIGURATION>();
-
-		return true;
-	}
-
 	template< Black::BuildMode >
 	void SharedStateCache::EnsureStorageReleased()
 	{
@@ -36,6 +29,13 @@ namespace Traits
 	void SharedStateCache::EnsureStorageReleased<Black::BuildMode::Release>()
 	{
 
+	}
+
+	const bool SharedStateCache::Finalize()
+	{
+		EnsureStorageReleased<Black::BUILD_CONFIGURATION>();
+
+		return true;
 	}
 }
 }
