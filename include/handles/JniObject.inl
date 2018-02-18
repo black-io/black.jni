@@ -14,7 +14,7 @@ inline namespace Handles
 
 		CRETD( !Black::JniConnection::IsValid(), {}, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
-		const JniMemberFunction<JniObject, TArguments...> constructor{ class_handle, "<init>" };
+		const JniMemberFunction<void, TArguments...> constructor{ class_handle, "<init>" };
 		CRETD( !constructor, {}, LOG_CHANNEL, "Failed to locate constructor with signature '{}'.", constructor.GetSignature().data() );
 
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
