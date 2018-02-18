@@ -392,7 +392,7 @@ namespace Traits
 
 	// JNI function signature for native function.
 	template< typename TResult, typename... TArguments >
-	using NativeFunctionSignature	= Black::JniFunctionSignature<Black::JniType<TResult>, Black::JniType<TArguments>...>;
+	using NativeFunctionSignature	= Black::JniFunctionSignatureBase<NativeTypeSignature<TResult>, NativeTypeSignature<TArguments>...>;
 
 	/**
 		@brief	Regular converting function from Jni type to C++ one.
