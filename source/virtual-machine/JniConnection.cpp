@@ -10,7 +10,7 @@ inline namespace VirtualMachine
 {
 	namespace
 	{
-		static constexpr char LOG_CHANNEL[] = "Black/Jni/Connection";
+		static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
 	}
 
 	const bool JniConnection::Initialize( Black::NotNull<JavaVM> jvm )
@@ -19,7 +19,7 @@ inline namespace VirtualMachine
 
 		CRETD( connection.m_connection != nullptr, false, LOG_CHANNEL, "Double initialization of JNI connection blocked." );
 
-		auto main_env_result = jvm->GetEnv( reinterpret_cast<void**>( connection.m_main_env ), Black::JNI_VERSION );
+		const auto main_env_result = jvm->GetEnv( reinterpret_cast<void**>( &connection.m_main_env ), Black::JNI_VERSION );
 		CRETM( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
 
 		connection.m_connection = jvm;
@@ -96,7 +96,7 @@ inline namespace VirtualMachine
 		CRET( IsMainThread(), connection.m_main_env );
 
 		JNIEnv* local_env			= nullptr;
-		const auto env_result		= connection.m_connection->GetEnv( reinterpret_cast<void**>( local_env ), Black::JNI_VERSION );
+		const auto env_result		= connection.m_connection->GetEnv( reinterpret_cast<void**>( &local_env ), Black::JNI_VERSION );
 		CRET( env_result == JNI_OK, local_env );
 
 		const auto attach_result	= connection.m_connection->AttachCurrentThread( &local_env, nullptr );
