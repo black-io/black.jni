@@ -46,7 +46,7 @@ namespace Traits
 	{
 		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TResult, TArguments...>;
 
-		EXPECTS( class_ref == nullptr );
+		EXPECTS( class_ref != nullptr );
 		CRETD( m_local_env == nullptr, {}, LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
 		if( FRAME_SIZE != 0 )
@@ -98,7 +98,7 @@ namespace Traits
 	{
 		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TArguments...>;
 
-		EXPECTS( class_ref == nullptr );
+		EXPECTS( class_ref != nullptr );
 		CRETD( m_local_env == nullptr, , LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
 		if( FRAME_SIZE != 0 )
