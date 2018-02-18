@@ -53,7 +53,7 @@ inline namespace Handles
 	// Private interface.
 	private:
 		// JNI type signature.
-		using Signature		= Black::NativeTypeSignature<TResult>;
+		using Signature		= Black::NativeFunctionSignature<TResult, TArguments...>;
 
 		// Entry-point.
 		using EntryPoint	= Traits::StaticFunctionEntry<TResult, TArguments...>;
