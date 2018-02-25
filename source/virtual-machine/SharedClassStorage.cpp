@@ -11,10 +11,11 @@ inline namespace VirtualMachine
 {
 namespace Traits
 {
-	namespace
-	{
-		static constexpr char LOG_CHANNEL[] = "Black/Jni/ClassStorage";
-	}
+namespace
+{
+	static constexpr const char* LOG_CHANNEL = "Black/Jni/ClassStorage";
+}
+
 
 	const bool SharedClassStorage::Initialize()
 	{
