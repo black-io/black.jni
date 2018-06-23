@@ -9,21 +9,21 @@ inline namespace Handles
 {
 	template< typename TNativeType >
 	JniMemberField<TNativeType>::JniMemberField( Black::StringView class_name, Black::StringView field_name )
-		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURES }
+		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
 	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name )
-		: JniMemberField{ class_handle, field_name, Black::IGNORE_FALURES }
+		: JniMemberField{ class_handle, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
 	JniMemberField<TNativeType>::JniMemberField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure )
-		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURES }
+		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 
 	}

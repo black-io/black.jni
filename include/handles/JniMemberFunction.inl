@@ -9,21 +9,21 @@ inline namespace Handles
 {
 	template< typename TResult, typename... TArguments >
 	JniMemberFunction<TResult, TArguments...>::JniMemberFunction( Black::StringView class_name, Black::StringView function_name )
-		: JniMemberFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURES }
+		: JniMemberFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TResult, typename... TArguments >
 	JniMemberFunction<TResult, TArguments...>::JniMemberFunction( const Black::JniClass& class_handle, Black::StringView function_name )
-		: JniMemberFunction{ class_handle, function_name, Black::IGNORE_FALURES }
+		: JniMemberFunction{ class_handle, function_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TResult, typename... TArguments >
 	JniMemberFunction<TResult, TArguments...>::JniMemberFunction( Black::StringView class_name, Black::StringView function_name, Black::IgnoreFailure )
-		: JniMemberFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURES }
+		: JniMemberFunction{ Black::JniClass{ class_name }, function_name, Black::IGNORE_FALURE }
 	{
 
 	}

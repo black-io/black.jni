@@ -74,11 +74,11 @@ inline namespace Res
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberField<int32_t>				density_dpi				{ class_handle, "densityDpi", Black::IGNORE_FALURES }; // since android-17.
+			Black::JniMemberField<int32_t>				density_dpi				{ class_handle, "densityDpi", Black::IGNORE_FALURE }; // since android-17.
 			Black::JniMemberField<float>				font_scale				{ class_handle, "fontScale" };
 			Black::JniMemberField<KeyboardType>			keyboard				{ class_handle, "keyboard" };
 			Black::JniMemberField<KeyboardState>		keyboard_hidden			{ class_handle, "keyboardHidden" };
-			Black::JniMemberField<Jni::Locale>			locale					{ class_handle, "locale", Black::IGNORE_FALURES }; // till android-24
+			Black::JniMemberField<Jni::Locale>			locale					{ class_handle, "locale", Black::IGNORE_FALURE }; // till android-24
 			Black::JniMemberField<ScreenOrientation>	screen_orientation		{ class_handle, "orientation" };
 			Black::JniMemberField<ScreenLayoutState>	scren_layout			{ class_handle, "screenLayout" };
 			Black::JniMemberField<int32_t>				scren_width_dp			{ class_handle, "screenWidthDp" };
@@ -86,7 +86,7 @@ inline namespace Res
 			Black::JniMemberField<int32_t>				scren_smallest_width_dp	{ class_handle, "smallestScreenWidthDp" };
 			Black::JniMemberField<ScreenUiMode>			ui_mode					{ class_handle, "uiMode" };
 
-			Black::JniMemberFunction<Jni::LocaleList>	get_locales				{ class_handle, "getLocales", Black::IGNORE_FALURES }; // since android-24
+			Black::JniMemberFunction<Jni::LocaleList>	get_locales				{ class_handle, "getLocales", Black::IGNORE_FALURE }; // since android-24
 		};
 
 		SharedState<ConfigurationState, true>	m_handles;	// Shared JNI handles.

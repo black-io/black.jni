@@ -9,21 +9,21 @@ inline namespace Handles
 {
 	template< typename TNativeType >
 	JniStaticField<TNativeType>::JniStaticField( Black::StringView class_name, Black::StringView field_name )
-		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURES }
+		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
 	JniStaticField<TNativeType>::JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name )
-		: JniStaticField{ class_handle, field_name, Black::IGNORE_FALURES }
+		: JniStaticField{ class_handle, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
 	JniStaticField<TNativeType>::JniStaticField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure )
-		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURES }
+		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 
 	}
