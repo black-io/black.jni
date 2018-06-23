@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-namespace Traits
+namespace Internal
 {
 	template< typename TResult, typename... TArguments >
 	inline MemberFunctionEntry<TResult, TArguments...>::MemberFunctionEntry( JNIEnv* local_env, jobject object_ref, jmethodID function_id )

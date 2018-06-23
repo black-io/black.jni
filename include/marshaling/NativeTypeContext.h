@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI environment context for regular native type.
 	template< typename TNativeType >
@@ -380,15 +380,15 @@ namespace Traits
 
 	// JNI environment context for regular native type.
 	template< typename TNativeType >
-	using NativeTypeContext			= Traits::NativeContext<TNativeType>;
+	using NativeTypeContext			= Internal::NativeContext<TNativeType>;
 
 	// JNI representation for regular native type.
 	template< typename TNativeType >
-	using JniType					= typename Traits::NativeContext<TNativeType>::JniType;
+	using JniType					= typename Internal::NativeContext<TNativeType>::JniType;
 
 	// JNI type signature for regular native type.
 	template< typename TNativeType >
-	using NativeTypeSignature		= typename Traits::NativeContext<TNativeType>::Signature;
+	using NativeTypeSignature		= typename Internal::NativeContext<TNativeType>::Signature;
 
 	// JNI function signature for native function.
 	template< typename TResult, typename... TArguments >

@@ -28,7 +28,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI context specification for `android.view.InputDevice.SOURCE_CLASS_*` values.
 	template<>

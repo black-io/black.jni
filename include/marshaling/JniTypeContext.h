@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI environment context for any regular JNI type.
 	template< typename TJniType >
@@ -448,7 +448,7 @@ namespace Traits
 
 	// JNI environment context for any regular JNI type.
 	template< typename TJniType >
-	using JniTypeContext = Traits::JniContext<TJniType>;
+	using JniTypeContext = Internal::JniContext<TJniType>;
 }
 }
 }

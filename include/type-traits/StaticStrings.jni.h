@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace TypeTraits
 {
-namespace Traits
+namespace Internal
 {
 	// Class path extractor for class signatures.
 	template< typename TClassSignature >
@@ -45,7 +45,7 @@ namespace Traits
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
-	using JniClassPath			= typename Traits::ClassPathExtractor<TClassSignature>::Signature;
+	using JniClassPath			= typename Internal::ClassPathExtractor<TClassSignature>::Signature;
 }
 }
 }

@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	template< typename TElementContext, bool IS_TYPE_PLAIN >
 	template< typename TAllocator >

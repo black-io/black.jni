@@ -47,7 +47,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI context specification for `android.content.res.Configuration.KEYBOARD_*` values.
 	template<>

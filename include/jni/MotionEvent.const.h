@@ -33,7 +33,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI context specification for `android.view.MotionEvent.ACTION_*` values.
 	template<>

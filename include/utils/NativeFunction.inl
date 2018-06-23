@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	template< typename TSender, typename TResult, typename... TArguments >
 	template< TResult (*NATIVE_HANDLER)( JNIEnv*, TSender, const TArguments&... ) >

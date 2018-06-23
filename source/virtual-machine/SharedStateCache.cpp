@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	const bool SharedStateCache::Initialize()
 	{

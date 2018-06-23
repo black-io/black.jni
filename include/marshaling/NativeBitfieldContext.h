@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// Safe environment context for native bit-fields.
 	template< typename TNativeBitfield, bool IS_VALID_BITFIELD >
@@ -48,7 +48,7 @@ namespace Traits
 
 	// JNI environment context for native bit-fields.
 	template< typename TNativeBitfield >
-	using NativeBitfieldContext = Traits::BitfieldContext<TNativeBitfield, Black::IS_BIT_FIELD<TNativeBitfield>>;
+	using NativeBitfieldContext = Internal::BitfieldContext<TNativeBitfield, Black::IS_BIT_FIELD<TNativeBitfield>>;
 }
 }
 }

@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI environment context for `Black::JniClass` type.
 	template<>

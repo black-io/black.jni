@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// Translation traits for JNI object arrays.
 	template< typename TElementContext, bool IS_TYPE_PLAIN >
@@ -67,7 +67,7 @@ namespace Traits
 
 	// JNI array type translation.
 	template< typename TElementContext >
-	using JniArrayTranslation = Traits::JniArrayTranslation<TElementContext, TElementContext::IS_PLAIN>;
+	using JniArrayTranslation = Internal::JniArrayTranslation<TElementContext, TElementContext::IS_PLAIN>;
 }
 }
 }

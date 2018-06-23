@@ -17,7 +17,7 @@ inline namespace VirtualMachine
 
 		// Instant access to `GetSharedStateStorage` function.
 		template< typename TState, bool IS_PERSISTENT >
-		friend class Black::Jni::VirtualMachine::Traits::SharedState;
+		friend class Black::Jni::VirtualMachine::Internal::SharedState;
 
 	// Public interface.
 	public:
@@ -69,10 +69,10 @@ inline namespace VirtualMachine
 		static JniClass GetParentClass( const Black::JniClass& class_handle );
 
 		// Short path to get the storage for shared classes.
-		static inline Traits::SharedClassStorage& GetClassStorage()		{ return GetInstance().m_stored_classes; };
+		static inline Internal::SharedClassStorage& GetClassStorage()		{ return GetInstance().m_stored_classes; };
 
 		// Short path to get the storage for shared states.
-		static inline Traits::SharedStateCache& GetSharedStateStorage()	{ return GetInstance().m_cached_states; };
+		static inline Internal::SharedStateCache& GetSharedStateStorage()	{ return GetInstance().m_cached_states; };
 
 
 		JniConnection() = default;
@@ -91,7 +91,7 @@ inline namespace VirtualMachine
 		int64_t						m_main_thread_id	= 0;		// Id of main thread.
 		int64_t						m_thread_detach_key	= 0;		// Thread-local environment detach key.
 
-		Traits::SharedClassStorage	m_stored_classes;				// Storage for shared classes.
+		Internal::SharedClassStorage	m_stored_classes;				// Storage for shared classes.
 
 	// Persistently captured JNI entities.
 	private:
@@ -102,7 +102,7 @@ inline namespace VirtualMachine
 
 	// Persistent cache.
 	private:
-		Traits::SharedStateCache	m_cached_states;	// Cache for shared states.
+		Internal::SharedStateCache	m_cached_states;	// Cache for shared states.
 	};
 }
 }

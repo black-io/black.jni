@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	// Specification for JNI native function handler.
 	struct NativeFunction final
@@ -63,9 +63,9 @@ namespace Traits
 
 	// Get the JNI native function for some handler.
 	template< typename TFunction, TFunction FUNCTION_HANDLER >
-	constexpr Traits::NativeFunction MakeNativeFunction( const char* function_name )
+	constexpr Internal::NativeFunction MakeNativeFunction( const char* function_name )
 	{
-		return Traits::NativeFunctionWrapper<TFunction>::template GetNativeFunction<FUNCTION_HANDLER>( function_name );
+		return Internal::NativeFunctionWrapper<TFunction>::template GetNativeFunction<FUNCTION_HANDLER>( function_name );
 	}
 }
 }

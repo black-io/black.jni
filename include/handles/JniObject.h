@@ -14,7 +14,7 @@ inline namespace Handles
 	public:
 		// Usable shared state to optimize the owning of function/field handles.
 		template< typename TState, bool IS_PERSISTENT = false >
-		using SharedState	= Black::Jni::VirtualMachine::Traits::SharedState<TState, IS_PERSISTENT>;
+		using SharedState	= Black::Jni::VirtualMachine::Internal::SharedState<TState, IS_PERSISTENT>;
 
 
 		// Construct new object of given class and using given construction arguments.

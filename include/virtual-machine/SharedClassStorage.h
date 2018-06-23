@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	/**
 		@brief	Storage for shared JNI class instances.

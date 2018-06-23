@@ -68,7 +68,7 @@ inline namespace VirtualMachine
 		jni_natives.reserve( bindings.natives.size() );
 		std::transform(
 			bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ),
-			[]( const Traits::NativeFunction& func )
+			[]( const Internal::NativeFunction& func )
 			{
 				return static_cast<JNINativeMethod>( func );
 			}

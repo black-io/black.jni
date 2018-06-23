@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace TypeTraits
 {
-namespace Traits
+namespace Internal
 {
 	// Common path to check the non-bit-field types.
 	template< typename TBitfield, typename = int >
@@ -50,11 +50,11 @@ namespace Traits
 
 	// Bit-field type check.
 	template< typename TCondition >
-	constexpr bool IS_BIT_FIELD = Traits::HasBitsField<TCondition>::value;
+	constexpr bool IS_BIT_FIELD = Internal::HasBitsField<TCondition>::value;
 
 	// Total size of locale frame for JNI environment.
 	template< typename... TNativeTypes >
-	constexpr size_t JNI_LOCAL_FRAME_SIZE = Traits::GetLocalFrameSize<Black::NativeTypeContext<TNativeTypes>::LOCAL_FRAME_SIZE...>();
+	constexpr size_t JNI_LOCAL_FRAME_SIZE = Internal::GetLocalFrameSize<Black::NativeTypeContext<TNativeTypes>::LOCAL_FRAME_SIZE...>();
 }
 }
 }

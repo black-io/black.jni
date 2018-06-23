@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-namespace Traits
+namespace Internal
 {
 	// Entry-point for JNI static function.
 	template< typename TResult, typename... TArguments >

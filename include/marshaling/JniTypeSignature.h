@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI regular type signature specification.
 	template< typename TJniType >
@@ -113,7 +113,7 @@ namespace Traits
 
 	// Type signature for any regular JNI type.
 	template< typename TJniType >
-	using JniTypeSignature		= typename Traits::JniSignature<TJniType>::Signature;
+	using JniTypeSignature		= typename Internal::JniSignature<TJniType>::Signature;
 
 	// Function signature for any JNI type.
 	template< typename TJniResult, typename... TJniArguments >

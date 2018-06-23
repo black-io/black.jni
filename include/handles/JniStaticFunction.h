@@ -56,7 +56,7 @@ inline namespace Handles
 		using Signature		= Black::NativeFunctionSignature<TResult, TArguments...>;
 
 		// Entry-point.
-		using EntryPoint	= Traits::StaticFunctionEntry<TResult, TArguments...>;
+		using EntryPoint	= Internal::StaticFunctionEntry<TResult, TArguments...>;
 
 
 		// Call the function using given arguments and local JNI environment.

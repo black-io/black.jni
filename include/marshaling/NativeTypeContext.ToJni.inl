@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	inline void NativeContext<bool>::ToJni( const NativeType& source, JniType& destination )
 	{

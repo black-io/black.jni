@@ -77,7 +77,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// JNI context specification for handles to `android.view.KeyEvent` class.
 	template<>

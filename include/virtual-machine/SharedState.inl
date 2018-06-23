@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	template< typename TState, bool IS_PERSISTENT >
 	SharedState<TState, IS_PERSISTENT>::SharedState( const SharedState<TState, IS_PERSISTENT>& other )

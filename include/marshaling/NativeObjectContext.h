@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// Safe environment context for object handle.
 	template< typename TObjectHandle, bool IS_VALID_HANDLE >
@@ -40,7 +40,7 @@ namespace Traits
 
 	// JNI environment context for object handle.
 	template< typename TObjectHandle >
-	using NativeObjectContext = Traits::ObjectContext<TObjectHandle, Black::IS_BASE_OF<Black::JniObject, TObjectHandle>>;
+	using NativeObjectContext = Internal::ObjectContext<TObjectHandle, Black::IS_BASE_OF<Black::JniObject, TObjectHandle>>;
 }
 }
 }

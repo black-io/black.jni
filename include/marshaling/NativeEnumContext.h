@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Marshaling
 {
-namespace Traits
+namespace Internal
 {
 	// Safe environment context for native enumeration.
 	template< typename TNativeEnum, bool IS_VALID_ENUMERATION >
@@ -51,7 +51,7 @@ namespace Traits
 
 	// JNI environment context for native enumerations.
 	template< typename TNativeEnum >
-	using NativeEnumContext = Traits::EnumContext<TNativeEnum, Black::IS_ENUMERATION<TNativeEnum>>;
+	using NativeEnumContext = Internal::EnumContext<TNativeEnum, Black::IS_ENUMERATION<TNativeEnum>>;
 }
 }
 }

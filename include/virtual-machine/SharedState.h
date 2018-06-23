@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	// The shared state entity.
 	template< typename TState, bool IS_PERSISTENT = false >

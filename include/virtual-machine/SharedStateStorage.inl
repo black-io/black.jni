@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace VirtualMachine
 {
-namespace Traits
+namespace Internal
 {
 	template< typename TState >
 	SharedStateStorage<TState>::~SharedStateStorage()
