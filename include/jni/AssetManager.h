@@ -29,9 +29,9 @@ inline namespace Res
 		AssetManager( AssetManager&& other ) : Black::JniObject( std::move( other ) ) { AcquireAssets(); };
 
 
-		const AssetManager& operator = ( jobject object_ref )			{ Black::JniObject::operator=( object_ref ); return *this; };
-		const AssetManager& operator = ( const AssetManager& other )	{ Black::JniObject::operator=( other ); return *this; };
-		const AssetManager& operator = ( AssetManager&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+		const AssetManager& operator = ( jobject object_ref )			{ Black::JniObject::operator=( object_ref ); AcquireAssets(); return *this; };
+		const AssetManager& operator = ( const AssetManager& other )	{ Black::JniObject::operator=( other ); AcquireAssets(); return *this; };
+		const AssetManager& operator = ( AssetManager&& other )			{ Black::JniObject::operator=( std::move( other ) ); AcquireAssets(); return *this; };
 
 	// Public interface.
 	public:
