@@ -24,14 +24,14 @@ inline namespace Res
 	// Construction and assignation.
 	public:
 		AssetManager() = default;
-		AssetManager( jobject object_ref ) : Black::JniObject{ object_ref } { AcquireAssets(); };
-		AssetManager( const AssetManager& other ) : Black::JniObject( other ) { AcquireAssets(); };
-		AssetManager( AssetManager&& other ) : Black::JniObject( std::move( other ) ) { AcquireAssets(); };
+		AssetManager( jobject object_ref );
+		AssetManager( const AssetManager& other );
+		AssetManager( AssetManager&& other );
 
 
-		const AssetManager& operator = ( jobject object_ref )			{ Black::JniObject::operator=( object_ref ); AcquireAssets(); return *this; };
-		const AssetManager& operator = ( const AssetManager& other )	{ Black::JniObject::operator=( other ); AcquireAssets(); return *this; };
-		const AssetManager& operator = ( AssetManager&& other )			{ Black::JniObject::operator=( std::move( other ) ); AcquireAssets(); return *this; };
+		const AssetManager& operator = ( jobject object_ref );
+		const AssetManager& operator = ( const AssetManager& other );
+		const AssetManager& operator = ( AssetManager&& other );
 
 	// Public interface.
 	public:

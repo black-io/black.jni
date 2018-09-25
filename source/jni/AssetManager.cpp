@@ -39,6 +39,48 @@ inline namespace Context
 {
 inline namespace Res
 {
+	AssetManager::AssetManager( jobject object_ref )
+		: Black::JniObject{ object_ref }
+	{
+		AcquireAssets();
+	}
+
+	AssetManager::AssetManager( const AssetManager& other )
+		: Black::JniObject( other )
+	{
+		AcquireAssets();
+	}
+
+	AssetManager::AssetManager( AssetManager&& other )
+		: Black::JniObject( std::move( other ) )
+	{
+		AcquireAssets();
+	}
+
+	const AssetManager& AssetManager::operator=( jobject object_ref )
+	{
+		Black::JniObject::operator=( object_ref );
+
+		AcquireAssets(); return
+		*this;
+	}
+
+	const AssetManager& AssetManager::operator=( const AssetManager& other )
+	{
+		Black::JniObject::operator=( other );
+
+		AcquireAssets();
+		return *this;
+	}
+
+	const AssetManager& AssetManager::operator=( AssetManager&& other )
+	{
+		Black::JniObject::operator=( std::move( other ) );
+
+		AcquireAssets();
+		return *this;
+	}
+
 	const bool AssetManager::IsValidFolder( const std::string& path ) const
 	{
 		ScopedAssetFolder folder{ AAssetManager_openDir( m_assets, path.data() ) };
