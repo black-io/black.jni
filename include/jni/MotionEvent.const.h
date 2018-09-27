@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace Android
 {
-inline namespace View
+inline namespace Views
 {
 	// Translation of motion actions.
 	enum class MotionActionType : int32_t
@@ -37,7 +37,7 @@ namespace Internal
 {
 	// JNI context specification for `android.view.MotionEvent.ACTION_*` values.
 	template<>
-	struct NativeContext<::Jni::Android::View::MotionActionType> : public Black::NativeEnumContext<::Jni::Android::View::MotionActionType>
+	struct NativeContext<::Jni::Android::Views::MotionActionType> : public Black::NativeEnumContext<::Jni::Android::Views::MotionActionType>
 	{
 
 	};

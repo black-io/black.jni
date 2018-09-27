@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace Android
 {
-inline namespace View
+inline namespace Views
 {
 	// Handle for `android.view.KeyEvent` objects.
 	class KeyEvent final : public Black::JniObject
@@ -81,7 +81,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.view.KeyEvent` class.
 	template<>
-	struct NativeContext<::Jni::Android::View::KeyEvent> : public Black::NativeObjectContext<::Jni::Android::View::KeyEvent>
+	struct NativeContext<::Jni::Android::Views::KeyEvent> : public Black::NativeObjectContext<::Jni::Android::Views::KeyEvent>
 	{
 
 	};

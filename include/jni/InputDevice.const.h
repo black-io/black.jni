@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace Android
 {
-inline namespace View
+inline namespace Views
 {
 	// Translation of input device class.
 	enum class InputSourceClass : int32_t
@@ -32,7 +32,7 @@ namespace Internal
 {
 	// JNI context specification for `android.view.InputDevice.SOURCE_CLASS_*` values.
 	template<>
-	struct NativeContext<::Jni::Android::View::InputSourceClass> : public Black::NativeEnumContext<::Jni::Android::View::InputSourceClass>
+	struct NativeContext<::Jni::Android::Views::InputSourceClass> : public Black::NativeEnumContext<::Jni::Android::Views::InputSourceClass>
 	{
 
 	};

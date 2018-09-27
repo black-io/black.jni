@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace Android
 {
-inline namespace View
+inline namespace Views
 {
 	// Handle for `android.view.MotionEvent` objects.
 	class MotionEvent final : public Black::JniObject
@@ -99,7 +99,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `java.util.Locale` class.
 	template<>
-	struct NativeContext<::Jni::Android::View::MotionEvent> : public Black::NativeObjectContext<::Jni::Android::View::MotionEvent>
+	struct NativeContext<::Jni::Android::Views::MotionEvent> : public Black::NativeObjectContext<::Jni::Android::Views::MotionEvent>
 	{
 
 	};
