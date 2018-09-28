@@ -8,7 +8,7 @@ inline namespace Android
 inline namespace Views
 {
 	// Handle for `android.view.View` objects.
-	class View final : public Black::JniObject
+	class View : public Black::JniObject
 	{
 	public:
 		// Class path.
@@ -49,4 +49,3 @@ namespace Internal
 }
 }
 }
-
