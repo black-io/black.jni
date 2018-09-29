@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Util
+inline namespace util
 {
 	// Handle for `android.util.DisplayMetrics` objects.
 	class DisplayMetrics final : public Black::JniObject
@@ -85,7 +85,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.util.DisplayMetrics` class.
 	template<>
-	struct NativeContext<::Jni::Android::Util::DisplayMetrics> : public Black::NativeObjectContext<::Jni::Android::Util::DisplayMetrics>
+	struct NativeContext<::Jni::android::util::DisplayMetrics> : public Black::NativeObjectContext<::Jni::android::util::DisplayMetrics>
 	{
 
 	};

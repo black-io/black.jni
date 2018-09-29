@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Java
+inline namespace java
 {
-inline namespace Util
+inline namespace util
 {
 	struct Locale::LocaleState final
 	{

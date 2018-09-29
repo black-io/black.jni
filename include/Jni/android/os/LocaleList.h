@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Os
+inline namespace os
 {
 	// Handle for `android.os.LocaleList` objects.
 	class LocaleList final : Black::JniObject
@@ -65,7 +65,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.os.LocaleList` class.
 	template<>
-	struct NativeContext<::Jni::Android::Os::LocaleList> : public Black::NativeObjectContext<::Jni::Android::Os::LocaleList>
+	struct NativeContext<::Jni::android::os::LocaleList> : public Black::NativeObjectContext<::Jni::android::os::LocaleList>
 	{
 
 	};

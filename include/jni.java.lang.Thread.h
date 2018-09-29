@@ -5,4 +5,4 @@
 
 
 // Implementation.
-#include "jni/Thread.h"
+#include "Jni/java/lang/Thread.h"

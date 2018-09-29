@@ -3,11 +3,11 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Context
+inline namespace context
 {
-inline namespace Res
+inline namespace res
 {
 	// Handle for `android.content.res.Configuration` objects.
 	class Configuration final : public Black::JniObject
@@ -107,7 +107,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.content.res.Configuration` class.
 	template<>
-	struct NativeContext<::Jni::Android::Context::Res::Configuration> : public Black::NativeObjectContext<::Jni::Android::Context::Res::Configuration>
+	struct NativeContext<::Jni::android::context::res::Configuration> : public Black::NativeObjectContext<::Jni::android::context::res::Configuration>
 	{
 
 	};

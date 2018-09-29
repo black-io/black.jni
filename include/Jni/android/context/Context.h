@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Contexts
+inline namespace context
 {
 	// Handle for `android.content.Context` objects.
 	class Context final : public Black::JniObject
@@ -41,7 +41,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.content.Context` class.
 	template<>
-	struct NativeContext<::Jni::Android::Contexts::Context> : public Black::NativeObjectContext<::Jni::Android::Contexts::Context>
+	struct NativeContext<::Jni::android::context::Context> : public Black::NativeObjectContext<::Jni::android::context::Context>
 	{
 
 	};

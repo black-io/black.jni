@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Java
+inline namespace java
 {
-inline namespace Lang
+inline namespace lang
 {
 	// Handle for `java.lang.ClassLoader` objects.
 	class ClassLoader final : public Black::JniObject
@@ -41,7 +41,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `java.lang.ClassLoader` class.
 	template<>
-	struct NativeContext<::Jni::Java::Lang::ClassLoader> : public Black::NativeObjectContext<::Jni::Java::Lang::ClassLoader>
+	struct NativeContext<::Jni::java::lang::ClassLoader> : public Black::NativeObjectContext<::Jni::java::lang::ClassLoader>
 	{
 
 	};

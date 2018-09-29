@@ -6,6 +6,6 @@
 
 
 // Implementation.
-#include "jni/InputDevice.const.h"
-#include "jni/KeyEvent.struct.h"
-#include "jni/KeyEvent.h"
+#include "Jni/android/view/InputDevice.const.h"
+#include "Jni/android/view/KeyEvent.struct.h"
+#include "Jni/android/view/KeyEvent.h"

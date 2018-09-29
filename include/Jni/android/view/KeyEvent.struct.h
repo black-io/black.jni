@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Views
+inline namespace view
 {
 	// Meta state for keys from keyboard.
 	union KeyMetaState
@@ -54,7 +54,7 @@ namespace Internal
 {
 	// JNI context specification for `android.view.KeyEvent.META_*` mask.
 	template<>
-	struct NativeContext<::Jni::Android::Views::KeyMetaState> : public Black::NativeBitfieldContext<::Jni::Android::Views::KeyMetaState>
+	struct NativeContext<::Jni::android::view::KeyMetaState> : public Black::NativeBitfieldContext<::Jni::android::view::KeyMetaState>
 	{
 
 	};

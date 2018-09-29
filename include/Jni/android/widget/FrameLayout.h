@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Widget
+inline namespace widget
 {
 	// Handle for `android.widget.FrameLayout` objects.
 	class FrameLayout final : public Black::JniObject
@@ -45,7 +45,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.view.View` class.
 	template<>
-	struct NativeContext<::Jni::Android::Widget::FrameLayout> : public Black::NativeObjectContext<::Jni::Android::Widget::FrameLayout>
+	struct NativeContext<::Jni::android::widget::FrameLayout> : public Black::NativeObjectContext<::Jni::android::widget::FrameLayout>
 	{
 
 	};

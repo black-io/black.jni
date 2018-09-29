@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Java
+inline namespace java
 {
-inline namespace Lang
+inline namespace lang
 {
 	// Handle for `java.lang.Thread` objects.
 	class Thread final : public Black::JniObject
@@ -41,7 +41,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `java.lang.Thread` class.
 	template<>
-	struct NativeContext<::Jni::Java::Lang::Thread> : public Black::NativeObjectContext<::Jni::Java::Lang::Thread>
+	struct NativeContext<::Jni::java::lang::Thread> : public Black::NativeObjectContext<::Jni::java::lang::Thread>
 	{
 
 	};

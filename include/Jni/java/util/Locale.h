@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Java
+inline namespace java
 {
-inline namespace Util
+inline namespace util
 {
 	// Handle for `java.util.Locale` objects.
 	class Locale final : public Black::JniObject
@@ -92,7 +92,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `java.util.Locale` class.
 	template<>
-	struct NativeContext<::Jni::Java::Util::Locale> : public Black::NativeObjectContext<::Jni::Java::Util::Locale>
+	struct NativeContext<::Jni::java::util::Locale> : public Black::NativeObjectContext<::Jni::java::util::Locale>
 	{
 
 	};

@@ -3,11 +3,11 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Context
+inline namespace context
 {
-inline namespace Res
+inline namespace res
 {
 	Jni::Locale Configuration::GetLocale() const
 	{

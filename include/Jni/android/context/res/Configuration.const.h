@@ -3,11 +3,11 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Context
+inline namespace context
 {
-inline namespace Res
+inline namespace res
 {
 	// Translation of keyboard types.
 	enum class KeyboardType : int32_t
@@ -51,21 +51,21 @@ namespace Internal
 {
 	// JNI context specification for `android.content.res.Configuration.KEYBOARD_*` values.
 	template<>
-	struct NativeContext<::Jni::Android::Context::KeyboardType> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardType>
+	struct NativeContext<::Jni::android::context::res::KeyboardType> : public Black::NativeEnumContext<::Jni::android::context::res::KeyboardType>
 	{
 
 	};
 
 	// JNI context specification for `android.content.res.Configuration.KEYBOARDHIDDEN_*` values.
 	template<>
-	struct NativeContext<::Jni::Android::Context::KeyboardState> : public Black::NativeEnumContext<::Jni::Android::Context::KeyboardState>
+	struct NativeContext<::Jni::android::context::res::KeyboardState> : public Black::NativeEnumContext<::Jni::android::context::res::KeyboardState>
 	{
 
 	};
 
 	// JNI context specification for `android.content.res.Configuration.ORIENTATION_*` values.
 	template<>
-	struct NativeContext<::Jni::Android::Context::ScreenOrientation> : public Black::NativeEnumContext<::Jni::Android::Context::ScreenOrientation>
+	struct NativeContext<::Jni::android::context::res::ScreenOrientation> : public Black::NativeEnumContext<::Jni::android::context::res::ScreenOrientation>
 	{
 
 	};

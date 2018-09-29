@@ -5,5 +5,5 @@
 
 
 // Implementation.
-#include "jni/Locale.h"
-#include "jni/Locale.inl"
+#include "Jni/java/util/Locale.h"
+#include "Jni/java/util/Locale.inl"

@@ -3,11 +3,11 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Context
+inline namespace context
 {
-inline namespace Res
+inline namespace res
 {
 	// Representation of screen layout state.
 	union ScreenLayoutState
@@ -74,14 +74,14 @@ namespace Internal
 {
 	// JNI context specification for `android.content.res.Configuration.SCREENLAYOUT_*` mask.
 	template<>
-	struct NativeContext<::Jni::Android::Context::ScreenLayoutState> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenLayoutState>
+	struct NativeContext<::Jni::android::context::ScreenLayoutState> : public Black::NativeBitfieldContext<::Jni::android::context::ScreenLayoutState>
 	{
 
 	};
 
 	// JNI context specification for `android.content.res.Configuration.UI_MODE_*` mask.
 	template<>
-	struct NativeContext<::Jni::Android::Context::ScreenUiMode> : public Black::NativeBitfieldContext<::Jni::Android::Context::ScreenUiMode>
+	struct NativeContext<::Jni::android::context::ScreenUiMode> : public Black::NativeBitfieldContext<::Jni::android::context::ScreenUiMode>
 	{
 
 	};

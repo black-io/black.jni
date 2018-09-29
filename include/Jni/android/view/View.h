@@ -3,9 +3,9 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Views
+inline namespace view
 {
 	// Handle for `android.view.View` objects.
 	class View final : public Black::JniObject
@@ -41,7 +41,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.view.View` class.
 	template<>
-	struct NativeContext<::Jni::Android::Views::View> : public Black::NativeObjectContext<::Jni::Android::Views::View>
+	struct NativeContext<::Jni::android::view::View> : public Black::NativeObjectContext<::Jni::android::view::View>
 	{
 
 	};

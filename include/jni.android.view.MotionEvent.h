@@ -6,6 +6,6 @@
 
 
 // Implementation.
-#include "jni/InputDevice.const.h"
-#include "jni/MotionEvent.const.h"
-#include "jni/MotionEvent.h"
+#include "Jni/android/view/InputDevice.const.h"
+#include "Jni/android/view/MotionEvent.const.h"
+#include "Jni/android/view/MotionEvent.h"

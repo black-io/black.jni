@@ -3,11 +3,11 @@
 
 namespace Jni
 {
-inline namespace Android
+inline namespace android
 {
-inline namespace Context
+inline namespace context
 {
-inline namespace Res
+inline namespace res
 {
 	// Handle for `android.content.res.AssetManager` objects.
 	class AssetManager final : public Black::JniObject
@@ -80,7 +80,7 @@ namespace Internal
 {
 	// JNI context specification for handles to `android.content.res.AssetManager` class.
 	template<>
-	struct NativeContext<::Jni::Android::Context::Res::AssetManager> : public Black::NativeObjectContext<::Jni::Android::Context::Res::AssetManager>
+	struct NativeContext<::Jni::android::context::res::AssetManager> : public Black::NativeObjectContext<::Jni::android::context::res::AssetManager>
 	{
 
 	};
