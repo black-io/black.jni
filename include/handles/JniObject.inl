@@ -40,6 +40,22 @@ inline namespace Handles
 		return result;
 	}
 
+	template< typename TOtherHandle >
+	inline TOtherHandle JniObject::ConvertTo() const
+	{
+		static_assert( Black::IS_BASE_OF<JniObject, TOtherHandle>, "Output handle type should be derived from `Black::JniObject`." );
+
+		CRET( !IsValid(), {} );
+
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+
+		JniClass current_class{ GetClass() };
+		JniClass other_class{ JniClass::FromHandleType<TOtherHandle>() };
+		CRET( !local_env->IsAssignableFrom( *current_class, *other_class ), {} );
+
+		return { GetJniReference() };
+	}
+
 	inline const bool operator == ( const JniObject& left, const JniObject& right )
 	{
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();

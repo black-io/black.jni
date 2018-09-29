@@ -10,16 +10,17 @@ inline namespace Handles
 	// Handle of arbitrary Java object.
 	class JniObject
 	{
-	// Construction and assignation.
+	// Public inner types.
 	public:
 		// Usable shared state to optimize the owning of function/field handles.
 		template< typename TState, bool IS_PERSISTENT = false >
 		using SharedState	= Black::Jni::VirtualMachine::Internal::SharedState<TState, IS_PERSISTENT>;
 
-
+	// Construction and assignation.
+	public:
 		// Construct new object of given class and using given construction arguments.
 		template< typename... TArguments >
-		static JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
+		static inline JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
 
 
 		JniObject()									= default;
@@ -40,6 +41,11 @@ inline namespace Handles
 	public:
 		// Invalidate the handle.
 		void Invalidate();
+
+
+		// cast the instance to another type.
+		template< typename TOtherHandle >
+		inline TOtherHandle ConvertTo() const;
 
 
 		// Check that the object is instance of given class.
