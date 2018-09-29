@@ -14,6 +14,11 @@ inline namespace Handles
 
 	// Construction and assignment.
 	public:
+		// Get the class handle for given object handle.
+		template< typename THandle >
+		static inline JniClass FromHandleType();
+
+
 		JniClass()									= default;
 		JniClass( const JniClass& other )			= default;
 		JniClass( JniClass&& other )				= default;
