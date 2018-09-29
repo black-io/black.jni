@@ -1,7 +1,7 @@
 #pragma once
 
 // General dependency.
-#include "jni.android.view.View.h"
+#include <black.jni.h>
 
 
 // Implementation.

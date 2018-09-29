@@ -7,7 +7,8 @@ inline namespace Android
 {
 inline namespace Widget
 {
-	class FrameLayout final : public Jni::View
+	// Handle for `android.widget.FrameLayout` objects.
+	class FrameLayout final : public Black::JniObject
 	{
 	public:
 		// Class path.
@@ -20,9 +21,9 @@ inline namespace Widget
 	// Construction and assignation.
 	public:
 		FrameLayout() = default;
-		FrameLayout( jobject object_ref ) : Jni::View{ object_ref } {};
-		FrameLayout( const FrameLayout& other ) : Jni::View( other ) {};
-		FrameLayout( FrameLayout&& other ) : Jni::View( std::move( other ) ) {};
+		FrameLayout( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		FrameLayout( const FrameLayout& other ) : Black::JniObject( other ) {};
+		FrameLayout( FrameLayout&& other ) : Black::JniObject( std::move( other ) ) {};
 
 
 		const FrameLayout& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
