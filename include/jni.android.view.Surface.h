@@ -7,3 +7,4 @@
 
 // Implementation.
 #include "Jni/android/view/Surface.h"
+#include "Jni/android/view/Surface.inl"

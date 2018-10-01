@@ -12,19 +12,42 @@ inline namespace view
 	{
 	public:
 		// Class path.
-		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'vi', 'e', 'w', '/', 'S', 'u', 'f', 'r', 'a', 'c', 'e'>;
+		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'S', 'u', 'f', 'r', 'a', 'c', 'e'>;
 
 	// Construction and assignation.
 	public:
 		Surface() = default;
-		Surface( jobject object_ref ) : Black::JniObject{ object_ref } {};
-		Surface( const Surface& other ) : Black::JniObject( other ) {};
-		Surface( Surface&& other ) : Black::JniObject( std::move( other ) ) {};
+		Surface( jobject object_ref );
+		Surface( const Surface& other );
+		Surface( Surface&& other );
 
 
-		const Surface& operator = ( jobject object_ref )	{ Black::JniObject::operator=( object_ref ); return *this; };
-		const Surface& operator = ( const Surface& other )	{ Black::JniObject::operator=( other ); return *this; };
-		const Surface& operator = ( Surface&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+		const Surface& operator = ( jobject object_ref );
+		const Surface& operator = ( const Surface& other );
+		const Surface& operator = ( Surface&& other );
+
+	// Public interface.
+	public:
+		// Call the `android.view.Surface.isValid` function.
+		inline const bool IsValid() const;
+
+		// Call the `android.view.Surface.release` function.
+		inline void Release() const;
+
+
+		// Get the native window interface.
+		inline ANativeWindow* GetNativeWindow() const;
+
+	// Private interface.
+	private:
+		void AcquireNativeWindow();
+
+	// Private state.
+	private:
+		struct SurfaceState;
+
+		ANativeWindow*					m_window	= nullptr;	// Pointer to native window.
+		SharedState<SurfaceState, true>	m_handles;				// Shared JNI handles.
 	};
 }
 }
