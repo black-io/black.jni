@@ -14,7 +14,7 @@ inline namespace view
 		// Class path.
 		using ClassPath = Black::StaticString<
 			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
-			'vi', 'e', 'w', '/',
+			'v', 'i', 'e', 'w', '/',
 			'S', 'u', 'f', 'r', 'a', 'c', 'e', 'H', 'o', 'l', 'd', 'e', 'r', '/',
 			'C', 'a', 'l', 'l', 'b', 'a', 'c', 'k'
 		>;
