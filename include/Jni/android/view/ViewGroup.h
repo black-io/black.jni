@@ -28,25 +28,25 @@ inline namespace view
 
 	// Public interface.
 	public:
-		// Cal the `android.view.ViewGroup.addView` function.
-		inline void AddView( View child ) const;
+		// Call the `android.view.ViewGroup.addView` function.
+		inline void AddView( const View& child ) const;
 
-		// Cal the `android.view.ViewGroup.addView` function.
-		inline void AddView( View child, int32_t index ) const;
+		// Call the `android.view.ViewGroup.addView` function.
+		inline void AddView( const View& child, const int32_t index ) const;
 
-		// Cal the `android.view.ViewGroup.addView` function.
-		inline void AddView( View child, LayoutParams params ) const;
+		// Call the `android.view.ViewGroup.addView` function.
+		inline void AddView( const View& child, const LayoutParams& params ) const;
 
-		// Cal the `android.view.ViewGroup.addView` function.
-		inline void AddView( View child, int32_t index, LayoutParams params ) const;
+		// Call the `android.view.ViewGroup.addView` function.
+		inline void AddView( const View& child, const int32_t index, const LayoutParams& params ) const;
 
-		// Cal the `android.view.ViewGroup.bringChildToFront` function.
-		inline void BringChildToFront( View child ) const;
+		// Call the `android.view.ViewGroup.bringChildToFront` function.
+		inline void BringChildToFront( const View& child ) const;
 
-		// Cal the `android.view.ViewGroup.removeView` function.
-		inline void RemoveView( View view ) const;
+		// Call the `android.view.ViewGroup.removeView` function.
+		inline void RemoveView( const View& view ) const;
 
-		// Cal the `android.view.ViewGroup.removeAllViews` function.
+		// Call the `android.view.ViewGroup.removeAllViews` function.
 		inline void RemoveAllViews() const;
 
 	// Private state.

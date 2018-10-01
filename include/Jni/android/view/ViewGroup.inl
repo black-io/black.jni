@@ -20,32 +20,32 @@ inline namespace view
 		Black::JniMemberFunction<void>								remove_all_views		{ class_handle, "removeAllViews" };
 	};
 
-	inline void ViewGroup::AddView( View child ) const
+	inline void ViewGroup::AddView( const View& child ) const
 	{
 		m_handles->add_view_0.Call( *this, child );
 	}
 
-	inline void ViewGroup::AddView( View child, int32_t index ) const
+	inline void ViewGroup::AddView( const View& child, const int32_t index ) const
 	{
 		m_handles->add_view_1.Call( *this, child, index );
 	}
 
-	inline void ViewGroup::AddView( View child, LayoutParams params ) const
+	inline void ViewGroup::AddView( const View& child, const LayoutParams& params ) const
 	{
 		m_handles->add_view_2.Call( *this, child, params );
 	}
 
-	inline void ViewGroup::AddView( View child, int32_t index, LayoutParams params ) const
+	inline void ViewGroup::AddView( const View& child, const int32_t index, const LayoutParams& params ) const
 	{
 		m_handles->add_view_3.Call( *this, child, index, params );
 	}
 
-	inline void ViewGroup::BringChildToFront( View child ) const
+	inline void ViewGroup::BringChildToFront( const View& child ) const
 	{
 		m_handles->bring_child_to_front.Call( *this, child );
 	}
 
-	inline void ViewGroup::RemoveView( View view ) const
+	inline void ViewGroup::RemoveView( const View& view ) const
 	{
 		m_handles->remove_view.Call( *this, view );
 	}
