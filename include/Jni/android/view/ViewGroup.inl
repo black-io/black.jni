@@ -20,6 +20,7 @@ inline namespace view
 		Black::JniMemberFunction<void>								remove_all_views		{ class_handle, "removeAllViews" };
 	};
 
+
 	inline void ViewGroup::AddView( const View& child ) const
 	{
 		m_handles->add_view_0.Call( *this, child );
