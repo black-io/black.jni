@@ -22,6 +22,7 @@ inline namespace view
 		Black::JniMemberFunction<void, SurfaceType>				set_type				{ class_handle, "setType", Black::IGNORE_FALURE };
 	};
 
+
 	inline void SufraceHolder::AddCallback( const Callback& callback ) const
 	{
 		m_handles->add_callback.Call( *this, callback );
