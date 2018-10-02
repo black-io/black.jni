@@ -28,6 +28,7 @@ inline namespace VirtualMachine
 
 		CRETM( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
 		CRETM( !connection.AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
+		CRETM( !connection.AcquireObjctInterface(), false, LOG_CHANNEL, "Failed to acquire the common JNI object functions." );
 		CRETM( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
 
 		return true;
@@ -38,6 +39,11 @@ inline namespace VirtualMachine
 		auto& connection = GetInstance();
 		CRET( !IsValid(), true );
 
+		connection.m_wait_msec_nsec_func		= {};
+		connection.m_wait_msec_func				= {};
+		connection.m_wait_func					= {};
+		connection.m_notify_all_func			= {};
+		connection.m_notify_func				= {};
 		connection.m_get_simple_name_func		= {};
 		connection.m_get_name_func				= {};
 		connection.m_get_canonical_name_func	= {};
@@ -163,6 +169,46 @@ inline namespace VirtualMachine
 		return GetInstance().m_get_super_class_func.Call( local_env, *class_handle );
 	}
 
+	void JniConnection::NotifyFromObject( const Black::JniObject& object_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		GetInstance().m_notify_func.Call( local_env, *object_handle );
+	}
+
+	void JniConnection::NotifyAllFromObject( const Black::JniObject& object_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		GetInstance().m_notify_all_func.Call( local_env, *object_handle );
+	}
+
+	void JniConnection::WaitFromObject( const Black::JniObject& object_handle )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		GetInstance().m_wait_func.Call( local_env, *object_handle );
+	}
+
+	void JniConnection::WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		GetInstance().m_wait_msec_func.Call( local_env, *object_handle, milliseconds );
+	}
+
+	void JniConnection::WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds, const int32_t nanoseconds )
+	{
+		EXPECTS_DEBUG( IsValid() );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		GetInstance().m_wait_msec_nsec_func.Call( local_env, *object_handle, milliseconds, nanoseconds );
+	}
+
 	const bool JniConnection::InitEnvDetacher()
 	{
 		CRETD( m_main_thread_id != 0, false, LOG_CHANNEL, "Double initialization of environment detacher blocked." );
@@ -190,6 +236,29 @@ inline namespace VirtualMachine
 
 		m_get_simple_name_func = { class_handle, "getSimpleName" };
 		CRETM( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
+
+		return true;
+	}
+
+	const bool JniConnection::AcquireObjctInterface()
+	{
+		const Black::JniClass class_handle{ "java/lang/Object" };
+		CRETM( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Object` class." );
+
+		m_notify_func = { class_handle, "notify" };
+		CRETM( !m_notify_func, false, LOG_CHANNEL, "Failed to locate `void Object::notify()` function." );
+
+		m_notify_all_func = { class_handle, "notifyAll" };
+		CRETM( !m_notify_all_func, false, LOG_CHANNEL, "Failed to locate `void Object::notifyAll()` function." );
+
+		m_wait_func = { class_handle, "wait" };
+		CRETM( !m_wait_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait()` function." );
+
+		m_wait_msec_func = { class_handle, "wait" };
+		CRETM( !m_wait_msec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis )` function." );
+
+		m_wait_msec_nsec_func = { class_handle, "wait" };
+		CRETM( !m_wait_msec_nsec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis, int nanos )` function." );
 
 		return true;
 	}

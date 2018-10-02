@@ -13,7 +13,8 @@ inline namespace VirtualMachine
 	*/
 	class JniConnection final : private Black::NonTransferable
 	{
-		friend class Black::Jni::Handles::JniClass;	// Intensively uses `m_stored_classes`.
+		friend class Black::Jni::Handles::JniClass;		// Intensively uses `m_stored_classes`.
+		friend class Black::Jni::Handles::JniObject;	// Uses the object synchronization functions.
 
 		// Instant access to `GetSharedStateStorage` function.
 		template< typename TState, bool IS_PERSISTENT >
@@ -53,8 +54,10 @@ inline namespace VirtualMachine
 		// Get the global instance of connection.
 		static JniConnection& GetInstance();
 
+
 		// Thread-local JNI environment termination routine.
 		static void DetachLocalEnv( void* local_env );
+
 
 		// Call the `java.lang.Class.getName()`.
 		static std::string GetClassName( const Black::JniClass& class_handle );
@@ -67,6 +70,23 @@ inline namespace VirtualMachine
 
 		// Call the `java.lang.Class.getSuperClass()`.
 		static JniClass GetParentClass( const Black::JniClass& class_handle );
+
+
+		// Call the `java.lang.Object.notify()`.
+		static void NotifyFromObject( const Black::JniObject& object_handle );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void NotifyAllFromObject( const Black::JniObject& object_handle );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( const Black::JniObject& object_handle );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds, const int32_t nanoseconds );
+
 
 		// Short path to get the storage for shared classes.
 		static inline Internal::SharedClassStorage& GetClassStorage()		{ return GetInstance().m_stored_classes; };
@@ -84,6 +104,9 @@ inline namespace VirtualMachine
 		// Acquire the helper functions for JNI class handle.
 		const bool AcquireClassInterface();
 
+		// Acquire the helper functions for JNI object handle.
+		const bool AcquireObjctInterface();
+
 	// Private state.
 	private:
 		JavaVM*						m_connection		= nullptr;	// Current connection to virtual machine.
@@ -95,10 +118,15 @@ inline namespace VirtualMachine
 
 	// Persistently captured JNI entities.
 	private:
-		Black::JniMemberFunction<Black::JniClass>	m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
-		Black::JniMemberFunction<std::string>		m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
-		Black::JniMemberFunction<std::string>		m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
-		Black::JniMemberFunction<std::string>		m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
+		Black::JniMemberFunction<Black::JniClass>			m_get_super_class_func;		// `java.lang.Class java.lang.Class.getSuperClass()`
+		Black::JniMemberFunction<std::string>				m_get_canonical_name_func;	// `java.lang.String java.lang.Class.getCanonicalName()`
+		Black::JniMemberFunction<std::string>				m_get_name_func;			// `java.lang.String java.lang.Class.getName()`
+		Black::JniMemberFunction<std::string>				m_get_simple_name_func;		// `java.lang.String java.lang.Class.getSimpleName()`
+		Black::JniMemberFunction<void>						m_notify_func;				// `java.lang.Object.notify()`
+		Black::JniMemberFunction<void>						m_notify_all_func;			// `java.lang.Object.notifyAll()`
+		Black::JniMemberFunction<void>						m_wait_func;				// `java.lang.Object.wait()`
+		Black::JniMemberFunction<void, int64_t>				m_wait_msec_func;			// `java.lang.Object.wait(long millis)`
+		Black::JniMemberFunction<void, int64_t, int32_t>	m_wait_msec_nsec_func;		// `java.lang.Object.wait(long millis, int nanos)`
 
 	// Persistent cache.
 	private:
