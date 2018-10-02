@@ -7,6 +7,13 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+	JniObject::JniObject( const JniObject& other )
+		: m_object_ref{ other.m_object_ref }
+		, m_class_handle{ other.m_class_handle }
+	{
+
+	}
+
 	JniObject::JniObject( const JniClass& class_handle )
 		: m_object_ref( class_handle.m_class_ref )
 	{
@@ -30,6 +37,75 @@ inline namespace Handles
 		m_object_ref.reset();
 	}
 
+	void JniObject::Lock() const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to lock the null object." );
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "Attempt to use invalid JNI connection." );
+
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		const int32_t access_result = local_env->MonitorEnter( GetJniReference() );
+		EXPECTS( access_result == 0 );
+	}
+
+	void JniObject::Unlock() const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to lock the null object." );
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "Attempt to use invalid JNI connection." );
+
+		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
+		const int32_t access_result = local_env->MonitorExit( GetJniReference() );
+		EXPECTS( access_result == 0 );
+
+		if( local_env->ExceptionCheck() == JNI_TRUE )
+		{
+			BLACK_NON_RELEASE_CODE( local_env->ExceptionDescribe() );
+			local_env->ExceptionClear();
+			local_env->FatalError( "Failed to release the synchronization from non-owning thread." );
+		}
+	}
+
+	void JniObject::Notify() const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to notify from the null object." );
+
+		Black::JniConnection::NotifyFromObject( *this );
+	}
+
+	void JniObject::NotifyAll() const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to notify from the null object." );
+
+		Black::JniConnection::NotifyAllFromObject( *this );
+	}
+
+	void JniObject::Wait() const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
+
+		Black::JniConnection::WaitFromObject( *this );
+	}
+
+	void JniObject::Wait( const std::chrono::milliseconds millis ) const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
+
+		Black::JniConnection::WaitFromObject( *this, millis.count() );
+	}
+
+	void JniObject::Wait( const std::chrono::milliseconds millis, std::chrono::nanoseconds nanos ) const
+	{
+		EXPECTS_DEBUG( IsValid() );
+		CRETM( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
+
+		Black::JniConnection::WaitFromObject( *this, millis.count(), nanos.count() );
+	}
+
 	const bool JniObject::IsInstanceOf( const JniClass& base_class ) const
 	{
 		CRET( !( IsValid() && base_class ), false );
@@ -41,7 +117,7 @@ inline namespace Handles
 	void JniObject::DeleteObjectRef( jobject object_ref )
 	{
 		CRET( object_ref == nullptr );
-		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "Attempt to use invalid JNI connection." );
 
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 		local_env->DeleteGlobalRef( object_ref );
@@ -49,15 +125,15 @@ inline namespace Handles
 
 	void JniObject::EnsureClassHandle() const
 	{
-		CRET( !IsValid() );
 		CRET( m_class_handle );
+		CRET( !IsValid() );
 
 		m_class_handle.AcquireClassReference( GetJniReference() );
 	}
 
 	void JniObject::AcquireObjectRef( jobject object_ref )
 	{
-		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+		CRETM( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "Attempt to use invalid JNI connection." );
 
 		Invalidate();
 		CRET( object_ref == nullptr );

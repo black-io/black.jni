@@ -8,7 +8,7 @@ inline namespace Jni
 inline namespace Handles
 {
 	// Handle of arbitrary Java object.
-	class JniObject
+	class JniObject : public Black::Mutex
 	{
 	// Public inner types.
 	public:
@@ -24,14 +24,14 @@ inline namespace Handles
 
 
 		JniObject()									= default;
-		JniObject( const JniObject& other )			= default;
+		JniObject( const JniObject& other );
 		JniObject( JniObject&& other )				= default;
 		JniObject( const JniClass& class_handle );
 		JniObject( JniClass&& class_handle );
 		explicit JniObject( jobject object_ref );
 
 
-		inline JniObject& operator = ( const JniObject& other )			= default;
+		inline JniObject& operator = ( const JniObject& other );
 		inline JniObject& operator = ( JniObject&& other )				= default;
 		inline JniObject& operator = ( jobject object_ref )				{ return Black::CopyAndSwap( *this, object_ref ); };
 		inline JniObject& operator = ( const JniClass& class_handle )	{ return Black::CopyAndSwap( *this, class_handle ); };
@@ -46,6 +46,28 @@ inline namespace Handles
 		// cast the instance to another type.
 		template< typename TOtherHandle >
 		inline TOtherHandle ConvertTo() const;
+
+
+		// @see	Mutex::Lock()
+		virtual void Lock() const override;
+
+		// @see	Mutex::Unlock()
+		virtual void Unlock() const override;
+
+		// Call the `java.lang.Object.notify` function.
+		void Notify() const;
+
+		// Call the `java.lang.Object.notifyAll` function.
+		void NotifyAll() const;
+
+		// Call the `java.lang.Object.wait` function.
+		void Wait() const;
+
+		// Call the `java.lang.Object.wait` function.
+		void Wait( const std::chrono::milliseconds millis ) const;
+
+		// Call the `java.lang.Object.wait` function.
+		void Wait( const std::chrono::milliseconds millis, std::chrono::nanoseconds nanos ) const;
 
 
 		// Check that the object is instance of given class.
