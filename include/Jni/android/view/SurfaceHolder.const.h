@@ -28,7 +28,7 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// JNI context specification for handles to `android.view.SufraceHolder` class.
+	// JNI context specification for `android.view.SurfaceHolder.SURFAC_TYPE_` constants.
 	template<>
 	struct NativeContext<::Jni::android::view::SurfaceType> : public Black::NativeEnumContext<::Jni::android::view::SurfaceType>
 	{

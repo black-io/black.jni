@@ -7,63 +7,63 @@ inline namespace android
 {
 inline namespace view
 {
-	// Handle for `android.view.SufraceHolder` objects.
-	class SufraceHolder final : public Black::JniObject
+	// Handle for `android.view.SurfaceHolder` objects.
+	class SurfaceHolder final : public Black::JniObject
 	{
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
 			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
 			'v', 'i', 'e', 'w', '/',
-			'S', 'u', 'f', 'r', 'a', 'c', 'e', 'H', 'o', 'l', 'd', 'e', 'r'
+			'S', 'u', 'r', 'f', 'a', 'c', 'e', 'H', 'o', 'l', 'd', 'e', 'r'
 		>;
 
 	// Construction and assignation.
 	public:
-		SufraceHolder() = default;
-		SufraceHolder( jobject object_ref ) : Black::JniObject{ object_ref } {};
-		SufraceHolder( const SufraceHolder& other ) : Black::JniObject( other ) {};
-		SufraceHolder( SufraceHolder&& other ) : Black::JniObject( std::move( other ) ) {};
+		SurfaceHolder() = default;
+		SurfaceHolder( jobject object_ref ) : Black::JniObject{ object_ref } {};
+		SurfaceHolder( const SurfaceHolder& other ) : Black::JniObject( other ) {};
+		SurfaceHolder( SurfaceHolder&& other ) : Black::JniObject( std::move( other ) ) {};
 
 
-		const SufraceHolder& operator = ( jobject object_ref )			{ Black::JniObject::operator=( object_ref ); return *this; };
-		const SufraceHolder& operator = ( const SufraceHolder& other )	{ Black::JniObject::operator=( other ); return *this; };
-		const SufraceHolder& operator = ( SufraceHolder&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+		const SurfaceHolder& operator = ( jobject object_ref )			{ Black::JniObject::operator=( object_ref ); return *this; };
+		const SurfaceHolder& operator = ( const SurfaceHolder& other )	{ Black::JniObject::operator=( other ); return *this; };
+		const SurfaceHolder& operator = ( SurfaceHolder&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 
 	// Public interface.
 	public:
-		// Call the `android.view.SufraceHolder.addCallback` function.
+		// Call the `android.view.SurfaceHolder.addCallback` function.
 		inline void AddCallback( const Callback& callback ) const;
 
-		// Call the `android.view.SufraceHolder.getSurface` function.
+		// Call the `android.view.SurfaceHolder.getSurface` function.
 		inline Surface GetSurface() const;
 
-		// Call the `android.view.SufraceHolder.isCreating` function.
+		// Call the `android.view.SurfaceHolder.isCreating` function.
 		inline const bool IsCreating() const;
 
-		// Call the `android.view.SufraceHolder.removeCallback` function.
+		// Call the `android.view.SurfaceHolder.removeCallback` function.
 		inline void RemoveCallback( const Callback& callback ) const;
 
-		// Call the `android.view.SufraceHolder.setFixedSize` function.
+		// Call the `android.view.SurfaceHolder.setFixedSize` function.
 		inline void SetFixedSize( const int32_t width, const int32_t height ) const;
 
-		// Call the `android.view.SufraceHolder.setFormat` function.
+		// Call the `android.view.SurfaceHolder.setFormat` function.
 		inline void SetFormat( const ::Jni::PixelFormatCode format ) const;
 
-		// Call the `android.view.SufraceHolder.setKeepScreenOn` function.
+		// Call the `android.view.SurfaceHolder.setKeepScreenOn` function.
 		inline void SetKeepSreenOn( const bool should_be_on ) const;
 
-		// Call the `android.view.SufraceHolder.setSizeFromLayout` function.
+		// Call the `android.view.SurfaceHolder.setSizeFromLayout` function.
 		inline void SetSizeFromLayout() const;
 
-		// Call the `android.view.SufraceHolder.setType` function. Deprecated since android-11.
+		// Call the `android.view.SurfaceHolder.setType` function. Deprecated since android-11.
 		inline void SetType( const SurfaceType type ) const;
 
 	// Private state.
 	private:
-		struct SufraceHolderState;
+		struct SurfaceHolderState;
 
-		SharedState<SufraceHolderState> m_handles; // Shared JNI handles.
+		SharedState<SurfaceHolderState> m_handles; // Shared JNI handles.
 	};
 }
 }
@@ -78,9 +78,9 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// JNI context specification for handles to `android.view.SufraceHolder` class.
+	// JNI context specification for handles to `android.view.SurfaceHolder` class.
 	template<>
-	struct NativeContext<::Jni::android::view::SufraceHolder> : public Black::NativeObjectContext<::Jni::android::view::SufraceHolder>
+	struct NativeContext<::Jni::android::view::SurfaceHolder> : public Black::NativeObjectContext<::Jni::android::view::SurfaceHolder>
 	{
 
 	};

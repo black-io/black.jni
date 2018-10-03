@@ -33,7 +33,7 @@ inline namespace view
 	// Public interface.
 	public:
 		// Call the `android.view.SurfaceView.getHolder` function.
-		inline SufraceHolder GetHolder() const									{ return m_handles->get_holder.Call( *this ); };
+		inline SurfaceHolder GetHolder() const									{ return m_handles->get_holder.Call( *this ); };
 
 		// Call the `android.view.SurfaceView.setSecure` function.
 		inline void SetSecure( const bool is_secure ) const						{ if( m_handles->set_secure ){ m_handles->set_secure.Call( *this, is_secure ); } };
@@ -53,7 +53,7 @@ inline namespace view
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<SufraceHolder>			get_holder					{ class_handle, "getHolder" };
+			Black::JniMemberFunction<SurfaceHolder>			get_holder					{ class_handle, "getHolder" };
 			Black::JniMemberFunction<void, bool>			set_secure					{ class_handle, "setSecure", Black::IGNORE_FALURE }; // Since android-17.
 			Black::JniMemberFunction<void, VisibilityState>	set_visibility				{ class_handle, "setVisibility" };
 			Black::JniMemberFunction<void, bool>			set_zorder_media_overlay	{ class_handle, "setZOrderMediaOverlay" };
