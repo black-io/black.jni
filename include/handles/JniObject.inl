@@ -7,6 +7,12 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+	template< typename THandle, typename... TArguments >
+	inline THandle JniObject::ConstructHandle( const TArguments&... arguments )
+	{
+		return Construct( JniClass::FromHandleType<THandle>(), arguments... ).template ConvertTo<THandle>();
+	}
+
 	template< typename... TArguments >
 	JniObject JniObject::Construct( const JniClass& class_handle, const TArguments&... arguments )
 	{

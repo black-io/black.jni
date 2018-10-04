@@ -18,6 +18,10 @@ inline namespace Handles
 
 	// Construction and assignation.
 	public:
+		// Construct new object by given handle type.
+		template< typename THandle, typename... TArguments >
+		static inline THandle ConstructHandle( const TArguments&... arguments );
+
 		// Construct new object of given class and using given construction arguments.
 		template< typename... TArguments >
 		static inline JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
