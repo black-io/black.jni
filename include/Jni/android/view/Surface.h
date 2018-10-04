@@ -12,7 +12,7 @@ inline namespace view
 	{
 	public:
 		// Class path.
-		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'S', 'u', 'f', 'r', 'a', 'c', 'e'>;
+		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'S', 'u', 'r', 'f', 'a', 'c', 'e'>;
 
 	// Construction and assignation.
 	public:
