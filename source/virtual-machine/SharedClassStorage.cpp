@@ -145,7 +145,7 @@ namespace
 			local_class_ref = nullptr;
 		}
 
-		CRETW( local_class_ref == nullptr, {}, LOG_CHANNEL, "No class was found with name `%s`.", class_name.data() );
+		CRETW( local_class_ref == nullptr, {}, LOG_CHANNEL, "No class was found with name `{}`.", class_name.data() );
 		return MakeGlobalRef( local_class_ref, local_env );
 	}
 }
