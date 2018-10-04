@@ -15,8 +15,7 @@ inline namespace view
 		using ClassPath = Black::StaticString<
 			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
 			'v', 'i', 'e', 'w', '/',
-			'S', 'u', 'f', 'r', 'a', 'c', 'e', 'H', 'o', 'l', 'd', 'e', 'r', '/',
-			'C', 'a', 'l', 'l', 'b', 'a', 'c', 'k'
+			'S', 'u', 'r', 'f', 'a', 'c', 'e', 'H', 'o', 'l', 'd', 'e', 'r', '$', 'C', 'a', 'l', 'l', 'b', 'a', 'c', 'k'
 		>;
 
 	// Construction and assignation.
@@ -29,7 +28,7 @@ inline namespace view
 
 		const Callback& operator = ( jobject object_ref )		{ Black::JniObject::operator=( object_ref ); return *this; };
 		const Callback& operator = ( const Callback& other )	{ Black::JniObject::operator=( other ); return *this; };
-		const Callback& operator = ( Callback&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
+		const Callback& operator = ( Callback&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
 }
 }
