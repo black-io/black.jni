@@ -15,8 +15,7 @@ inline namespace view
 		using ClassPath = Black::StaticString<
 			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
 			'v', 'i', 'e', 'w', '/',
-			'V', 'i', 'e', 'w', 'G', 'r', 'o', 'u', 'p', '/',
-			'L', 'a', 'y', 'o', 'u', 't', 'P', 'a', 'r', 'a', 'm', 's'
+			'V', 'i', 'e', 'w', 'G', 'r', 'o', 'u', 'p', '$', 'L', 'a', 'y', 'o', 'u', 't', 'P', 'a', 'r', 'a', 'm', 's'
 		>;
 
 	// Construction and assignation.
@@ -44,7 +43,7 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// JNI context specification for handles to `android.view.View` class.
+	// JNI context specification for handles to `android.view.ViewGroup.LayoutParams` class.
 	template<>
 	struct NativeContext<::Jni::android::view::LayoutParams> : public Black::NativeObjectContext<::Jni::android::view::LayoutParams>
 	{

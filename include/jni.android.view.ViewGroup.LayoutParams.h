@@ -5,4 +5,5 @@
 
 
 // Implementation.
+#include "Jni/android/view/ViewGroup.LayoutParams.const.h"
 #include "Jni/android/view/ViewGroup.LayoutParams.h"
