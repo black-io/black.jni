@@ -8,7 +8,7 @@ inline namespace android
 inline namespace os
 {
 	// Handle for `android.os.LocaleList` objects.
-	class LocaleList final : Black::JniObject
+	class LocaleList final : public Black::JniObject
 	{
 	public:
 		// Class path.
