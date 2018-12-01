@@ -29,7 +29,7 @@ inline namespace view
 	// Public interface.
 	public:
 		// Call the `android.view.Surface.isValid` function.
-		inline const bool IsValid() const;
+		inline const bool IsSurfaceValid() const;
 
 		// Call the `android.view.Surface.release` function.
 		inline void Release() const;

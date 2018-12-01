@@ -16,7 +16,7 @@ inline namespace view
 	};
 
 
-	inline const bool Surface::IsValid() const
+	inline const bool Surface::IsSurfaceValid() const
 	{
 		return m_handles->is_valid.Call( *this );
 	}
