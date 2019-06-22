@@ -14,6 +14,13 @@ inline namespace Handles
 
 	}
 
+	JniObject::JniObject( JniObject&& other )
+		: m_object_ref{ std::move( other.m_object_ref ) }
+		, m_class_handle{ std::move( other.m_class_handle ) }
+	{
+
+	}
+
 	JniObject::JniObject( const JniClass& class_handle )
 		: m_object_ref( class_handle.m_class_ref )
 	{
