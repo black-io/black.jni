@@ -70,6 +70,14 @@ inline namespace Handles
 		return *this;
 	}
 
+	inline JniObject& JniObject::operator=( JniObject&& other )
+	{
+		m_object_ref	= std::move( other.m_object_ref );
+		m_class_handle	= std::move( other.m_class_handle );
+
+		return *this;
+	}
+
 	inline const bool operator == ( const JniObject& left, const JniObject& right )
 	{
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
