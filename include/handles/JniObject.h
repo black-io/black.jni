@@ -27,16 +27,16 @@ inline namespace Handles
 		static inline JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
 
 
-		JniObject()									= default;
+		JniObject() = default;
 		JniObject( const JniObject& other );
-		JniObject( JniObject&& other )				= default;
+		JniObject( JniObject&& other );
 		JniObject( const JniClass& class_handle );
 		JniObject( JniClass&& class_handle );
 		explicit JniObject( jobject object_ref );
 
 
 		inline JniObject& operator = ( const JniObject& other );
-		inline JniObject& operator = ( JniObject&& other )				= default;
+		inline JniObject& operator = ( JniObject&& other );
 		inline JniObject& operator = ( jobject object_ref )				{ return Black::CopyAndSwap( *this, object_ref ); };
 		inline JniObject& operator = ( const JniClass& class_handle )	{ return Black::CopyAndSwap( *this, class_handle ); };
 		inline JniObject& operator = ( JniClass&& class_handle )		{ return Black::CopyAndSwap( *this, std::move( class_handle ) ); };
