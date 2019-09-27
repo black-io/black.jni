@@ -23,7 +23,7 @@ inline namespace VirtualMachine
 	// Public interface.
 	public:
 		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
-		static const bool Initialize( Black::NotNull<JavaVM> jvm );
+		static const bool Initialize( Black::NotNull<JavaVM*> jvm );
 
 		// Finalize the JNI connection. Expected to be used only at `JNI_OnUnload` function.
 		static const bool Finalize();
@@ -37,7 +37,7 @@ inline namespace VirtualMachine
 
 
 		// Get the thread-local JNI environment.
-		static Black::NotNull<JNIEnv> GetLocalEnvironment();
+		static Black::NotNull<JNIEnv*> GetLocalEnvironment();
 
 
 		// Check that the current thread is the main (for JNI connection) one.

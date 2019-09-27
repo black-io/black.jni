@@ -47,7 +47,7 @@ namespace Internal
 
 
 		// Create shared global reference to JNI class from local one.
-		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env );
+		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<jclass> local_ref, JNIEnv* local_env );
 
 		// Load the JNI class by given class name.
 		std::shared_ptr<_jclass> LoadClass( Black::StringView class_name );

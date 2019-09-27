@@ -100,7 +100,7 @@ namespace
 		return true;
 	}
 
-	std::shared_ptr<_jclass> SharedClassStorage::MakeGlobalRef( Black::NotNull<_jclass> local_ref, JNIEnv* local_env )
+	std::shared_ptr<_jclass> SharedClassStorage::MakeGlobalRef( Black::NotNull<jclass> local_ref, JNIEnv* local_env )
 	{
 		EXPECTS_DEBUG( local_ref != nullptr );
 		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_ref ) ), SharedClassStorage::DeleteSharedClass };

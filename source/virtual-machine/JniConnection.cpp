@@ -13,7 +13,7 @@ inline namespace VirtualMachine
 		static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
 	}
 
-	const bool JniConnection::Initialize( Black::NotNull<JavaVM> jvm )
+	const bool JniConnection::Initialize( Black::NotNull<JavaVM*> jvm )
 	{
 		auto& connection = GetInstance();
 
@@ -94,7 +94,7 @@ inline namespace VirtualMachine
 		return std::all_of( bindings.begin(), bindings.end(), static_cast<RegisterFunction>( JniConnection::RegisterClassNatives ) );
 	}
 
-	Black::NotNull<JNIEnv> JniConnection::GetLocalEnvironment()
+	Black::NotNull<JNIEnv*> JniConnection::GetLocalEnvironment()
 	{
 		ENSURES( IsValid() );
 
