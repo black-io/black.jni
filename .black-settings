@@ -1,0 +1,16 @@
+__include__:
+  - '../{current-file-name}'
+
+component:
+  path: '{current-folder-path}'
+  type: 'static-library'
+
+includes:
+  - '{component/path}/include'
+
+files:
+  - '{component/path}/include'
+  - '{component/path}/source'
+
+references:
+  - 'black.core'
