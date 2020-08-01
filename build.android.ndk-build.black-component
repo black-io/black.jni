@@ -1,0 +1,4 @@
+__include__:
+  - '.black-settings'
+  - '../platform.android.black-settings'
+  - '../properties.android.black-settings'
