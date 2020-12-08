@@ -1,10 +1,8 @@
 #pragma once
 
 
-// The prologue of library.
-#include "../../.prologue.h"
+// Declaration for JNI logging to restore the macros.
+#define BLACK_JNI_RESTORE_ISOLATED_LOGS
 
-
-
-// The epilogue of library.
-#include "../../.epilogue.h"
+// Just include the private master-header.
+#include "../../jni.private.h"
