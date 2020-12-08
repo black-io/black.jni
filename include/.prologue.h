@@ -3,6 +3,7 @@
 
 // External dependencies.
 #include <black/core.minimal.h>
+#include <black/core/static-strings.h>
 
 
 // The library namespace definition.
