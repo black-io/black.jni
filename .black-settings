@@ -1,16 +1,24 @@
 __include__:
   - '../{current-file-name}'
 
+# Component general settings.
 component:
-  path: '{current-folder-path}'
-  type: 'static-library'
+  path: '{current-folder-path}' # The root path of component.
+  type: 'static-library' # Type of component output.
 
+# Main include paths. Inherited by referencing components.
 includes:
+  - '{component/path}/include/.public'
+
+# Additional, private paths. Visible only for this component.
+private-includes:
   - '{component/path}/include'
 
+# List of all C++ files the component consists of. Folder or file paths are accepted.
 files:
   - '{component/path}/include'
   - '{component/path}/source'
 
+# External dependencies.
 references:
   - 'black.core'
