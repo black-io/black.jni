@@ -5,7 +5,9 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace TypeTraits
+inline namespace Global
+{
+inline namespace StaticStrings
 {
 namespace Internal
 {
@@ -33,19 +35,20 @@ namespace Internal
 
 	// Transform the class path into JNI-consumable class signature.
 	template< char... CHARS >
-	using JniClassSignature		= Black::StaticString<'L', CHARS..., ';'>;
+	using JniClassSignatureString		= Black::StaticString<'L', CHARS..., ';'>;
 
 	// Transform the type signature into JNI-consumable array signature.
 	template< typename TValueSignature >
-	using JniArraySignature		= Black::StaticStrings::Join<Black::StaticString<'['>, TValueSignature>;
+	using JniArraySignatureString		= Black::StaticStrings::Join<Black::StaticString<'['>, TValueSignature>;
 
 	// Get the JNI-consumable function signature.
 	template< typename TResultSignature, typename... TArgumentSignatures >
-	using JniFunctionSignatureBase	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
+	using JniFunctionSignatureString	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
-	using JniClassPath			= typename Internal::ClassPathExtractor<TClassSignature>::Signature;
+	using JniClassPathString			= typename Internal::ClassPathExtractor<TClassSignature>::Signature;
+}
 }
 }
 }
