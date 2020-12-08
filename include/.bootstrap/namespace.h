@@ -7,7 +7,7 @@ namespace Black
 // The JNI abstraction library.
 inline namespace Jni
 {
-// Internal layer of Jni Library.
+// Internal layer of JNI Library.
 namespace Internal
 {
 
