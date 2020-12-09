@@ -4,6 +4,7 @@
 // External dependencies.
 #include <black/core.minimal.h>
 #include <black/core/static-strings.h>
+#include <black/core/concurrency.h>
 
 
 // The library namespace definition.
