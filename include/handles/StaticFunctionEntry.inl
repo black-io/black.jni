@@ -33,7 +33,7 @@ namespace Internal
 
 		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ToJni( arguments )... );
 
-		TResult result;
+		TResult result{};
 		Black::FromJni( jni_result, result );
 		CRET( FRAME_SIZE == 0, result );
 
