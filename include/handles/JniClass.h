@@ -22,13 +22,13 @@ inline namespace Handles
 		JniClass()									= default;
 		JniClass( const JniClass& other )			= default;
 		JniClass( JniClass&& other )				= default;
-		JniClass( Black::StringView class_name );
+		JniClass( std::string_view class_name );
 		explicit JniClass( jclass class_ref );
 
 
 		inline JniClass& operator = ( const JniClass& other )			= default;
 		inline JniClass& operator = ( JniClass&& other )				= default;
-		inline JniClass& operator = ( Black::StringView class_name )	{ return Black::CopyAndSwap( *this, class_name ); };
+		inline JniClass& operator = ( std::string_view class_name )		{ return Black::CopyAndSwap( *this, class_name ); };
 		inline JniClass& operator = ( jclass class_ref )				{ return Black::CopyAndSwap( *this, class_ref ); };
 
 	// Public interface.
@@ -63,7 +63,7 @@ inline namespace Handles
 	// Private interface.
 	private:
 		// Acquire the reference of class via its name.
-		void AcquireClassReference( Black::StringView class_name );
+		void AcquireClassReference( std::string_view class_name );
 
 		// Acquire the reference of class via reference of its object.
 		void AcquireClassReference( jobject object_ref );
