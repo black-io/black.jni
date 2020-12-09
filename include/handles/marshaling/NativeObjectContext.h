@@ -21,7 +21,7 @@ namespace Internal
 		static constexpr size_t	LOCAL_FRAME_SIZE = 1;
 
 		// JNI type signature.
-		using Signature		= Black::StaticStrings::Join<Black::StaticString<'L'>, typename TObjectHandle::ClassPath, Black::StaticString<';'>>;
+		using Signature		= Black::StaticStringJoin<Black::StaticString<'L'>, typename TObjectHandle::ClassPath, Black::StaticString<';'>>;
 
 		// C++ native type.
 		using NativeType	= TObjectHandle;
