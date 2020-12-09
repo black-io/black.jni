@@ -25,12 +25,6 @@ namespace Internal
 
 		// JNI type
 		using JniType		= void;
-
-		// Type translation from JNI space to C++ space.
-		//static inline void FromJni( const JniType& source, NativeType& destination );
-
-		// Type translation from C++ space to JNI space.
-		//static inline void ToJni( const NativeType& source, JniType& destination );
 	};
 
 	// JNI environment context for `bool` type.
@@ -361,7 +355,7 @@ namespace Internal
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// JNI type signature.
-		using Signature		= Black::JniArraySignature<typename NativeContext<TNativeValue>::Signature>;
+		using Signature		= Black::JniArraySignatureString<typename NativeContext<TNativeValue>::Signature>;
 
 		// C++ native type.
 		using NativeType	= std::vector<TNativeValue, TAllocator>;
@@ -392,7 +386,7 @@ namespace Internal
 
 	// JNI function signature for native function.
 	template< typename TResult, typename... TArguments >
-	using NativeFunctionSignature	= Black::JniFunctionSignatureBase<NativeTypeSignature<TResult>, NativeTypeSignature<TArguments>...>;
+	using NativeFunctionSignature	= Black::JniFunctionSignatureString<NativeTypeSignature<TResult>, NativeTypeSignature<TArguments>...>;
 
 	/**
 		@brief	Regular converting function from Jni type to C++ one.
@@ -427,7 +421,7 @@ namespace Internal
 	template< typename TNativeType >
 	inline TNativeType FromJni( const JniType<TNativeType>& source )
 	{
-		TNativeType destination;
+		TNativeType destination{};
 		NativeTypeContext<TNativeType>::FromJni( source, destination );
 		return destination;
 	}
@@ -441,7 +435,7 @@ namespace Internal
 	template< typename TNativeType >
 	inline JniType<TNativeType> ToJni( const TNativeType& source )
 	{
-		JniType<TNativeType> destination;
+		JniType<TNativeType> destination{};
 		NativeTypeContext<TNativeType>::ToJni( source, destination );
 		return destination;
 	}
