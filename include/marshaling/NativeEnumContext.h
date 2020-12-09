@@ -15,10 +15,10 @@ namespace Internal
 
 	// JNI environment context for native enumeration.
 	template< typename TNativeEnum >
-	struct EnumContext<TNativeEnum, true> : NativeContext<Black::UnderlyingType<TNativeEnum>>
+	struct EnumContext<TNativeEnum, true> : NativeContext<std::underlying_type_t<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
-		using UnderlyingType	= Black::UnderlyingType<TNativeEnum>;
+		using UnderlyingType	= std::underlying_type_t<TNativeEnum>;
 
 		// JNI context for underlying type.
 		using UnderlyingContext	= NativeContext<UnderlyingType>;
@@ -51,7 +51,7 @@ namespace Internal
 
 	// JNI environment context for native enumerations.
 	template< typename TNativeEnum >
-	using NativeEnumContext = Internal::EnumContext<TNativeEnum, Black::IS_ENUMERATION<TNativeEnum>>;
+	using NativeEnumContext = Internal::EnumContext<TNativeEnum, std::is_enum_v<TNativeEnum>>;
 }
 }
 }
