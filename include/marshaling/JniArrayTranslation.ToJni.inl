@@ -16,7 +16,7 @@ namespace Internal
 		using ElementSignature = typename TElementContext::Signature;
 
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
-		const Black::JniClass element_class{ Black::JniClassPath<ElementSignature>::GetData() };
+		const Black::JniClass element_class{ Black::JniClassPathString<ElementSignature>::GetData() };
 
 		constexpr auto ARRAY_CONSTRUCT_HANDLER		= TElementContext::ARRAY_CONSTRUCT_HANDLER;
 		constexpr auto ARRAY_ELEMENT_WRITE_HANDLER	= TElementContext::ARRAY_ELEMENT_WRITE_HANDLER;
