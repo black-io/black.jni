@@ -90,7 +90,7 @@ namespace Internal
 	struct JniSignature<jobject>
 	{
 		// JNI signature.
-		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't'>;
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't'>;
 	};
 
 	// `java.lang.Class` type signature.
@@ -98,7 +98,7 @@ namespace Internal
 	struct JniSignature<jclass>
 	{
 		// JNI signature.
-		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's'>;
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's'>;
 	};
 
 	// `java.lang.String` type signature.
@@ -106,7 +106,7 @@ namespace Internal
 	struct JniSignature<jstring>
 	{
 		// JNI signature.
-		using Signature	= Black::JniClassSignature<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g'>;
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g'>;
 	};
 }
 
@@ -117,7 +117,7 @@ namespace Internal
 
 	// Function signature for any JNI type.
 	template< typename TJniResult, typename... TJniArguments >
-	using JniFunctionSignature	= Black::JniFunctionSignatureBase<JniTypeSignature<TJniResult>, JniTypeSignature<TJniArguments>...>;
+	using JniFunctionSignature	= Black::JniFunctionSignatureString<JniTypeSignature<TJniResult>, JniTypeSignature<TJniArguments>...>;
 }
 }
 }
