@@ -1,18 +1,18 @@
 #pragma once
 
 
-// Namespace declaration.
-#include "namespace.h"
-
-
 namespace Black
 {
 inline namespace Jni
 {
+// Java virtual machine subsystem.
 inline namespace VirtualMachine
 {
-	class JniEnvironment;
-	class JniConnection;
+// Internal definitions for JVM subsystem.
+namespace Internal
+{
+
+}
 }
 }
 }
