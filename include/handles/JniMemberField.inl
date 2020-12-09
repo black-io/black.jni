@@ -8,28 +8,28 @@ inline namespace Jni
 inline namespace Handles
 {
 	template< typename TNativeType >
-	JniMemberField<TNativeType>::JniMemberField( Black::StringView class_name, Black::StringView field_name )
+	JniMemberField<TNativeType>::JniMemberField( std::string_view class_name, std::string_view field_name )
 		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
-	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name )
+	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, std::string_view field_name )
 		: JniMemberField{ class_handle, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
-	JniMemberField<TNativeType>::JniMemberField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure )
+	JniMemberField<TNativeType>::JniMemberField( std::string_view class_name, std::string_view field_name, Black::IgnoreFailure )
 		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 
 	}
 
 	template< typename TNativeType >
-	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure )
+	JniMemberField<TNativeType>::JniMemberField( const Black::JniClass& class_handle, std::string_view field_name, Black::IgnoreFailure )
 	{
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();

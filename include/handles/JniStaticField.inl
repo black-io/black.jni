@@ -8,28 +8,28 @@ inline namespace Jni
 inline namespace Handles
 {
 	template< typename TNativeType >
-	JniStaticField<TNativeType>::JniStaticField( Black::StringView class_name, Black::StringView field_name )
+	JniStaticField<TNativeType>::JniStaticField( std::string_view class_name, std::string_view field_name )
 		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
-	JniStaticField<TNativeType>::JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name )
+	JniStaticField<TNativeType>::JniStaticField( const Black::JniClass& class_handle, std::string_view field_name )
 		: JniStaticField{ class_handle, field_name, Black::IGNORE_FALURE }
 	{
 		ENSURES( IsValid() );
 	}
 
 	template< typename TNativeType >
-	JniStaticField<TNativeType>::JniStaticField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure )
+	JniStaticField<TNativeType>::JniStaticField( std::string_view class_name, std::string_view field_name, Black::IgnoreFailure )
 		: JniStaticField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
 	{
 
 	}
 
 	template< typename TNativeType >
-	JniStaticField<TNativeType>::JniStaticField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure )
+	JniStaticField<TNativeType>::JniStaticField( const Black::JniClass& class_handle, std::string_view field_name, Black::IgnoreFailure )
 		: m_class_handle{ class_handle }
 	{
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );

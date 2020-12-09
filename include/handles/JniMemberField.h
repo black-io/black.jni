@@ -21,11 +21,11 @@ inline namespace Handles
 		JniMemberField( const JniMemberField& other )	= default;
 		JniMemberField( JniMemberField&& other )		= default;
 
-		JniMemberField( Black::StringView class_name, Black::StringView field_name );
-		JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name );
+		JniMemberField( std::string_view class_name, std::string_view field_name );
+		JniMemberField( const Black::JniClass& class_handle, std::string_view field_name );
 
-		JniMemberField( Black::StringView class_name, Black::StringView field_name, Black::IgnoreFailure );
-		JniMemberField( const Black::JniClass& class_handle, Black::StringView field_name, Black::IgnoreFailure );
+		JniMemberField( std::string_view class_name, std::string_view field_name, Black::IgnoreFailure );
+		JniMemberField( const Black::JniClass& class_handle, std::string_view field_name, Black::IgnoreFailure );
 
 
 		inline JniMemberField& operator = ( const JniMemberField& other )	= default;
