@@ -1,4 +1,4 @@
-#include <black.jni.h>
+#include <jni.private.h>
 #include <pthread.h>
 
 
@@ -20,16 +20,16 @@ inline namespace VirtualMachine
 		CRETD( connection.m_connection != nullptr, false, LOG_CHANNEL, "Double initialization of JNI connection blocked." );
 
 		const auto main_env_result = jvm->GetEnv( reinterpret_cast<void**>( &connection.m_main_env ), Black::JNI_VERSION );
-		CRETM( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
+		CRETE( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
 
 		connection.m_connection = jvm;
 		EXPECTS( connection.InitEnvDetacher() );
 		ENSURES( connection.m_main_env != nullptr );
 
-		CRETM( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
-		CRETM( !connection.AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
-		CRETM( !connection.AcquireObjctInterface(), false, LOG_CHANNEL, "Failed to acquire the common JNI object functions." );
-		CRETM( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
+		CRETE( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
+		CRETE( !connection.AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
+		CRETE( !connection.AcquireObjctInterface(), false, LOG_CHANNEL, "Failed to acquire the common JNI object functions." );
+		CRETE( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
 
 		return true;
 	}
@@ -68,7 +68,7 @@ inline namespace VirtualMachine
 
 		JNIEnv* local_env = GetLocalEnvironment();
 		Black::JniClass bound_class{ bindings.class_name };
-		CRETM( !bound_class, false, LOG_CHANNEL, "Failed to get handle to class '{}'.", bindings.class_name );
+		CRETE( !bound_class, false, LOG_CHANNEL, "Failed to get handle to class '{}'.", bindings.class_name );
 
 		std::vector<JNINativeMethod> jni_natives;
 		jni_natives.reserve( bindings.natives.size() );
@@ -81,7 +81,7 @@ inline namespace VirtualMachine
 		);
 
 		auto result = local_env->RegisterNatives( *bound_class, jni_natives.data(), static_cast<jsize>( jni_natives.size() ) );
-		CRETM( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
+		CRETE( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
 
 		return true;
 	}
@@ -223,19 +223,19 @@ inline namespace VirtualMachine
 	const bool JniConnection::AcquireClassInterface()
 	{
 		const Black::JniClass class_handle{ "java/lang/Class" };
-		CRETM( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Class` class." );
+		CRETE( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Class` class." );
 
 		m_get_super_class_func = { class_handle, "getSuperclass" };
-		CRETM( !m_get_super_class_func, false, LOG_CHANNEL, "Failed to locate `Class Class::getSuperclass()` function." );
+		CRETE( !m_get_super_class_func, false, LOG_CHANNEL, "Failed to locate `Class Class::getSuperclass()` function." );
 
 		m_get_canonical_name_func = { class_handle, "getCanonicalName" };
-		CRETM( !m_get_canonical_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getCanonicalName()` function." );
+		CRETE( !m_get_canonical_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getCanonicalName()` function." );
 
 		m_get_name_func = { class_handle, "getName" };
-		CRETM( !m_get_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getName()` function." );
+		CRETE( !m_get_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getName()` function." );
 
 		m_get_simple_name_func = { class_handle, "getSimpleName" };
-		CRETM( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
+		CRETE( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
 
 		return true;
 	}
@@ -243,22 +243,22 @@ inline namespace VirtualMachine
 	const bool JniConnection::AcquireObjctInterface()
 	{
 		const Black::JniClass class_handle{ "java/lang/Object" };
-		CRETM( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Object` class." );
+		CRETE( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Object` class." );
 
 		m_notify_func = { class_handle, "notify" };
-		CRETM( !m_notify_func, false, LOG_CHANNEL, "Failed to locate `void Object::notify()` function." );
+		CRETE( !m_notify_func, false, LOG_CHANNEL, "Failed to locate `void Object::notify()` function." );
 
 		m_notify_all_func = { class_handle, "notifyAll" };
-		CRETM( !m_notify_all_func, false, LOG_CHANNEL, "Failed to locate `void Object::notifyAll()` function." );
+		CRETE( !m_notify_all_func, false, LOG_CHANNEL, "Failed to locate `void Object::notifyAll()` function." );
 
 		m_wait_func = { class_handle, "wait" };
-		CRETM( !m_wait_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait()` function." );
+		CRETE( !m_wait_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait()` function." );
 
 		m_wait_msec_func = { class_handle, "wait" };
-		CRETM( !m_wait_msec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis )` function." );
+		CRETE( !m_wait_msec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis )` function." );
 
 		m_wait_msec_nsec_func = { class_handle, "wait" };
-		CRETM( !m_wait_msec_nsec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis, int nanos )` function." );
+		CRETE( !m_wait_msec_nsec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis, int nanos )` function." );
 
 		return true;
 	}
