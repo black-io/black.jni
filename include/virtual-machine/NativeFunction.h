@@ -47,7 +47,7 @@ namespace Internal
 	struct NativeFunctionWrapper<TResult (*)( JNIEnv*, TSender, const TArguments&... )> final
 	{
 		// Suppress the possible wrong declaration of native function.
-		static_assert( Black::IS_SAME<jobject, TSender> || Black::IS_SAME<jclass, TSender>, "The sender class may be only `jclass` or `jobject`." );
+		static_assert( std::is_same_v<jobject, TSender> || std::is_same_v<jclass, TSender>, "The sender class may be only `jclass` or `jobject`." );
 
 		// Function signature.
 		using Signature	= Black::NativeFunctionSignature<TResult, TArguments...>;
