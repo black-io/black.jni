@@ -1,6 +1,6 @@
-#include <black.jni.h>
-#include <jni.java.lang.Thread.h>
-#include <jni.java.lang.ClassLoader.h>
+#include <jni.private.h>
+#include <black/jni/java/lang/Thread.h>
+#include <black/jni/java/lang/ClassLoader.h>
 
 
 namespace Black
@@ -19,7 +19,7 @@ namespace
 
 	const bool SharedClassStorage::Initialize()
 	{
-		CRETM( !CaptureClassLoader(), false, LOG_CHANNEL, "Failed to capture JNI class loader." );
+		CRETE( !CaptureClassLoader(), false, LOG_CHANNEL, "Failed to capture JNI class loader." );
 
 		return true;
 	}
@@ -51,12 +51,12 @@ namespace
 		return MakeGlobalRef( class_ref, Black::JniConnection::GetLocalEnvironment() );
 	}
 
-	std::shared_ptr<_jclass> SharedClassStorage::GetClassReference( Black::StringView class_name )
+	std::shared_ptr<_jclass> SharedClassStorage::GetClassReference( std::string_view class_name )
 	{
 		CRETD( class_name.empty(), {}, LOG_CHANNEL, "Attempt to get class reference using null class name." );
 
 		Black::MutexLock lock{ m_latch };
-		auto& weak_class_ref = m_storage[ class_name.data() ];
+		auto& weak_class_ref = m_storage[ std::string{ class_name } ];
 		CRET( !weak_class_ref.expired(), weak_class_ref.lock() );
 
 		// If shared class already lost or never been found, ask JNI to lookup it.
@@ -77,25 +77,25 @@ namespace
 	const bool SharedClassStorage::CaptureClassLoader()
 	{
 		const Black::JniClass loader_class{ "java/lang/ClassLoader" };
-		CRETM( !loader_class, false, LOG_CHANNEL, "Failed to locate `java.lang.ClassLoader` class." );
+		CRETE( !loader_class, false, LOG_CHANNEL, "Failed to locate `java.lang.ClassLoader` class." );
 
 		m_load_class_func = { loader_class, "loadClass" };
-		CRETM( !m_load_class_func, false, LOG_CHANNEL, "Failed to locate `Class ClassLoader::findClass( String )` function." );
+		CRETE( !m_load_class_func, false, LOG_CHANNEL, "Failed to locate `Class ClassLoader::findClass( String )` function." );
 
 		const Black::JniClass thread_class{ "java/lang/Thread" };
-		CRETM( !thread_class, false, LOG_CHANNEL, "Failed to locate `java.lang.Thread` class." );
+		CRETE( !thread_class, false, LOG_CHANNEL, "Failed to locate `java.lang.Thread` class." );
 
 		const Black::JniStaticFunction<::Jni::Thread> current_thread_func{ thread_class, "currentThread" };
-		CRETM( !current_thread_func, false, LOG_CHANNEL, "Failed to locate `Thread Thread::currentThread()` function." );
+		CRETE( !current_thread_func, false, LOG_CHANNEL, "Failed to locate `Thread Thread::currentThread()` function." );
 
 		const ::Jni::Thread current_thread{ current_thread_func.Call() };
-		CRETM( !current_thread, false, LOG_CHANNEL, "Failed to get object of current thread." );
+		CRETE( !current_thread, false, LOG_CHANNEL, "Failed to get object of current thread." );
 
 		const Black::JniMemberFunction<::Jni::ClassLoader> get_class_loader_func{ thread_class, "getContextClassLoader" };
-		CRETM( !get_class_loader_func, false, LOG_CHANNEL, "Failed to locate `ClassLoader Thread::getContextClassLoader()` function." );
+		CRETE( !get_class_loader_func, false, LOG_CHANNEL, "Failed to locate `ClassLoader Thread::getContextClassLoader()` function." );
 
 		m_class_loader = get_class_loader_func.Call( current_thread );
-		CRETM( !m_class_loader, false, LOG_CHANNEL, "Failed to get class loader object." );
+		CRETE( !m_class_loader, false, LOG_CHANNEL, "Failed to get class loader object." );
 
 		return true;
 	}
@@ -106,15 +106,19 @@ namespace
 		return { reinterpret_cast<jclass>( local_env->NewGlobalRef( local_ref ) ), SharedClassStorage::DeleteSharedClass };
 	}
 
-	std::shared_ptr<_jclass> SharedClassStorage::LoadClass( Black::StringView class_name )
+	std::shared_ptr<_jclass> SharedClassStorage::LoadClass( std::string_view class_name )
 	{
 		JNIEnv* local_env		= Black::JniConnection::GetLocalEnvironment();
 		jclass local_class_ref	= nullptr;
 
 		if( Black::JniConnection::IsMainThread() )
 		{
+			char* name_buffer = static_cast<char*>( alloca( class_name.length() + 1 ) );
+			Black::CopyMemory( name_buffer, class_name.data(), class_name.length() );
+			name_buffer[ class_name.length() ] = 0;
+
 			// For the main thread we may use `FindClass` function from `JNIEnv` object.
-			local_class_ref = local_env->FindClass( class_name.data() );
+			local_class_ref = local_env->FindClass( name_buffer );
 		}
 		else
 		{
@@ -123,7 +127,7 @@ namespace
 			// https://developer.android.com/training/articles/perf-jni.html#faq_FindClass
 
 			// The name of class must be converted into Java-style package name.
-			std::string jni_class_name{ class_name.data() };
+			std::string jni_class_name{ class_name };
 			for( auto& item : jni_class_name )
 			{
 				if( item == '/' )

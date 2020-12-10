@@ -1,4 +1,6 @@
-#include <jni.android.content.res.AssetManager.h>
+#include <jni.private.h>
+#include <black/jni/android/context/res/AssetManager.h>
+
 #include <android/asset_manager_jni.h>
 
 

@@ -1,4 +1,5 @@
-#include <jni.android.content.res.Configuration.h>
+#include <jni.private.h>
+#include <black/jni/android/context/res/Configuration.h>
 
 
 namespace Jni

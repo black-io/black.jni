@@ -1,4 +1,4 @@
-#include <black.jni.h>
+#include <jni.private.h>
 
 
 namespace Black
