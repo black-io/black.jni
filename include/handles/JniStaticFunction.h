@@ -21,11 +21,11 @@ inline namespace Handles
 		JniStaticFunction( const JniStaticFunction& other )	= default;
 		JniStaticFunction( JniStaticFunction&& other )		= default;
 
-		JniStaticFunction( Black::StringView class_name, Black::StringView function_name );
-		JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name );
+		JniStaticFunction( std::string_view class_name, std::string_view function_name );
+		JniStaticFunction( const Black::JniClass& class_handle, std::string_view function_name );
 
-		JniStaticFunction( Black::StringView class_name, Black::StringView function_name, Black::IgnoreFailure );
-		JniStaticFunction( const Black::JniClass& class_handle, Black::StringView function_name, Black::IgnoreFailure );
+		JniStaticFunction( std::string_view class_name, std::string_view function_name, Black::IgnoreFailure );
+		JniStaticFunction( const Black::JniClass& class_handle, std::string_view function_name, Black::IgnoreFailure );
 
 
 		inline JniStaticFunction& operator = ( const JniStaticFunction& other )	= default;
@@ -44,7 +44,7 @@ inline namespace Handles
 		inline jmethodID GetFunctionId() const			{ return m_function_id; };
 
 		// Get the signature of function.
-		inline Black::StringView GetSignature() const	{ return { Signature::GetData(), Signature::GetLength() }; };
+		inline std::string_view GetSignature() const	{ return { Signature::GetData(), Signature::GetLength() }; };
 
 
 		inline explicit operator const bool () const	{ return IsValid(); };
