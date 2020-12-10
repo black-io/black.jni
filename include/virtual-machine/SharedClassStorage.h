@@ -30,7 +30,7 @@ namespace Internal
 		std::shared_ptr<_jclass> GetClassReference( jclass class_ref );
 
 		// Get the class reference by its name.
-		std::shared_ptr<_jclass> GetClassReference( Black::StringView class_name );
+		std::shared_ptr<_jclass> GetClassReference( std::string_view class_name );
 
 
 		// Get the synchronization mutex for storage.
@@ -50,7 +50,7 @@ namespace Internal
 		std::shared_ptr<_jclass> MakeGlobalRef( Black::NotNull<jclass> local_ref, JNIEnv* local_env );
 
 		// Load the JNI class by given class name.
-		std::shared_ptr<_jclass> LoadClass( Black::StringView class_name );
+		std::shared_ptr<_jclass> LoadClass( std::string_view class_name );
 
 	// Private state.
 	private:
