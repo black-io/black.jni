@@ -20,7 +20,7 @@ namespace Internal
 	struct ClassPathExtractor<Black::StaticString<'L', CHARS...>> final
 	{
 		// JNI signature.
-		using Signature = Black::StaticStrings::RemoveSuffix<1, Black::StaticString<CHARS...>>;
+		using Signature = Black::StaticStringRemoveSuffix<1, Black::StaticString<CHARS...>>;
 	};
 
 	// Extract the class path from array signature.
@@ -39,11 +39,11 @@ namespace Internal
 
 	// Transform the type signature into JNI-consumable array signature.
 	template< typename TValueSignature >
-	using JniArraySignatureString		= Black::StaticStrings::Join<Black::StaticString<'['>, TValueSignature>;
+	using JniArraySignatureString		= Black::StaticStringJoin<Black::StaticString<'['>, TValueSignature>;
 
 	// Get the JNI-consumable function signature.
 	template< typename TResultSignature, typename... TArgumentSignatures >
-	using JniFunctionSignatureString	= Black::StaticStrings::Join<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
+	using JniFunctionSignatureString	= Black::StaticStringJoin<Black::StaticString<'('>, TArgumentSignatures..., Black::StaticString<')'>, TResultSignature>;
 
 	// Get the class path from class signature.
 	template< typename TClassSignature >
