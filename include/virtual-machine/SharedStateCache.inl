@@ -10,7 +10,7 @@ inline namespace VirtualMachine
 namespace Internal
 {
 	template< typename TState >
-	inline SharedStateStorage<TState>* SharedStateCache::GetCachedStorage()
+	inline SharedStateCache::SharedStateStorage<TState>* SharedStateCache::GetCachedStorage()
 	{
 		Black::MutexLock lock{ m_latch };
 
