@@ -18,7 +18,7 @@ inline namespace VirtualMachine
 
 		// Instant access to `GetSharedStateStorage` function.
 		template< typename TState, bool IS_PERSISTENT >
-		friend class Black::Jni::VirtualMachine::Internal::SharedState;
+		friend class Black::Jni::Handles::Internal::SharedState;
 
 	// Public interface.
 	public:
