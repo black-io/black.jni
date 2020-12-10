@@ -1,4 +1,4 @@
-#include <black.jni.h>
+#include <jni.private.h>
 
 
 namespace Black
@@ -7,7 +7,7 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-	JniClass::JniClass( Black::StringView class_name )
+	JniClass::JniClass( std::string_view class_name )
 	{
 		AcquireClassReference( class_name );
 	}
@@ -47,7 +47,7 @@ inline namespace Handles
 		return Black::JniConnection::GetParentClass( *this );
 	}
 
-	void JniClass::AcquireClassReference( Black::StringView class_name )
+	void JniClass::AcquireClassReference( std::string_view class_name )
 	{
 		Invalidate();
 		EXPECTS( !class_name.empty() );
