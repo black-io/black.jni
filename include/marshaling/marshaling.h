@@ -18,7 +18,7 @@ namespace Internal
 }
 
 
-// JNI Marshaling.
+// Type Marshaling.
 #include "JniTypeSignature.h"
 #include "JniTypeContext.h"
 #include "JniArrayTranslation.h"
