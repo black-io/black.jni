@@ -3,8 +3,8 @@
 
 // External dependencies.
 #include <black/core.minimal.h>
+#include <black/core/algorithms.h>
 #include <black/core/static-strings.h>
-#include <black/core/concurrency.h>
 
 
 // The library namespace definition.
@@ -15,7 +15,7 @@
 
 // Isolate the logging for all JNI declarations.
 #include ".bootstrap/logging.isolation.h"
-#include ".global/logging/logging.h"
+#include ".global/logging/macros.h"
 
 // Most global code.
 #include ".global/static-strings/signatures.h"
