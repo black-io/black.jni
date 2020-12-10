@@ -23,6 +23,14 @@ namespace Internal
 	*/
 	class SharedStateCache final : private Black::NonTransferable
 	{
+	// Public inner declarations.
+	public:
+		using SharedStateEntity = Black::Jni::Handles::Internal::SharedStateEntity;
+
+		template< typename TState >
+		using SharedStateStorage = Black::Jni::Handles::Internal::SharedStateStorage<TState>;
+
+	// PUblic interface.
 	public:
 		// Init the cache.
 		const bool Initialize();
@@ -39,10 +47,12 @@ namespace Internal
 		// Get the synchronization mutex for storage.
 		inline const Black::Mutex& GetMutex()	{ return m_latch; };
 
+	// Private interface.
 	private:
 		template< Black::BuildMode >
 		void EnsureStorageReleased();
 
+	// Private state.
 	private:
 		using Storage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
 
