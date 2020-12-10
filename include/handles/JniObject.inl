@@ -49,7 +49,7 @@ inline namespace Handles
 	template< typename TOtherHandle >
 	inline TOtherHandle JniObject::ConvertTo() const
 	{
-		static_assert( Black::IS_BASE_OF<JniObject, TOtherHandle>, "Output handle type should be derived from `Black::JniObject`." );
+		static_assert( std::is_base_of_v<JniObject, TOtherHandle>, "Output handle type should be derived from `Black::JniObject`." );
 
 		CRET( !IsValid(), {} );
 
