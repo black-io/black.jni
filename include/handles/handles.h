@@ -1,6 +1,11 @@
 #pragma once
 
 
+// External dependencies.
+// JniObject implements the interface of `Black::Mutex`.
+#include <black/core/concurrency.h>
+
+
 // Namespace declaration.
 #include "namespace.h"
 
