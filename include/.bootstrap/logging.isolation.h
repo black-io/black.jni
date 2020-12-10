@@ -21,5 +21,8 @@
 #pragma push_macro( "BLACK_LOG_VERBOSE" )
 #undef BLACK_LOG_VERBOSE
 
+#pragma push_macro( "BLACK_LOG_DEBUG" )
+#undef BLACK_LOG_DEBUG
+
 #pragma push_macro( "BLACK_LOGS_CLOSE" )
 #undef BLACK_LOGS_CLOSE

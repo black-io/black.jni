@@ -9,5 +9,6 @@
 	#pragma pop_macro( "BLACK_LOG_WARNING" )
 	#pragma pop_macro( "BLACK_LOG_INFO" )
 	#pragma pop_macro( "BLACK_LOG_VERBOSE" )
+	#pragma pop_macro( "BLACK_LOG_DEBUG" )
 	#pragma pop_macro( "BLACK_LOGS_CLOSE" )
 #endif
