@@ -40,7 +40,7 @@ namespace Internal
 
 	// JNI environment context for object handle.
 	template< typename TObjectHandle >
-	using NativeObjectContext = Internal::ObjectContext<TObjectHandle, Black::IS_BASE_OF<Black::JniObject, TObjectHandle>>;
+	using NativeObjectContext = Internal::ObjectContext<TObjectHandle, std::is_base_of_v<Black::JniObject, TObjectHandle>>;
 }
 }
 }
