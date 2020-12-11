@@ -35,8 +35,12 @@ inline namespace Handles
 		CRETD( !Black::JniConnection::IsValid(), , LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 
+		char* function_name_buffer = static_cast<char*>( alloca( function_name.length() ) );
+		Black::CopyMemory( function_name_buffer, function_name.data(), function_name.length() );
+		function_name_buffer[ function_name.length() ] = 0;
+
 		ENSURES( m_class_handle );
-		m_function_id = local_env->GetMethodID( *m_class_handle, function_name.data(), Signature::GetData() );
+		m_function_id = local_env->GetMethodID( *m_class_handle, function_name_buffer, Signature::GetData() );
 
 		CRET( local_env->ExceptionCheck() != JNI_TRUE );
 
