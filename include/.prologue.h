@@ -2,7 +2,7 @@
 
 
 // External dependencies.
-#include <black/core.minimal.h>
+#include <black/core.h>
 #include <black/core/algorithms.h>
 #include <black/core/static-strings.h>
 
