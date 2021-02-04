@@ -13,14 +13,24 @@ inline namespace VirtualMachine
 	*/
 	class JniConnection final : private Black::NonTransferable
 	{
-		friend class Black::Jni::Handles::JniClass;		// Intensively uses `m_stored_classes`.
-		friend class Black::Jni::Handles::JniObject;	// Uses the object synchronization functions.
+	// Friendship declarations.
+	public:
+		// Intensively uses `m_stored_classes`.
+		friend class Black::Jni::Handles::JniClass;
+
+		// Uses the object synchronization functions.
+		friend class Black::Jni::Handles::JniObject;
 
 		// Instant access to `GetSharedStateStorage` function.
 		template< typename TState, bool IS_PERSISTENT >
 		friend class Black::Jni::Handles::Internal::SharedState;
 
-	// Public interface.
+	// Public inner types.
+	public:
+		// Binding table for object native interfaces.
+		using NativeBindingTable	= Internal::NativeBindingTable;
+
+	// Public static interface.
 	public:
 		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
 		static const bool Initialize( Black::NotNull<JavaVM*> jvm );
@@ -30,10 +40,14 @@ inline namespace VirtualMachine
 
 
 		// Register the native function handlers for JNI class.
-		static const bool RegisterClassNatives( const Black::NativeBindingTable& bindings );
+		static const bool RegisterClassNatives( const NativeBindingTable& bindings );
 
 		// Register the native function handlers for list of JNI classes.
-		static const bool RegisterClassNatives( std::initializer_list<Black::NativeBindingTable> bindings );
+		static const bool RegisterClassNatives( std::initializer_list<NativeBindingTable> bindings );
+
+		// Build the information record for given native function.
+		template< auto FUNCTION >
+		static inline ::JNINativeMethod BuildNativeFunctionInfo( Black::NotNull<const char*> function_name );
 
 
 		// Get the thread-local JNI environment.
