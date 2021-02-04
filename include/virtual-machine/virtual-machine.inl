@@ -2,6 +2,7 @@
 
 
 #include "JniEnvironment.inl"
-#include "SharedStateCache.inl"
+#include "JniConnection.inl"
+#include "internal/SharedStateCache.inl"
 
-#include "NativeFunction.inl"
+#include "internal/NativeMethodBuilder.inl"

@@ -6,11 +6,11 @@
 
 
 // JNI native function specification.
-#include "NativeFunction.h"
-#include "NativeBindingTable.h"
+#include "internal/structures.h"
+#include "internal/NativeMethodBuilder.h"
 
 // JNI Virtual machine and environment.
-#include "SharedStateCache.h"
-#include "SharedClassStorage.h"
+#include "internal/SharedStateCache.h"
+#include "internal/SharedClassStorage.h"
 #include "JniConnection.h"
 #include "JniEnvironment.h"
