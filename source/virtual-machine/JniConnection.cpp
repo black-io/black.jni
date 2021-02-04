@@ -62,7 +62,7 @@ inline namespace VirtualMachine
 		return true;
 	}
 
-	const bool JniConnection::RegisterClassNatives( const Black::NativeBindingTable& bindings )
+	const bool JniConnection::RegisterClassNatives( const NativeBindingTable& bindings )
 	{
 		CRETD( !IsValid(), false, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
@@ -72,13 +72,7 @@ inline namespace VirtualMachine
 
 		std::vector<JNINativeMethod> jni_natives;
 		jni_natives.reserve( bindings.natives.size() );
-		std::transform(
-			bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ),
-			[]( const Internal::NativeFunction& func )
-			{
-				return static_cast<JNINativeMethod>( func );
-			}
-		);
+		std::copy( bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ) );
 
 		auto result = local_env->RegisterNatives( *bound_class, jni_natives.data(), static_cast<jsize>( jni_natives.size() ) );
 		CRETE( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
@@ -86,9 +80,9 @@ inline namespace VirtualMachine
 		return true;
 	}
 
-	const bool JniConnection::RegisterClassNatives( std::initializer_list<Black::NativeBindingTable> bindings )
+	const bool JniConnection::RegisterClassNatives( std::initializer_list< NativeBindingTable> bindings )
 	{
-		using RegisterFunction = const bool (*)( const Black::NativeBindingTable& );
+		using RegisterFunction = const bool (*)( const NativeBindingTable& );
 
 		// Select the right overload for function name.
 		return std::all_of( bindings.begin(), bindings.end(), static_cast<RegisterFunction>( JniConnection::RegisterClassNatives ) );
