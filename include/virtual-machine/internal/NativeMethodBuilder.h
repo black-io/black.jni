@@ -60,17 +60,6 @@ namespace Internal
 		static constexpr NativeFunction GetNativeFunction( const char* function_name );
 	};
 }
-
-	// Get the JNI native function for some handler.
-	template< typename TFunction, TFunction FUNCTION_HANDLER >
-	constexpr Internal::NativeFunction MakeNativeFunction( const char* function_name )
-	{
-		return Internal::NativeFunctionWrapper<TFunction>::template GetNativeFunction<FUNCTION_HANDLER>( function_name );
-	}
 }
 }
 }
-
-
-// Simplifying macro to make the native function construction more comfortable.
-#define BLACK_JNI_NATIVE_FUNCTION( NAME, FUNC )	Black::MakeNativeFunction<decltype( FUNC ), FUNC>( NAME )
