@@ -9,6 +9,9 @@ namespace
 
 	using Black::Jni::Startup::Internal::BasicStartupNode;
 	using Black::Jni::Startup::Internal::StartupStaticList;
+
+	// Used to initialize the JNI connection.
+	using Black::Jni::Global::JniConnections::Internal::JniConnectionInitializer;
 }
 
 
@@ -17,7 +20,7 @@ extern "C"
 	JNIEXPORT jint JNI_OnLoad( JavaVM* virtual_machine, void* reserved )
 	{
 		BLACK_LOG_DEBUG( LOG_CHANNEL, "Attempt to initialize native library." );
-		CRETE( !Black::JniConnection::Initialize( virtual_machine ), -1, LOG_CHANNEL, "Failed to initialize jni connection." );
+		CRETE( !JniConnectionInitializer::Initialize( virtual_machine ), -1, LOG_CHANNEL, "Failed to initialize jni connection." );
 
 		for( const BasicStartupNode& entity : StartupStaticList{} )
 		{
@@ -38,7 +41,7 @@ extern "C"
 			entity.OnJniShutdown( virtual_machine );
 		}
 
-		Black::JniConnection::Finalize();
+		JniConnectionInitializer::Finalize();
 		BLACK_LOG_DEBUG( LOG_CHANNEL, "Native library finalized." );
 	}
 }
