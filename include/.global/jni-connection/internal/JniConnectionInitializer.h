@@ -19,7 +19,7 @@ namespace Internal
 	// Static public interface.
 	public:
 		// Initialize the JNI connection. Expected to be used only at `JNI_OnLoad` function.
-		static const bool Initialize( Black::NotNull<JavaVM*> jvm );
+		static const bool Initialize( Black::NotNull<JavaVM*> virtual_machine );
 
 		// Finalize the JNI connection. Expected to be used only at `JNI_OnUnload` function.
 		static const bool Finalize();
