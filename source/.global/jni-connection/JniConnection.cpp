@@ -7,78 +7,19 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace Global
 {
-	namespace
-	{
-		static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
-	}
+inline namespace JniConnections
+{
+namespace
+{
+	static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
+}
 
-	const bool JniConnection::Initialize( Black::NotNull<JavaVM*> jvm )
-	{
-		auto& connection = GetInstance();
-
-		CRETD( connection.m_connection != nullptr, false, LOG_CHANNEL, "Double initialization of JNI connection blocked." );
-
-		const auto main_env_result = jvm->GetEnv( reinterpret_cast<void**>( &connection.m_main_env ), Black::JNI_VERSION );
-		CRETE( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
-
-		connection.m_connection = jvm;
-		EXPECTS( connection.InitEnvDetacher() );
-		ENSURES( connection.m_main_env != nullptr );
-
-		CRETE( !connection.m_stored_classes.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared class storage." );
-		CRETE( !connection.AcquireClassInterface(), false, LOG_CHANNEL, "Failed to acquire JNI common class interface." );
-		CRETE( !connection.AcquireObjctInterface(), false, LOG_CHANNEL, "Failed to acquire the common JNI object functions." );
-		CRETE( !connection.m_cached_states.Initialize(), false, LOG_CHANNEL, "Failed to initialize the shared state cache." );
-
-		return true;
-	}
-
-	const bool JniConnection::Finalize()
-	{
-		auto& connection = GetInstance();
-		CRET( !IsValid(), true );
-
-		connection.m_wait_msec_nsec_func		= {};
-		connection.m_wait_msec_func				= {};
-		connection.m_wait_func					= {};
-		connection.m_notify_all_func			= {};
-		connection.m_notify_func				= {};
-		connection.m_get_simple_name_func		= {};
-		connection.m_get_name_func				= {};
-		connection.m_get_canonical_name_func	= {};
-		connection.m_get_super_class_func		= {};
-
-		connection.m_cached_states.Finalize();
-		connection.m_stored_classes.Finalize();
-
-		pthread_key_delete( connection.m_thread_detach_key );
-
-		connection.m_connection			= nullptr;
-		connection.m_main_env			= nullptr;
-		connection.m_main_thread_id		= 0;
-		connection.m_thread_detach_key	= 0;
-
-		return true;
-	}
 
 	const bool JniConnection::RegisterClassNatives( const NativeBindingTable& bindings )
 	{
-		CRETD( !IsValid(), false, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		Black::JniClass bound_class{ bindings.class_name };
-		CRETE( !bound_class, false, LOG_CHANNEL, "Failed to get handle to class '{}'.", bindings.class_name );
-
-		std::vector<JNINativeMethod> jni_natives;
-		jni_natives.reserve( bindings.natives.size() );
-		std::copy( bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ) );
-
-		auto result = local_env->RegisterNatives( *bound_class, jni_natives.data(), static_cast<jsize>( jni_natives.size() ) );
-		CRETE( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
-
-		return true;
+		return false;
 	}
 
 	const bool JniConnection::RegisterClassNatives( std::initializer_list< NativeBindingTable> bindings )
@@ -94,7 +35,7 @@ inline namespace VirtualMachine
 		ENSURES( IsValid() );
 
 		auto& connection = GetInstance();
-		CRET( IsMainThread(), connection.m_main_env );
+		CRET( IsMainThread(), connection.m_main_environment );
 
 		JNIEnv* local_env			= nullptr;
 		const auto env_result		= connection.m_connection->GetEnv( reinterpret_cast<void**>( &local_env ), Black::JNI_VERSION );
@@ -123,140 +64,23 @@ inline namespace VirtualMachine
 		return connection;
 	}
 
-	void JniConnection::DetachLocalEnv( void* local_env )
+	void JniConnection::DetachLocalEnvironment( void* local_environment )
 	{
 		ENSURES( IsValid() );
 		GetConnection()->DetachCurrentThread();
 	}
 
-	std::string JniConnection::GetClassName( const Black::JniClass& class_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		std::string name{ GetInstance().m_get_name_func.Call( local_env, *class_handle ) };
-
-		std::transform( name.begin(), name.end(), name.begin(), []( char& ch ){ return ( ch == '.' )? '/' : ch; } );
-		return name;
-	}
-
-	std::string JniConnection::GetSimpleClassName( const Black::JniClass& class_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		return GetInstance().m_get_simple_name_func.Call( local_env, *class_handle );
-	}
-
-	std::string JniConnection::GetCanonicalClassName( const Black::JniClass& class_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		return GetInstance().m_get_canonical_name_func.Call( local_env, *class_handle );
-	}
-
-	JniClass JniConnection::GetParentClass( const Black::JniClass& class_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		return GetInstance().m_get_super_class_func.Call( local_env, *class_handle );
-	}
-
-	void JniConnection::NotifyFromObject( const Black::JniObject& object_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		GetInstance().m_notify_func.Call( local_env, *object_handle );
-	}
-
-	void JniConnection::NotifyAllFromObject( const Black::JniObject& object_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		GetInstance().m_notify_all_func.Call( local_env, *object_handle );
-	}
-
-	void JniConnection::WaitFromObject( const Black::JniObject& object_handle )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		GetInstance().m_wait_func.Call( local_env, *object_handle );
-	}
-
-	void JniConnection::WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		GetInstance().m_wait_msec_func.Call( local_env, *object_handle, milliseconds );
-	}
-
-	void JniConnection::WaitFromObject( const Black::JniObject& object_handle, const int64_t milliseconds, const int32_t nanoseconds )
-	{
-		EXPECTS_DEBUG( IsValid() );
-
-		JNIEnv* local_env = GetLocalEnvironment();
-		GetInstance().m_wait_msec_nsec_func.Call( local_env, *object_handle, milliseconds, nanoseconds );
-	}
-
-	const bool JniConnection::InitEnvDetacher()
+	const bool JniConnection::InitEnvironmentDetacher()
 	{
 		CRETD( m_main_thread_id != 0, false, LOG_CHANNEL, "Double initialization of environment detacher blocked." );
 
 		m_main_thread_id = pthread_self();
 
-		ENSURES( pthread_key_create( reinterpret_cast<pthread_key_t*>( &m_thread_detach_key ), JniConnection::DetachLocalEnv ) == 0 );
+		ENSURES( pthread_key_create( reinterpret_cast<pthread_key_t*>( &m_thread_detach_key ), JniConnection::DetachLocalEnvironment ) == 0 );
 
 		return true;
 	}
-
-	const bool JniConnection::AcquireClassInterface()
-	{
-		const Black::JniClass class_handle{ "java/lang/Class" };
-		CRETE( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Class` class." );
-
-		m_get_super_class_func = { class_handle, "getSuperclass" };
-		CRETE( !m_get_super_class_func, false, LOG_CHANNEL, "Failed to locate `Class Class::getSuperclass()` function." );
-
-		m_get_canonical_name_func = { class_handle, "getCanonicalName" };
-		CRETE( !m_get_canonical_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getCanonicalName()` function." );
-
-		m_get_name_func = { class_handle, "getName" };
-		CRETE( !m_get_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getName()` function." );
-
-		m_get_simple_name_func = { class_handle, "getSimpleName" };
-		CRETE( !m_get_simple_name_func, false, LOG_CHANNEL, "Failed to locate `String Class::getSimpleName()` function." );
-
-		return true;
-	}
-
-	const bool JniConnection::AcquireObjctInterface()
-	{
-		const Black::JniClass class_handle{ "java/lang/Object" };
-		CRETE( !class_handle, false, LOG_CHANNEL, "Failed to locate `java.lang.Object` class." );
-
-		m_notify_func = { class_handle, "notify" };
-		CRETE( !m_notify_func, false, LOG_CHANNEL, "Failed to locate `void Object::notify()` function." );
-
-		m_notify_all_func = { class_handle, "notifyAll" };
-		CRETE( !m_notify_all_func, false, LOG_CHANNEL, "Failed to locate `void Object::notifyAll()` function." );
-
-		m_wait_func = { class_handle, "wait" };
-		CRETE( !m_wait_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait()` function." );
-
-		m_wait_msec_func = { class_handle, "wait" };
-		CRETE( !m_wait_msec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis )` function." );
-
-		m_wait_msec_nsec_func = { class_handle, "wait" };
-		CRETE( !m_wait_msec_nsec_func, false, LOG_CHANNEL, "Failed to locate `void Object::wait( long millis, int nanos )` function." );
-
-		return true;
-	}
+}
 }
 }
 }
