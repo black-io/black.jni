@@ -5,7 +5,9 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace Global
+{
+inline namespace JniConnections
 {
 namespace Internal
 {
@@ -15,6 +17,7 @@ namespace Internal
 		const char*									class_name;	// JNI class path.
 		std::initializer_list<::JNINativeMethod>	natives;	// List of native handlers.
 	};
+}
 }
 }
 }
