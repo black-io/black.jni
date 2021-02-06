@@ -1,4 +1,5 @@
-#include <jni.private.h>
+#include <black/jni.h>
+
 #include <pthread.h>
 
 
