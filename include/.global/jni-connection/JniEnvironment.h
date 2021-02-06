@@ -5,7 +5,9 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace Global
+{
+inline namespace JniConnections
 {
 	/**
 		@brief		Thread-local JNI environment.
@@ -18,51 +20,8 @@ inline namespace VirtualMachine
 	*/
 	class JniEnvironment final : private Black::NonTransferable
 	{
+	// Public interface.
 	public:
-		JniEnvironment() = default;
-
-
-		// Read the value into storage from given field of given JNI object.
-		template< typename TValue >
-		inline const bool GetValue( const Black::JniObject& object_handle, const Black::JniMemberField<TValue>& field_handle, TValue& value_storage ) const;
-
-		// Read the value into storage from given static field.
-		template< typename TValue >
-		inline const bool GetValue( const Black::JniStaticField<TValue>& field_handle, TValue& value_storage ) const;
-
-		// Write the value from storage into given field of given object.
-		template< typename TValue >
-		inline const bool SetValue( const Black::JniObject& object_handle, const Black::JniMemberField<TValue>& field_handle, const TValue& value_storage ) const;
-
-		// Write the value from storage into given static field.
-		template< typename TValue >
-		inline const bool SetValue( const Black::JniStaticField<TValue>& field_handle, const TValue& value_storage ) const;
-
-
-		// Call the member-function using given arguments.
-		template< typename TResult, typename... TArguments >
-		inline TResult Call(
-			const Black::JniObject& object_handle,
-			const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
-			const TArguments&... arguments
-		) const;
-
-		// Call the non-virtual member-function using given arguments.
-		template< typename TResult, typename... TArguments >
-		inline TResult CallNonVirtual(
-			const Black::JniObject& object_handle,
-			const Black::JniMemberFunction<TResult, TArguments...>& function_handle,
-			const TArguments&... arguments
-		) const;
-
-		// Call the member-function using given arguments.
-		template< typename TResult, typename... TArguments >
-		inline TResult Call(
-			const Black::JniStaticFunction<TResult, TArguments...>& function_handle,
-			const TArguments&... arguments
-		) const;
-
-
 		// Check that the instance is valid.
 		inline const bool IsValid() const				{ return m_local_env != nullptr; };
 
@@ -77,6 +36,7 @@ inline namespace VirtualMachine
 		JNIEnv* const			m_local_env	= JniConnection::GetLocalEnvironment();	// Thread-local JNI environment.
 		const std::thread::id	m_owner_id	= std::this_thread::get_id();			// Id of thread owning the environment.
 	};
+}
 }
 }
 }
