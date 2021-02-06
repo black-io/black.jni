@@ -39,6 +39,9 @@ inline namespace JniConnections
 		// Get the thread-local JNI environment.
 		static Black::NotNull<JNIEnv*> GetLocalEnvironment();
 
+		// Get the local reference of Java class by given class-path.
+		static Black::NotNull<jclass> GetClassReference( std::string_view class_path );
+
 
 		// Check that the current thread is the main (for JNI connection) one.
 		static const bool IsMainThread();

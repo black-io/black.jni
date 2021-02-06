@@ -53,6 +53,11 @@ namespace
 		return local_env;
 	}
 
+	Black::NotNull<jclass> GetClassReference( std::string_view class_path )
+	{
+		return { nullptr };
+	}
+
 	const bool JniConnection::IsMainThread()
 	{
 		return pthread_self() == GetInstance().m_main_thread_id;
