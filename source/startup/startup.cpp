@@ -1,5 +1,3 @@
-#define BLACK_JNI_LIBRARY
-
 #include <black/jni.h>
 #include <black/jni/startup.h>
 
