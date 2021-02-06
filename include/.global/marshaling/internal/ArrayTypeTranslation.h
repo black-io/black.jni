@@ -5,13 +5,15 @@ namespace Black
 {
 inline namespace Jni
 {
+inline namespace Global
+{
 inline namespace Marshaling
 {
 namespace Internal
 {
 	// Translation traits for JNI object arrays.
-	template< typename TElementContext, bool IS_TYPE_PLAIN >
-	struct JniArrayTranslation
+	template< typename TElementContext, bool IS_ELEMENT_PLAIN >
+	struct ArrayTypeTranslation
 	{
 		// JNI regular type of single element.
 		using JniValue		= typename TElementContext::JniType;
@@ -38,7 +40,7 @@ namespace Internal
 
 	// Translation traits for JNI plain arrays.
 	template< typename TElementContext >
-	struct JniArrayTranslation<TElementContext, true>
+	struct ArrayTypeTranslation<TElementContext, true>
 	{
 		// JNI regular type of single element.
 		using JniValue		= typename TElementContext::JniType;
@@ -63,11 +65,7 @@ namespace Internal
 		static inline void ToJni( const NativeArray<TAllocator>& source, JniArray& destination );
 	};
 }
-
-
-	// JNI array type translation.
-	template< typename TElementContext >
-	using JniArrayTranslation = Internal::JniArrayTranslation<TElementContext, TElementContext::IS_PLAIN>;
+}
 }
 }
 }
