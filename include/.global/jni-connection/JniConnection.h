@@ -10,8 +10,10 @@ inline namespace Global
 inline namespace JniConnections
 {
 	/**
-		@brief	Global connection to topside virtual machine.
-		This class is the most major and most crucial part of interaction with JNI.
+		@brief	Implementation of global connection to JVM.
+
+		This service helps to track the local JNI Environment for any low-level thread of process.
+		It tracks the presence of local JNI Environment and performs the valid detaching of JVM on thread exit.
 	*/
 	class JniConnection final : private Black::NonTransferable
 	{
@@ -64,12 +66,6 @@ inline namespace JniConnections
 
 		// Initialize the thread-local environment detaching entity.
 		const bool InitEnvironmentDetacher();
-
-		// Acquire the helper functions for JNI class handle.
-		const bool AcquireClassInterface();
-
-		// Acquire the helper functions for JNI object handle.
-		const bool AcquireObjctInterface();
 
 	// Private state.
 	private:
