@@ -19,87 +19,87 @@ namespace Internal
 		@tparam	TNativeType	Native C++ type, for which the translation is required.
 	*/
 	template< typename TNativeType >
-	struct CommonTypeContext;
+	struct CommonTypeJniConverter;
 
 	// Type translation environment for `void` type.
 	template<>
-	struct CommonTypeContext<void>;
+	struct CommonTypeJniConverter<void>;
 
 	// Type translation environment for `bool` type.
 	template<>
-	struct CommonTypeContext<bool>;
+	struct CommonTypeJniConverter<bool>;
 
 	// Type translation environment for `char16_t` type.
 	template<>
-	struct CommonTypeContext<char16_t>;
+	struct CommonTypeJniConverter<char16_t>;
 
 	// Type translation environment for `int8_t` type.
 	template<>
-	struct CommonTypeContext<int8_t>;
+	struct CommonTypeJniConverter<int8_t>;
 
 	// Type translation environment for `int16_t` type.
 	template<>
-	struct CommonTypeContext<int16_t>;
+	struct CommonTypeJniConverter<int16_t>;
 
 	// Type translation environment for `int32_t` type.
 	template<>
-	struct CommonTypeContext<int32_t>;
+	struct CommonTypeJniConverter<int32_t>;
 
 	// Type translation environment for `int64_t` type.
 	template<>
-	struct CommonTypeContext<int64_t>;
+	struct CommonTypeJniConverter<int64_t>;
 
 	// Type translation environment for `uint8_t` type.
 	template<>
-	struct CommonTypeContext<uint8_t>;
+	struct CommonTypeJniConverter<uint8_t>;
 
 	// Type translation environment for `uint16_t` type.
 	template<>
-	struct CommonTypeContext<uint16_t>;
+	struct CommonTypeJniConverter<uint16_t>;
 
 	// Type translation environment for `uint32_t` type.
 	template<>
-	struct CommonTypeContext<uint32_t>;
+	struct CommonTypeJniConverter<uint32_t>;
 
 	// Type translation environment for `uint64_t` type.
 	template<>
-	struct CommonTypeContext<uint64_t>;
+	struct CommonTypeJniConverter<uint64_t>;
 
 	// Type translation environment for `float` type.
 	template<>
-	struct CommonTypeContext<float>;
+	struct CommonTypeJniConverter<float>;
 
 	// Type translation environment for `double` type.
 	template<>
-	struct CommonTypeContext<double>;
+	struct CommonTypeJniConverter<double>;
 
 	// Type translation environment for `const char*` type.
 	template<>
-	struct CommonTypeContext<const char*>;
+	struct CommonTypeJniConverter<const char*>;
 
 	// Type translation environment for `const char16_t*` type.
 	template<>
-	struct CommonTypeContext<const char16_t*>;
+	struct CommonTypeJniConverter<const char16_t*>;
 
 	// Type translation environment for `std::string_view` type.
 	template<>
-	struct CommonTypeContext<std::string_view>;
+	struct CommonTypeJniConverter<std::string_view>;
 
 	// Type translation environment for `std::u16string_view` type.
 	template<>
-	struct CommonTypeContext<std::u16string_view>;
+	struct CommonTypeJniConverter<std::u16string_view>;
 
 	// Type translation environment for `std::string` type.
 	template<>
-	struct CommonTypeContext<std::string>;
+	struct CommonTypeJniConverter<std::string>;
 
 	// Type translation environment for `std::u16string` type.
 	template<>
-	struct CommonTypeContext<std::u16string>;
+	struct CommonTypeJniConverter<std::u16string>;
 
 	// Type translation environment for `std::vector` type.
 	template< typename TNativeValue, typename TAllocator >
-	struct CommonTypeContext<std::vector<TNativeValue, TAllocator>>;
+	struct CommonTypeJniConverter<std::vector<TNativeValue, TAllocator>>;
 }
 }
 }

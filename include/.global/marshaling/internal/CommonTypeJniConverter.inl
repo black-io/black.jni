@@ -12,7 +12,7 @@ inline namespace Marshaling
 namespace Internal
 {
 	template<>
-	struct CommonTypeContext<void> : CommonTypeJniContext<void>, CommonTypeSignature<void>
+	struct CommonTypeJniConverter<void> : CommonTypeJniContext<void>, CommonTypeSignature<void>
 	{
 		// Count of local references required to store this type in Dalvik local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -25,7 +25,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<bool> : CommonTypeJniContext<jboolean>, CommonTypeSignature<jboolean>
+	struct CommonTypeJniConverter<bool> : CommonTypeJniContext<jboolean>, CommonTypeSignature<jboolean>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -44,7 +44,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<char16_t> : CommonTypeJniContext<jchar>, CommonTypeSignature<jchar>
+	struct CommonTypeJniConverter<char16_t> : CommonTypeJniContext<jchar>, CommonTypeSignature<jchar>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -63,7 +63,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<int8_t> : CommonTypeJniContext<jbyte>, CommonTypeSignature<jbyte>
+	struct CommonTypeJniConverter<int8_t> : CommonTypeJniContext<jbyte>, CommonTypeSignature<jbyte>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -82,7 +82,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<int16_t> : CommonTypeJniContext<jshort>, CommonTypeSignature<jshort>
+	struct CommonTypeJniConverter<int16_t> : CommonTypeJniContext<jshort>, CommonTypeSignature<jshort>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -101,7 +101,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<int32_t> : CommonTypeJniContext<jint>, CommonTypeSignature<jint>
+	struct CommonTypeJniConverter<int32_t> : CommonTypeJniContext<jint>, CommonTypeSignature<jint>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -120,7 +120,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<int64_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
+	struct CommonTypeJniConverter<int64_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -139,7 +139,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<uint8_t> : CommonTypeJniContext<jshort>, CommonTypeSignature<jshort>
+	struct CommonTypeJniConverter<uint8_t> : CommonTypeJniContext<jshort>, CommonTypeSignature<jshort>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -158,7 +158,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<uint16_t> : CommonTypeJniContext<jint>, CommonTypeSignature<jint>
+	struct CommonTypeJniConverter<uint16_t> : CommonTypeJniContext<jint>, CommonTypeSignature<jint>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -177,7 +177,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<uint32_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
+	struct CommonTypeJniConverter<uint32_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -196,7 +196,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<uint64_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
+	struct CommonTypeJniConverter<uint64_t> : CommonTypeJniContext<jlong>, CommonTypeSignature<jlong>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -215,7 +215,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<float> : CommonTypeJniContext<jfloat>, CommonTypeSignature<jfloat>
+	struct CommonTypeJniConverter<float> : CommonTypeJniContext<jfloat>, CommonTypeSignature<jfloat>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -234,7 +234,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<double> : CommonTypeJniContext<jdouble>, CommonTypeSignature<jdouble>
+	struct CommonTypeJniConverter<double> : CommonTypeJniContext<jdouble>, CommonTypeSignature<jdouble>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 0;
@@ -253,7 +253,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<const char*> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<const char*> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -272,7 +272,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<const char16_t*> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<const char16_t*> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -291,7 +291,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<std::string_view> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<std::string_view> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -310,7 +310,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<std::u16string_view> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<std::u16string_view> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -329,7 +329,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<std::string> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<std::string> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -348,7 +348,7 @@ namespace Internal
 	};
 
 	template<>
-	struct CommonTypeContext<std::u16string> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
+	struct CommonTypeJniConverter<std::u16string> : CommonTypeJniContext<jobject>, CommonTypeSignature<jstring>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
@@ -367,13 +367,13 @@ namespace Internal
 	};
 
 	template< typename TNativeValue, typename TAllocator >
-	struct CommonTypeContext<std::vector<TNativeValue, TAllocator>> : CommonTypeJniContext<jobject>
+	struct CommonTypeJniConverter<std::vector<TNativeValue, TAllocator>> : CommonTypeJniContext<jobject>
 	{
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t LOCAL_FRAME_SIZE = 1;
 
 		// JNI type signature.
-		using Signature		= Black::JniArraySignatureString<typename CommonTypeContext<TNativeValue>::Signature>;
+		using Signature		= Black::JniArraySignatureString<typename CommonTypeJniConverter<TNativeValue>::Signature>;
 
 		// C++ native type.
 		using NativeType	= std::vector<TNativeValue, TAllocator>;

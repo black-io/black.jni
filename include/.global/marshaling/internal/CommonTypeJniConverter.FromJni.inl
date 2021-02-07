@@ -11,67 +11,67 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	inline void CommonTypeContext<bool>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<bool>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source == JNI_TRUE;
 	}
 
-	inline void CommonTypeContext<char16_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<char16_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<int8_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<int8_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<int16_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<int16_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<int32_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<int32_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<int64_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<int64_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<uint8_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<uint8_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<uint16_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<uint16_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<uint32_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<uint32_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<uint64_t>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<uint64_t>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<float>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<float>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<double>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<double>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination = source;
 	}
 
-	inline void CommonTypeContext<std::string>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<std::string>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination.clear();
 		CRET( source == nullptr );
@@ -84,7 +84,7 @@ namespace Internal
 		local_env->GetStringUTFRegion( source, 0, string_length, &destination.front() );
 	}
 
-	inline void CommonTypeContext<std::u16string>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<std::u16string>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination.clear();
 		CRET( source == nullptr );
@@ -98,12 +98,12 @@ namespace Internal
 	}
 
 	template< typename TNativeValue, typename TAllocator >
-	inline void CommonTypeContext<std::vector<TNativeValue, TAllocator>>::FromJni( const JniType& source, NativeType& destination )
+	inline void CommonTypeJniConverter<std::vector<TNativeValue, TAllocator>>::FromJni( const JniType& source, NativeType& destination )
 	{
 		destination.clear();
 		CRET( source == nullptr );
 
-		using ElementContext	= CommonTypeContext<TNativeValue>;
+		using ElementContext	= CommonTypeJniConverter<TNativeValue>;
 		using JniArray			= typename ElementContext::ArrayType;
 		using ArrayTrnslation	= Black::JniArrayTranslation<ElementContext>;
 

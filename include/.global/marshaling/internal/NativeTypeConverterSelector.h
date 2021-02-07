@@ -16,7 +16,7 @@ namespace Internal
 	struct KnownNativeTypeConverterSelector final
 	{
 		// By default the common type converter will be used.
-		using Converter = CommonTypeContext<TNativeType>;
+		using Converter = CommonTypeJniConverter<TNativeType>;
 	};
 
 	// The selection variant to use predefined converter for enumeration types.
