@@ -11,19 +11,19 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Safe environment context for native enumeration.
-	template< typename TNativeEnum >
-	struct EnumContext : CommonTypeContext<std::underlying_type_t<TNativeEnum>>
+	// JNI environment context for `Black::EnumFlags` type.
+	template< typename TEnumeration, typename TProjection >
+	struct EnumFlagsJniConvertter final : CommonTypeContext<typename Black::EnumFlags<TEnumeration, TProjection>::Bits>
 	{
-		// Underlying type for enumeration type.
-		using UnderlyingType	= std::underlying_type_t<TNativeEnum>;
+		// Underlying type.
+		using UnderlyingType	= typename Black::EnumFlags<TEnumeration, TProjection>::Bits;
 
 		// JNI context for underlying type.
 		using UnderlyingContext	= CommonTypeContext<UnderlyingType>;
 
 
 		// C++ native type.
-		using NativeType	= TNativeEnum;
+		using NativeType	= Black::EnumFlags<TEnumeration, TProjection>;
 
 		// JNI type
 		using JniType		= typename UnderlyingContext::JniType;
@@ -40,7 +40,7 @@ namespace Internal
 		// Type translation from C++ space to JNI space.
 		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
-			const UnderlyingType transition_buffer = Black::GetEnumValue( source );
+			const UnderlyingType transition_buffer{ source };
 			UnderlyingContext::FromJni( transition_buffer, destination );
 		}
 	};

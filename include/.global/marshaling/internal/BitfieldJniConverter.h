@@ -13,7 +13,7 @@ namespace Internal
 {
 	// Safe environment context for native bit-fields.
 	template< typename TNativeBitfield >
-	struct BitfieldContext : CommonTypeContext<decltype( std::declval<TNativeBitfield>().bits )>
+	struct BitfieldJniConverter : CommonTypeContext<decltype( std::declval<TNativeBitfield>().bits )>
 	{
 		// Underlying type for bit-field type.
 		using UnderlyingType	= decltype( std::declval<TNativeBitfield>().bits );

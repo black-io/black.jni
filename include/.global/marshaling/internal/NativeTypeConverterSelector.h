@@ -24,7 +24,7 @@ namespace Internal
 	struct KnownNativeTypeConverterSelector<TEnumeration, std::enable_if_t<std::is_enum_v<TEnumeration>>> final
 	{
 		// Predefined converter for enumeration types will be used.
-		using Converter = EnumContext<TEnumeration>;
+		using Converter = EnumJniConverter<TEnumeration>;
 	};
 
 	// The selection variant to use predefined converter for bit-fields.
@@ -32,7 +32,7 @@ namespace Internal
 	struct KnownNativeTypeConverterSelector<TBitfield, std::enable_if_t<Black::IS_BIT_FIELD<TBitfield>>> final
 	{
 		// Predefined bit-field converter will be used.
-		using Converter = BitfieldContext<TBitfield>;
+		using Converter = BitfieldJniConverter<TBitfield>;
 	};
 
 	// The selection variant to use predefined converter for `Black::EnumFlags` instantiations.
@@ -40,7 +40,7 @@ namespace Internal
 	struct KnownNativeTypeConverterSelector<Black::EnumFlags<TEnumeration, TProjection>, void> final
 	{
 		// Predefined converter for `Black::EnumFlags` will be used.
-		using Converter = EnumFlagsContext<TEnumeration, TProjection>;
+		using Converter = EnumFlagsJniConvertter<TEnumeration, TProjection>;
 	};
 
 	// Custom converter type selector.
