@@ -13,7 +13,7 @@ namespace Internal
 {
 	// Safe environment context for native enumeration.
 	template< typename TNativeEnum >
-	struct EnumJniConverter : CommonTypeContext<std::underlying_type_t<TNativeEnum>>
+	struct EnumJniConverter : CommonTypeJniConverter<std::underlying_type_t<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
 		using UnderlyingType	= std::underlying_type_t<TNativeEnum>;

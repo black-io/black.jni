@@ -13,7 +13,7 @@ namespace Internal
 {
 	// JNI environment context for `Black::EnumFlags` type.
 	template< typename TEnumeration, typename TProjection >
-	struct EnumFlagsJniConvertter final : CommonTypeContext<typename Black::EnumFlags<TEnumeration, TProjection>::Bits>
+	struct EnumFlagsJniConvertter final : CommonTypeJniConverter<typename Black::EnumFlags<TEnumeration, TProjection>::Bits>
 	{
 		// Underlying type.
 		using UnderlyingType	= typename Black::EnumFlags<TEnumeration, TProjection>::Bits;
