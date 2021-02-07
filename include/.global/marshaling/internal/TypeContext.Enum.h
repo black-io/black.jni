@@ -5,23 +5,21 @@ namespace Black
 {
 inline namespace Jni
 {
+inline namespace Global
+{
 inline namespace Marshaling
 {
 namespace Internal
 {
 	// Safe environment context for native enumeration.
-	template< typename TNativeEnum, bool IS_VALID_ENUMERATION >
-	struct EnumContext;
-
-	// JNI environment context for native enumeration.
 	template< typename TNativeEnum >
-	struct EnumContext<TNativeEnum, true> : NativeContext<std::underlying_type_t<TNativeEnum>>
+	struct EnumContext : CommonTypeContext<std::underlying_type_t<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
 		using UnderlyingType	= std::underlying_type_t<TNativeEnum>;
 
 		// JNI context for underlying type.
-		using UnderlyingContext	= NativeContext<UnderlyingType>;
+		using UnderlyingContext	= CommonTypeContext<UnderlyingType>;
 
 
 		// C++ native type.
@@ -34,24 +32,20 @@ namespace Internal
 		// Type translation from JNI space to C++ space.
 		static inline void FromJni( const JniType& source, NativeType& destination )
 		{
-			UnderlyingType buffer;
-			UnderlyingContext::FromJni( source, buffer );
-			destination = static_cast<TNativeEnum>( buffer );
+			UnderlyingType transition_buffer{};
+			UnderlyingContext::FromJni( source, transition_buffer );
+			destination = NativeType{ transition_buffer };
 		}
 
 		// Type translation from C++ space to JNI space.
 		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
-			const UnderlyingType buffer = static_cast<UnderlyingType>( source );
-			UnderlyingContext::FromJni( buffer, destination );
+			const UnderlyingType transition_buffer = Black::GetEnumValue( source );
+			UnderlyingContext::FromJni( transition_buffer, destination );
 		}
 	};
 }
-
-
-	// JNI environment context for native enumerations.
-	template< typename TNativeEnum >
-	using NativeEnumContext = Internal::EnumContext<TNativeEnum, std::is_enum_v<TNativeEnum>>;
+}
 }
 }
 }

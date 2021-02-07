@@ -5,23 +5,21 @@ namespace Black
 {
 inline namespace Jni
 {
+inline namespace Global
+{
 inline namespace Marshaling
 {
 namespace Internal
 {
 	// Safe environment context for native bit-fields.
-	template< typename TNativeBitfield, bool IS_VALID_BITFIELD >
-	struct BitfieldContext;
-
-	// JNI environment context for native bit-fields.
 	template< typename TNativeBitfield >
-	struct BitfieldContext<TNativeBitfield, true> : NativeContext<decltype( std::declval<TNativeBitfield>().bits )>
+	struct BitfieldContext : CommonTypeContext<decltype( std::declval<TNativeBitfield>().bits )>
 	{
 		// Underlying type for bit-field type.
 		using UnderlyingType	= decltype( std::declval<TNativeBitfield>().bits );
 
 		// JNI context for underlying type.
-		using UnderlyingContext	= NativeContext<UnderlyingType>;
+		using UnderlyingContext	= CommonTypeContext<UnderlyingType>;
 
 
 		// C++ native type.
@@ -44,11 +42,7 @@ namespace Internal
 		}
 	};
 }
-
-
-	// JNI environment context for native bit-fields.
-	template< typename TNativeBitfield >
-	using NativeBitfieldContext = Internal::BitfieldContext<TNativeBitfield, Black::IS_BIT_FIELD<TNativeBitfield>>;
+}
 }
 }
 }
