@@ -13,7 +13,7 @@ namespace Internal
 {
 	template< typename TElementContext, bool IS_ELEMENT_PLAIN >
 	template< typename TAllocator >
-	inline void ArrayTypeTranslation<TElementContext, IS_ELEMENT_PLAIN>::FromJni( const JniArray& source, NativeArray<TAllocator>& destination )
+	inline void ArrayTypeConverter<TElementContext, IS_ELEMENT_PLAIN>::FromJni( const JniArray& source, NativeArray<TAllocator>& destination )
 	{
 		JNIEnv* local_env			= Black::JniConnection::GetLocalEnvironment();
 		const jsize array_length	= local_env->GetArrayLength( source );
@@ -35,7 +35,7 @@ namespace Internal
 
 	template< typename TElementContext, bool IS_ELEMENT_PLAIN >
 	template< typename TAllocator >
-	inline void ArrayTypeTranslation<TElementContext, IS_ELEMENT_PLAIN>::ToJni( const NativeArray<TAllocator>& source, JniArray& destination )
+	inline void ArrayTypeConverter<TElementContext, IS_ELEMENT_PLAIN>::ToJni( const NativeArray<TAllocator>& source, JniArray& destination )
 	{
 		using ElementSignature = typename TElementContext::Signature;
 
@@ -61,7 +61,7 @@ namespace Internal
 
 	template< typename TElementContext >
 	template< typename TAllocator >
-	inline void ArrayTypeTranslation<TElementContext, true>::FromJni( const JniArray& source, NativeArray<TAllocator>& destination )
+	inline void ArrayTypeConverter<TElementContext, true>::FromJni( const JniArray& source, NativeArray<TAllocator>& destination )
 	{
 		JNIEnv* local_env			= Black::JniConnection::GetLocalEnvironment();
 		const jsize array_length	= local_env->GetArrayLength( source );
@@ -82,7 +82,7 @@ namespace Internal
 
 	template< typename TElementContext >
 	template< typename TAllocator >
-	inline void ArrayTypeTranslation<TElementContext, true>::ToJni( const NativeArray<TAllocator>& source, JniArray& destination )
+	inline void ArrayTypeConverter<TElementContext, true>::ToJni( const NativeArray<TAllocator>& source, JniArray& destination )
 	{
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 

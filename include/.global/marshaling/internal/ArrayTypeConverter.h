@@ -13,7 +13,7 @@ namespace Internal
 {
 	// Translation traits for JNI object arrays.
 	template< typename TElementContext, bool IS_ELEMENT_PLAIN >
-	struct ArrayTypeTranslation
+	struct ArrayTypeConverter
 	{
 		// JNI regular type of single element.
 		using JniValue		= typename TElementContext::JniType;
@@ -40,7 +40,7 @@ namespace Internal
 
 	// Translation traits for JNI plain arrays.
 	template< typename TElementContext >
-	struct ArrayTypeTranslation<TElementContext, true>
+	struct ArrayTypeConverter<TElementContext, true>
 	{
 		// JNI regular type of single element.
 		using JniValue		= typename TElementContext::JniType;
