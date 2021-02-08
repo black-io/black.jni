@@ -7,6 +7,8 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+inline namespace Objects
+{
 	template< typename THandle, typename... TArguments >
 	inline THandle JniObject::ConstructHandle( const TArguments&... arguments )
 	{
@@ -16,7 +18,7 @@ inline namespace Handles
 	template< typename... TArguments >
 	JniObject JniObject::Construct( const JniClass& class_handle, const TArguments&... arguments )
 	{
-		constexpr size_t FRAME_SIZE = Black::JNI_LOCAL_FRAME_SIZE<TArguments...>;
+		constexpr size_t FRAME_SIZE = Black::CalculateLocalFrameSize<TArguments...>();
 
 		CRETD( !Black::JniConnection::IsValid(), {}, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
 
@@ -89,6 +91,7 @@ inline namespace Handles
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 		return !local_env->IsSameObject( *left, *right );
 	}
+}
 }
 }
 }

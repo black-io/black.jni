@@ -73,10 +73,10 @@ inline namespace Objects
 
 
 		// @see	Mutex::Lock()
-		virtual void Lock() const override;
+		void Lock() const override;
 
 		// @see	Mutex::Unlock()
-		virtual void Unlock() const override;
+		void Unlock() const override;
 
 		// Call the `java.lang.Object.notify` function.
 		void Notify() const;
@@ -107,8 +107,10 @@ inline namespace Objects
 		inline jobject GetJniReference() const				{ return m_object_ref.get(); };
 
 
-		inline explicit operator const bool () const		{ return IsValid(); };
 		inline jobject operator * () const					{ return GetJniReference(); };
+
+		inline explicit operator const bool () const		{ return IsValid(); };
+		inline const bool operator ! () const				{ return !IsValid(); };
 
 	// Private interface.
 	private:
