@@ -7,19 +7,25 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-	// Static-field handle for JNI objects.
+inline namespace Fields
+{
+	/**
+		@brief	Static-field handle for JNI objects.
+
+		This template implements the functionality of accessing the static field of some class.
+		The field template should be instantiated for the type the field stores. Only native C++ types are allowed.
+		The field automatically performs the conversion between C++ and Java types based on JNI type converter corresponded to native type.
+
+		@tparam	TNativeType	Native C++ type the field stores.
+	*/
 	template< typename TNativeType >
 	class JniStaticField final
 	{
-		friend class Black::Jni::VirtualMachine::JniConnection;		// Grant access to function calls.
-		friend class Black::Jni::VirtualMachine::JniEnvironment;	// Grant access to function calls.
-
 	// Construction and assignment.
 	public:
-		JniStaticField()								= default;
-
-		JniStaticField( const JniStaticField& other )	= default;
-		JniStaticField( JniStaticField&& other )		= default;
+		JniStaticField()						= default;
+		JniStaticField( const JniStaticField& )	= default;
+		JniStaticField( JniStaticField&& )		= default;
 
 		JniStaticField( std::string_view class_name, std::string_view field_name );
 		JniStaticField( const Black::JniClass& class_handle, std::string_view field_name );
@@ -28,8 +34,8 @@ inline namespace Handles
 		JniStaticField( const Black::JniClass& class_handle, std::string_view field_name, Black::IgnoreFailure );
 
 
-		inline JniStaticField& operator = ( const JniStaticField& other )	= default;
-		inline JniStaticField& operator = ( JniStaticField&& other )		= default;
+		inline JniStaticField& operator = ( const JniStaticField& )	= default;
+		inline JniStaticField& operator = ( JniStaticField&& )		= default;
 
 	// Public interface.
 	public:
@@ -50,18 +56,20 @@ inline namespace Handles
 		inline jfieldID GetFieldId() const				{ return m_field_id; };
 
 
-		inline explicit operator const bool () const	{ return IsValid(); };
 		inline jfieldID operator * () const				{ return GetFieldId(); };
+
+		inline explicit operator const bool () const	{ return IsValid(); };
+		inline const bool operator ! () const			{ return !IsValid(); };
 
 	private:
 		// JNI-side type for used native one.
-		using JniType		= Black::JniType<TNativeType>;
+		using JniType = Black::JniType<TNativeType>;
 
 		// JNI type signature.
-		using Signature		= Black::NativeTypeSignature<TNativeType>;
+		using Signature = Black::JniTypeSignature<TNativeType>;
 
 		// JNI environment context.
-		using JniContext	= Black::NativeTypeContext<TNativeType>;
+		using Converter = Black::JniNativeTypeConverter<TNativeType>;
 
 
 		// Get the value of field.
@@ -70,15 +78,26 @@ inline namespace Handles
 		// Set the value of field.
 		inline const bool SetValue( JNIEnv* local_env, const TNativeType& value_storage ) const;
 
+	// Private static fields.
 	private:
-		static constexpr size_t			LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
-		static constexpr auto			FIELD_READ_HANDLER	= JniContext::STATIC_FIELD_READ_HANDLER;
-		static constexpr auto			FIELD_WRITE_HANDLER	= JniContext::STATIC_FIELD_WRITE_HANDLER;
-		static constexpr const char*	LOG_CHANNEL			= "Black/Jni/StaticField";
+		// Size of JNI local frame to hold the value reference.
+		static constexpr size_t LOCAL_FRAME_SIZE = Converter::LOCAL_FRAME_SIZE;
 
+		// `JNIEnv` field handler to read the value of field.
+		static constexpr auto FIELD_READ_HANDLER = Converter::STATIC_FIELD_READ_HANDLER;
+
+		// `JNIEnv` field handler to write the value of field.
+		static constexpr auto FIELD_WRITE_HANDLER = Converter::STATIC_FIELD_WRITE_HANDLER;
+
+		// Logging channel.
+		static constexpr const char* LOG_CHANNEL = "Black/Jni/StaticField";
+
+	// Private state.
+	private:
 		Black::JniClass	m_class_handle;				// Handle to class of field.
 		jfieldID		m_field_id		= nullptr;	// Field id for JNI.
 	};
+}
 }
 }
 }
