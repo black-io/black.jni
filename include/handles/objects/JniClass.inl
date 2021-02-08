@@ -7,6 +7,8 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+inline namespace Objects
+{
 	template< typename THandle >
 	inline JniClass JniClass::FromHandleType()
 	{
@@ -17,6 +19,7 @@ inline namespace Handles
 		std::string_view class_name{ ClassPath::GetData() };
 		return { class_name };
 	}
+}
 }
 }
 }
