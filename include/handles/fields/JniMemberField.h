@@ -34,8 +34,8 @@ inline namespace Fields
 		JniMemberField( const Black::JniClass& class_handle, std::string_view field_name, Black::IgnoreFailure );
 
 
-		inline JniMemberField& operator = ( const JniMemberField& other )	= default;
-		inline JniMemberField& operator = ( JniMemberField&& other )		= default;
+		inline JniMemberField& operator = ( const JniMemberField& )	= default;
+		inline JniMemberField& operator = ( JniMemberField&& )		= default;
 
 	// Public interface.
 	public:
@@ -66,8 +66,10 @@ inline namespace Fields
 		inline jfieldID GetFieldId() const				{ return m_field_id; };
 
 
-		inline explicit operator const bool () const	{ return IsValid(); };
 		inline jfieldID operator * () const				{ return GetFieldId(); };
+
+		inline explicit operator const bool () const	{ return IsValid(); };
+		inline const bool operator ! () const			{ return !IsValid(); };
 
 	// Private interface.
 	private:
@@ -78,7 +80,7 @@ inline namespace Fields
 		using Signature = Black::JniTypeSignature<TNativeType>;
 
 		// JNI environment context.
-		using JniContext = Black::JniNativeTypeConverter<TNativeType>;
+		using Converter = Black::JniNativeTypeConverter<TNativeType>;
 
 
 		// Get the value of field from given object ref.
@@ -90,13 +92,13 @@ inline namespace Fields
 	// Private static fields.
 	private:
 		// Size of JNI local frame to hold the value reference.
-		static constexpr size_t LOCAL_FRAME_SIZE = JniContext::LOCAL_FRAME_SIZE;
+		static constexpr size_t LOCAL_FRAME_SIZE = Converter::LOCAL_FRAME_SIZE;
 
 		// `JNIEnv` field handler to read the value of field.
-		static constexpr auto FIELD_READ_HANDLER = JniContext::FIELD_READ_HANDLER;
+		static constexpr auto FIELD_READ_HANDLER = Converter::FIELD_READ_HANDLER;
 
-		// `JNIEnv` field handle to write the value of field.
-		static constexpr auto FIELD_WRITE_HANDLER = JniContext::FIELD_WRITE_HANDLER;
+		// `JNIEnv` field handler to write the value of field.
+		static constexpr auto FIELD_WRITE_HANDLER = Converter::FIELD_WRITE_HANDLER;
 
 		// Logging channel.
 		static constexpr const char* LOG_CHANNEL = "Black/Jni/MemberField";
