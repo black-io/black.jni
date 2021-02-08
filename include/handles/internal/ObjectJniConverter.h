@@ -9,16 +9,18 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Safe environment context for object handle.
-	template< typename TObjectHandle, bool IS_VALID_HANDLE >
-	struct ObjectContext;
-
-	// JNI environment context for object handle.
+	/**
+		@brief ObjectJniConverter
+	*/
 	template< typename TObjectHandle >
-	struct ObjectContext<TObjectHandle, true> : JniContext<jobject>
+	struct ObjectJniConverter final : Black::JniCommonTypeEnvContext<jobject>
 	{
+		static_assert( std::is_base_of_v<Black::JniObject, TObjectHandle>, "Type of object handle should be based on `Black::JniObject` type." );
+
+
 		// Count of local references required to store this type in JNI local frame.
 		static constexpr size_t	LOCAL_FRAME_SIZE = 1;
+
 
 		// JNI type signature.
 		using Signature		= Black::StaticStringJoin<Black::StaticString<'L'>, typename TObjectHandle::ClassPath, Black::StaticString<';'>>;
@@ -29,6 +31,7 @@ namespace Internal
 		// JNI type
 		using JniType		= jobject;
 
+
 		// Type translation from JNI space to C++ space.
 		static inline void FromJni( const JniType& source, NativeType& destination )	{ destination = source; };
 
@@ -36,11 +39,6 @@ namespace Internal
 		static inline void ToJni( const NativeType& source, JniType& destination )		{ destination = *source; };
 	};
 }
-
-
-	// JNI environment context for object handle.
-	template< typename TObjectHandle >
-	using NativeObjectContext = Internal::ObjectContext<TObjectHandle, std::is_base_of_v<Black::JniObject, TObjectHandle>>;
 }
 }
 }

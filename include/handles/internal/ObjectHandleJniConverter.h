@@ -5,22 +5,25 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace Marshaling
+inline namespace Handles
 {
 namespace Internal
 {
-	// JNI environment context for `Black::JniObject` type.
-	template<>
-	struct NativeContext<Black::JniObject> : JniContext<jobject>, JniSignature<jobject>
+	/**
+		@brief	Custom JNI converter for `Black::JniObject` type.
+	*/
+	struct ObjectHandleJniConverter final : Black::JniCommonTypeEnvContext<jobject>, Black::JniCommonTypeSignature<jobject>
 	{
 		// Count of local references required to store this type in JNI local frame.
-		constexpr static const size_t LOCAL_FRAME_SIZE = 1;
+		static constexpr const size_t LOCAL_FRAME_SIZE = 1;
+
 
 		// C++ native type.
 		using NativeType	= Black::JniObject;
 
 		// JNI type
 		using JniType		= jobject;
+
 
 		// Type translation from JNI space to C++ space.
 		static inline void FromJni( const JniType& source, NativeType& destination )	{ destination = source; };
