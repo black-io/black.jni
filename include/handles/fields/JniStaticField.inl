@@ -78,16 +78,16 @@ inline namespace Fields
 		CRETD( !m_class_handle, false, LOG_CHANNEL, "Invalid static field - no class specified." );
 		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
 
-		if( LOCAL_FRAME_SIZE != 0 )
+		constexpr size_t frame_size = LOCAL_FRAME_SIZE;
+		if( frame_size != 0 )
 		{
-			const size_t frame_size = LOCAL_FRAME_SIZE;
-			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
+			CRETD( local_env->PushLocalFrame( frame_size ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
 		auto jni_value = (JniType)(local_env->*FIELD_READ_HANDLER)( *m_class_handle, m_field_id );
 		Black::FromJni( jni_value, value_storage );
 
-		CRET( LOCAL_FRAME_SIZE == 0, true );
+		CRET( frame_size == 0, true );
 		local_env->PopLocalFrame( nullptr );
 		return true;
 	}
@@ -99,17 +99,17 @@ inline namespace Fields
 		CRETD( !m_class_handle, false, LOG_CHANNEL, "Invalid static field - no class specified." );
 		CRETD( m_field_id == nullptr, false, LOG_CHANNEL, "Invalid static field - field not found for specified class." );
 
-		if( LOCAL_FRAME_SIZE != 0 )
+		constexpr size_t frame_size = LOCAL_FRAME_SIZE;
+		if( frame_size != 0 )
 		{
-			const size_t frame_size = LOCAL_FRAME_SIZE;
-			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
+			CRETD( local_env->PushLocalFrame( frame_size ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
 		JniType jni_value{};
 		Black::ToJni( value_storage, jni_value );
 		(local_env->*FIELD_WRITE_HANDLER)( *m_class_handle, m_field_id, jni_value );
 
-		CRET( LOCAL_FRAME_SIZE == 0, true );
+		CRET( frame_size == 0, true );
 		local_env->PopLocalFrame( nullptr );
 		return true;
 	}

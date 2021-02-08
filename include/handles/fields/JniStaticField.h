@@ -61,6 +61,7 @@ inline namespace Fields
 		inline explicit operator const bool () const	{ return IsValid(); };
 		inline const bool operator ! () const			{ return !IsValid(); };
 
+	// Private inner types.
 	private:
 		// JNI-side type for used native one.
 		using JniType = Black::JniType<TNativeType>;
@@ -68,10 +69,11 @@ inline namespace Fields
 		// JNI type signature.
 		using Signature = Black::JniTypeSignature<TNativeType>;
 
-		// JNI environment context.
+		// JNI converter for given native type.
 		using Converter = Black::JniNativeTypeConverter<TNativeType>;
 
-
+	// Private interface.
+	private:
 		// Get the value of field.
 		inline const bool GetValue( JNIEnv* local_env, TNativeType& value_storage ) const;
 
