@@ -7,19 +7,25 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-	// Member-field handle for JNI objects.
+inline namespace Fields
+{
+	/**
+		@brief	Member-field handle for JNI objects.
+
+		This template implements the functionality of accessing the field of some object.
+		The field template should be instantiated for the type the field stores. Only native C++ types are allowed.
+		The field automatically performs the conversion between C++ and Java types based on JNI type converter corresponded to native type.
+
+		@tparam	TNativeType	Native C++ type the field stores.
+	*/
 	template< typename TNativeType >
 	class JniMemberField final
 	{
-		friend class Black::Jni::VirtualMachine::JniConnection;		// Grant access to function calls.
-		friend class Black::Jni::VirtualMachine::JniEnvironment;	// Grant access to function calls.
-
 	// Construction and assignment.
 	public:
-		JniMemberField()								= default;
-
-		JniMemberField( const JniMemberField& other )	= default;
-		JniMemberField( JniMemberField&& other )		= default;
+		JniMemberField()						= default;
+		JniMemberField( const JniMemberField& )	= default;
+		JniMemberField( JniMemberField&& )		= default;
 
 		JniMemberField( std::string_view class_name, std::string_view field_name );
 		JniMemberField( const Black::JniClass& class_handle, std::string_view field_name );
@@ -66,13 +72,13 @@ inline namespace Handles
 	// Private interface.
 	private:
 		// JNI-side type for used native one.
-		using JniType		= Black::JniType<TNativeType>;
+		using JniType = Black::JniType<TNativeType>;
 
 		// JNI type signature.
-		using Signature		= Black::NativeTypeSignature<TNativeType>;
+		using Signature = Black::JniTypeSignature<TNativeType>;
 
 		// JNI environment context.
-		using JniContext	= Black::NativeTypeContext<TNativeType>;
+		using JniContext = Black::JniNativeTypeConverter<TNativeType>;
 
 
 		// Get the value of field from given object ref.
@@ -81,14 +87,25 @@ inline namespace Handles
 		// Set the value of field to given object by its ref.
 		inline const bool SetValue( JNIEnv* local_env, jobject object_ref, const TNativeType& value_storage ) const;
 
+	// Private static fields.
 	private:
-		static constexpr size_t			LOCAL_FRAME_SIZE	= JniContext::LOCAL_FRAME_SIZE;
-		static constexpr auto			FIELD_READ_HANDLER	= JniContext::FIELD_READ_HANDLER;
-		static constexpr auto			FIELD_WRITE_HANDLER	= JniContext::FIELD_WRITE_HANDLER;
-		static constexpr const char*	LOG_CHANNEL			= "Black/Jni/MemberField";
+		// Size of JNI local frame to hold the value reference.
+		static constexpr size_t LOCAL_FRAME_SIZE = JniContext::LOCAL_FRAME_SIZE;
 
-		jfieldID	m_field_id	= nullptr;	// Field id for JNI.
+		// `JNIEnv` field handler to read the value of field.
+		static constexpr auto FIELD_READ_HANDLER = JniContext::FIELD_READ_HANDLER;
+
+		// `JNIEnv` field handle to write the value of field.
+		static constexpr auto FIELD_WRITE_HANDLER = JniContext::FIELD_WRITE_HANDLER;
+
+		// Logging channel.
+		static constexpr const char* LOG_CHANNEL = "Black/Jni/MemberField";
+
+	// Private state.
+	private:
+		jfieldID m_field_id = nullptr; // Field id for JNI.
 	};
+}
 }
 }
 }

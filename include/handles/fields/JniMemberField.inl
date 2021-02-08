@@ -7,6 +7,8 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+inline namespace Fields
+{
 	template< typename TNativeType >
 	JniMemberField<TNativeType>::JniMemberField( std::string_view class_name, std::string_view field_name )
 		: JniMemberField{ Black::JniClass{ class_name }, field_name, Black::IGNORE_FALURE }
@@ -63,7 +65,7 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline TNativeType JniMemberField<TNativeType>::GetValue( const JniObject& object_handle, const TNativeType& default_value ) const
 	{
-		TNativeType native_result;
+		TNativeType native_result{};
 		CRETD( !GetValue( object_handle, native_result ), default_value, LOG_CHANNEL, "Failed to read value of field." );
 		return native_result;
 	}
@@ -71,7 +73,7 @@ inline namespace Handles
 	template< typename TNativeType >
 	inline TNativeType JniMemberField<TNativeType>::GetValue( jobject object_ref, const TNativeType& default_value ) const
 	{
-		TNativeType native_result;
+		TNativeType native_result{};
 		CRETD( !GetValue( object_ref, native_result ), default_value, LOG_CHANNEL, "Failed to read value of field." );
 		return native_result;
 	}
@@ -120,7 +122,7 @@ inline namespace Handles
 			CRETD( local_env->PushLocalFrame( LOCAL_FRAME_SIZE ) != JNI_OK, false, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		JniType jni_value;
+		JniType jni_value{};
 		Black::ToJni( value_storage, jni_value );
 		(local_env->*FIELD_WRITE_HANDLER)( object_ref, m_field_id, jni_value );
 
@@ -128,6 +130,7 @@ inline namespace Handles
 		local_env->PopLocalFrame( nullptr );
 		return true;
 	}
+}
 }
 }
 }
