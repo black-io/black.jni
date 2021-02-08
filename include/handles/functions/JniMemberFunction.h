@@ -12,7 +12,7 @@ inline namespace Functions
 	/**
 		@brief	JNI member-function handle.
 
-		This template Implements the functionality of calling the member-functions of some class.
+		This template implements the functionality of calling the member-functions of some class.
 		The function template should be instantiated for the valid function signature, where only native C++ types present.
 		This handle automatically converts all given arguments on call.
 		The result of Java call will be also automatically converted back to native type, when required.
@@ -75,10 +75,10 @@ inline namespace Functions
 	// Private inner types.
 	private:
 		// JNI type signature.
-		using Signature		= Black::NativeFunctionSignature<TResult, TArguments...>;
+		using Signature = Black::NativeFunctionSignature<TResult, TArguments...>;
 
 		// Entry-point.
-		using EntryPoint	= Internal::MemberFunctionEntry<TResult, TArguments...>;
+		using EntryPoint = Internal::MemberFunctionEntry<TResult, TArguments...>;
 
 	// Private interface.
 	private:
