@@ -7,16 +7,35 @@ inline namespace Jni
 {
 inline namespace Handles
 {
-	// Handle of arbitrary Java object.
+inline namespace Objects
+{
+	/**
+		@brief	Common JNI object handle.
+
+		This type implement the basic interface for all other object handles.
+		Every handle to object of Java class should be derived from this type. It simplifies a lot the design of such handle.
+
+		Each derived type should provide its own custom JNI converter through the valid declaration of `GetJniConverter` function.
+		It may be easily done by means of `JniConverter` template.
+	*/
 	class JniObject : public Black::Mutex
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend Internal::ObjectHandleJniConverter GetJniConverter( JniObject );
+
 	// Public inner types.
 	public:
 		// Usable shared state to optimize the owning of function/field handles.
 		template< typename TState, bool IS_PERSISTENT = false >
-		using SharedState	= Internal::SharedState<TState, IS_PERSISTENT>;
+		using SharedState = Internal::SharedState<TState, IS_PERSISTENT>;
 
-	// Construction and assignation.
+		// Custom JNI converter template for every derived type.
+		template< typename TObjectHandle >
+		using JniConverter = Internal::ObjectJniConverter<TObjectHandle>;
+
+	// Static public interface.
 	public:
 		// Construct new object by given handle type.
 		template< typename THandle, typename... TArguments >
@@ -26,7 +45,8 @@ inline namespace Handles
 		template< typename... TArguments >
 		static inline JniObject Construct( const JniClass& class_handle, const TArguments&... arguments );
 
-
+	// Construction and assignation.
+	public:
 		JniObject() = default;
 		JniObject( const JniObject& other );
 		JniObject( JniObject&& other );
@@ -102,9 +122,12 @@ inline namespace Handles
 		// Acquire the global ref to object.
 		void AcquireObjectRef( jobject object_ref );
 
+	// Private static fields.
 	private:
-		static constexpr const char*	LOG_CHANNEL	= "Black/Jni/Object";
+		static constexpr const char* LOG_CHANNEL = "Black/Jni/Object";
 
+	// Private state.
+	private:
 		std::shared_ptr<_jobject>	m_object_ref;	// Shared JNI representation of Java object global reference.
 		mutable JniClass			m_class_handle;	// Handle to class of stored object.
 	};
@@ -112,6 +135,7 @@ inline namespace Handles
 
 	inline const bool operator == ( const JniObject& left, const JniObject& right );
 	inline const bool operator != ( const JniObject& left, const JniObject& right );
+}
 }
 }
 }
