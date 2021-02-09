@@ -1,4 +1,4 @@
-#include <jni.private.h>
+#include <black/jni/handles.h>
 
 
 namespace Black
@@ -6,6 +6,8 @@ namespace Black
 inline namespace Jni
 {
 inline namespace Handles
+{
+inline namespace Objects
 {
 	JniObject::JniObject( const JniObject& other )
 		: m_object_ref{ other.m_object_ref }
@@ -148,6 +150,7 @@ inline namespace Handles
 		JNIEnv* local_env	= Black::JniConnection::GetLocalEnvironment();
 		m_object_ref		= { local_env->NewGlobalRef( object_ref ), JniObject::DeleteObjectRef };
 	}
+}
 }
 }
 }
