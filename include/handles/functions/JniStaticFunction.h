@@ -66,7 +66,7 @@ inline namespace Functions
 	// Private inner types.
 	private:
 		// JNI type signature.
-		using Signature = Black::NativeFunctionSignature<TResult, TArguments...>;
+		using Signature = Black::JniTypeFunctionSignature<TResult, TArguments...>;
 
 		// Entry-point.
 		using EntryPoint = Internal::StaticFunctionEntry<TResult, TArguments...>;
