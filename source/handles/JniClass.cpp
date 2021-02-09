@@ -1,4 +1,4 @@
-#include <jni.private.h>
+#include <black/jni/handles.h>
 
 
 namespace Black
@@ -7,15 +7,16 @@ inline namespace Jni
 {
 inline namespace Handles
 {
+inline namespace Objects
+{
 	JniClass::JniClass( std::string_view class_name )
 	{
 		AcquireClassReference( class_name );
 	}
 
 	JniClass::JniClass( jclass class_ref )
-		: m_class_ref{ Black::JniConnection::GetClassStorage().GetClassReference( class_ref ) }
+		: m_class_ref{ Internal::ClassRegistry::GetClassReference( class_ref ) }
 	{
-
 	}
 
 	void JniClass::Invalidate()
@@ -26,25 +27,25 @@ inline namespace Handles
 	const std::string JniClass::GetCanonicalName() const
 	{
 		CRET( !IsValid(), {} );
-		return Black::JniConnection::GetCanonicalClassName( *this );
+		return Internal::ClassRegistry::GetCanonicalClassName( GetJniReference() );
 	}
 
 	const std::string JniClass::GetName() const
 	{
 		CRET( !IsValid(), {} );
-		return Black::JniConnection::GetClassName( *this );
+		return Internal::ClassRegistry::GetClassName( GetJniReference() );
 	}
 
 	const std::string JniClass::GetSimpleName() const
 	{
 		CRET( !IsValid(), {} );
-		return Black::JniConnection::GetSimpleClassName( *this );
+		return Internal::ClassRegistry::GetSimpleClassName( GetJniReference() );
 	}
 
 	JniClass JniClass::GetParentClass() const
 	{
 		CRET( !IsValid(), {} );
-		return Black::JniConnection::GetParentClass( *this );
+		return Internal::ClassRegistry::GetParentClass( GetJniReference() );
 	}
 
 	void JniClass::AcquireClassReference( std::string_view class_name )
@@ -52,7 +53,7 @@ inline namespace Handles
 		Invalidate();
 		EXPECTS( !class_name.empty() );
 
-		m_class_ref = Black::JniConnection::GetClassStorage().GetClassReference( class_name );
+		m_class_ref = Internal::ClassRegistry::GetClassReference( class_name );
 		ENSURES( IsValid() );
 	}
 
@@ -61,7 +62,7 @@ inline namespace Handles
 		Invalidate();
 		CRET( object_ref == nullptr );
 
-		m_class_ref = Black::JniConnection::GetClassStorage().GetClassReference( object_ref );
+		m_class_ref = Internal::ClassRegistry::GetClassReference( object_ref );
 		ENSURES( IsValid() );
 	}
 
@@ -76,6 +77,7 @@ inline namespace Handles
 		JNIEnv* local_env = Black::JniConnection::GetLocalEnvironment();
 		return !local_env->IsSameObject( *left, *right );
 	}
+}
 }
 }
 }
