@@ -5,21 +5,25 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace Handles
 {
 namespace Internal
 {
 	template< typename TState >
-	inline SharedStateCache::SharedStateStorage<TState>* SharedStateCache::GetCachedStorage()
+	inline ObjectStateBuffer<TState>* ObjectStateRegistry::GetStateBuffer()
 	{
-		Black::MutexLock lock{ m_latch };
+		using StateBuffer = ObjectStateBuffer<TState>;
 
-		std::unique_ptr<SharedStateEntity>& entity = m_storage[ { typeid( TState ) } ];
-		CRET( entity, static_cast<SharedStateStorage<TState>*>( entity.get() ) );
+		constexpr std::type_index state_index{ typeid( TState ) };
+		ObjectStateRegistry& registry = GetInstance();
 
-		auto new_entity = new SharedStateStorage<TState>{};
-		entity.reset( new_entity );
-		return new_entity;
+		Black::MutexLock lock{ registry.m_lock };
+
+		std::unique_ptr<ObjectStateInterface>& state_buffer = registry.m_storage[ state_index ];
+		CRET( state_buffer, static_cast<StateBuffer*>( state_buffer.get() ) );
+
+		state_buffer = std::make_unique<StateBuffer>();
+		return state_buffer.get();
 	}
 }
 }

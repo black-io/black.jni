@@ -5,59 +5,88 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace Handles
 {
 namespace Internal
 {
 	/**
-		@brief	Cache for shared states.
-		This class implements the cache for shared states, which may be used in any place of 'Black::Jni' library.
+		@breif	Registry for JNI object states.
 
-		The cache provides retrieving of state storage by the type of state.
-		It means, there only one instance of some state type may exists in program.
-		Each time the state is retrieved, the same shared instance of state will be returned.
-		Once the state storage is retrieved via `GetCachedStorage` function, it becomes persistent and will be deleted only on program termination.
-
-		The cache is not thread-safe inside, but it supplies the `Black::Mutex` interface to implement thread-safety on higher levels of execution.
-		It will be more efficient to lock the mutex when the storage is actually used by consumer.
+		This registry implements the `Lightweight` pattern for any type derived from `JniObject`.
+		The registry implements the management of state buffers and guaranties that there only one instance of each required state in runtime.
 	*/
-	class SharedStateCache final : private Black::NonTransferable
+	class ObjectStateRegistry final : private Black::NonTransferable
 	{
-	// Public inner declarations.
+	// Friendship declarations.
 	public:
-		using SharedStateEntity = Black::Jni::Handles::Internal::SharedStateEntity;
+		// Grant access to initialization and finalization.
+		friend class Black::JniConnection;
 
-		template< typename TState >
-		using SharedStateStorage = Black::Jni::Handles::Internal::SharedStateStorage<TState>;
-
-	// PUblic interface.
+	// Public static interface.
 	public:
-		// Init the cache.
-		const bool Initialize();
+		// Call the `java.lang.Object.notify()`.
+		static void NotifyFromObject( Black::NotNull<jobject> object_ref );
 
-		// Finalize.
-		const bool Finalize();
+		// Call the `java.lang.Object.notifyAll()`.
+		static void NotifyAllFromObject( Black::NotNull<jobject> object_ref );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds, const int32_t nanoseconds );
 
 
 		// Get the cached storage for shared state.
 		template< typename TState >
-		inline SharedStateStorage<TState>* GetCachedStorage();
+		static inline ObjectStateBuffer<TState>* GetStateBuffer();
 
 
 		// Get the synchronization mutex for storage.
-		inline const Black::Mutex& GetMutex()	{ return m_latch; };
+		static inline const Black::Mutex& GetMutex() { return GetInstance().m_lock; };
+
+	// Private inner types.
+	private:
+		// Storage for object state instances.
+		using StateStorage = std::unordered_map<std::type_index, std::unique_ptr<ObjectStateInterface>>;
+
+	// Private static interface.
+	private:
+		// Get the global instance of connection.
+		static ObjectStateRegistry& GetInstance();
 
 	// Private interface.
 	private:
+		// Initialize the registry.
+		const bool Initialize();
+
+		// Perform the finalization.
+		const bool Finalize();
+
+
+		// Acquire the helper functions for JNI object handle.
+		const bool AcquireObjctInterface();
+
+
+		// Ensure there all buffers released already.
 		template< Black::BuildMode >
 		void EnsureStorageReleased();
 
 	// Private state.
 	private:
-		using Storage = std::unordered_map<std::type_index, std::unique_ptr<SharedStateEntity>>;
+		Black::SpinLock	m_lock;				// Storage synchronization lock.
+		StateStorage	m_storage;			// Permanent storage for object states.
 
-		Black::CriticalSection	m_latch;	// Synchronization latch.
-		Storage					m_storage;	// Permanent storage for shared states.
+	// Persistently cached handles.
+	private:
+		Black::JniMemberFunction<void ()>					m_notify;			// `java.lang.Object.notify()`
+		Black::JniMemberFunction<void ()>					m_notify_all;		// `java.lang.Object.notifyAll()`
+		Black::JniMemberFunction<void ()>					m_wait;				// `java.lang.Object.wait()`
+		Black::JniMemberFunction<void ( int64_t )>			m_wait_msec;		// `java.lang.Object.wait(long millis)`
+		Black::JniMemberFunction<void ( int64_t, int32_t )>	m_wait_msec_nsec;	// `java.lang.Object.wait(long millis, int nanos)`
 	};
 }
 }
