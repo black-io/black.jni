@@ -1,4 +1,4 @@
-#include <jni.private.h>
+#include <black/jni.h>
 #include <black/jni/android/context/res/Configuration.h>
 
 

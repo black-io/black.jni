@@ -1,4 +1,4 @@
-#include <jni.private.h>
+#include <black/jni.h>
 #include <black/jni/android/view/Surface.h>
 
 #include <android/native_window_jni.h>
