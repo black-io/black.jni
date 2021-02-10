@@ -4,7 +4,7 @@
 // The prologue of library.
 #include "../../../.prologue.h"
 
-// JNI startup subsystem.
+// JNI handles subsystem.
 #include "../../../handles/handles.h"
 
 // The epilogue of library.
