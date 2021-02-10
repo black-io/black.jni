@@ -6,6 +6,7 @@
 
 // JNI startup subsystem.
 #include "../../handles/handles.h"
+#include "../../native-bindings/native-bindings.h"
 #include "../../startup/startup.h"
 
 // The epilogue of library.
