@@ -70,7 +70,7 @@ namespace Internal
 		inline TState* GetState() const					{ return m_state; };
 
 		// Check that the entity is currently allocated.
-		virtual const bool IsAllocated() const override	{ return m_presence > 0; };
+		const bool IsAllocated() const override			{ return m_presence > 0; };
 
 	// Private inner types.
 	private:
