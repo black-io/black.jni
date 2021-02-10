@@ -42,6 +42,30 @@ inline namespace JniConnections
 		// Get the local reference of Java class by given class-path.
 		static Black::NotNull<jclass> GetClassReference( std::string_view class_path );
 
+		// Call the `java.lang.Class.getName()`.
+		static std::string GetClassName( Black::NotNull<jclass> class_ref );
+
+		// Call the `java.lang.Class.getSimpleName()`.
+		static std::string GetSimpleClassName( Black::NotNull<jclass> class_ref );
+
+		// Call the `java.lang.Class.getCanonicalName()`.
+		static std::string GetCanonicalClassName( Black::NotNull<jclass> class_ref );
+
+		// Call the `java.lang.Object.notify()`.
+		static void NotifyFromObject( Black::NotNull<jobject> object_ref );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void NotifyAllFromObject( Black::NotNull<jobject> object_ref );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds );
+
+		// Call the `java.lang.Object.notifyAll()`.
+		static void WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds, const int32_t nanoseconds );
+
 
 		// Check that the current thread is the main (for JNI connection) one.
 		static const bool IsMainThread();
@@ -63,12 +87,19 @@ inline namespace JniConnections
 
 	// Private interface.
 	private:
-		// Thread-local JNI environment termination routine.
-		static void DetachLocalEnvironment( void* local_environment );
+		// Perform the internal services initialization.
+		const bool InitializeServices();
+
+		// Finalize the internal services.
+		const bool FinalizeServices();
 
 
 		// Initialize the thread-local environment detaching entity.
-		const bool InitEnvironmentDetacher();
+		const bool InitializeDetachKey();
+
+
+		// Thread-local JNI environment termination routine.
+		static void DetachLocalEnvironment( void* local_environment );
 
 	// Private state.
 	private:

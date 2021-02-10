@@ -1,4 +1,5 @@
 #include <black/jni.h>
+#include <black/jni/handles.h>
 
 #include <pthread.h>
 
@@ -13,6 +14,11 @@ inline namespace JniConnections
 {
 namespace
 {
+	// Only at this time. Allow access to internal registry for classes.
+	using Black::Jni::Handles::Internal::ClassRegistry;
+	using Black::Jni::Handles::Internal::ObjectStateRegistry;
+
+
 	static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
 }
 
@@ -53,9 +59,49 @@ namespace
 		return local_env;
 	}
 
-	Black::NotNull<jclass> GetClassReference( std::string_view class_path )
+	Black::NotNull<jclass> JniConnection::GetClassReference( std::string_view class_path )
 	{
-		return { nullptr };
+		return ClassRegistry::GetLocalClassReference( class_path );
+	}
+
+	std::string JniConnection::GetClassName( Black::NotNull<jclass> class_ref )
+	{
+		return ClassRegistry::GetClassName( class_ref );
+	}
+
+	std::string JniConnection::GetSimpleClassName( Black::NotNull<jclass> class_ref )
+	{
+		return ClassRegistry::GetSimpleClassName( class_ref );
+	}
+
+	std::string JniConnection::GetCanonicalClassName( Black::NotNull<jclass> class_ref )
+	{
+		return ClassRegistry::GetCanonicalClassName( class_ref );
+	}
+
+	void JniConnection::NotifyFromObject( Black::NotNull<jobject> object_ref )
+	{
+		ObjectStateRegistry::NotifyFromObject( object_ref );
+	}
+
+	void JniConnection::NotifyAllFromObject( Black::NotNull<jobject> object_ref )
+	{
+		ObjectStateRegistry::NotifyAllFromObject( object_ref );
+	}
+
+	void JniConnection::WaitFromObject( Black::NotNull<jobject> object_ref )
+	{
+		ObjectStateRegistry::WaitFromObject( object_ref );
+	}
+
+	void JniConnection::WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds )
+	{
+		ObjectStateRegistry::WaitFromObject( object_ref, milliseconds );
+	}
+
+	void JniConnection::WaitFromObject( Black::NotNull<jobject> object_ref, const int64_t milliseconds, const int32_t nanoseconds )
+	{
+		ObjectStateRegistry::WaitFromObject( object_ref, milliseconds, nanoseconds );
 	}
 
 	const bool JniConnection::IsMainThread()
@@ -69,13 +115,23 @@ namespace
 		return connection;
 	}
 
-	void JniConnection::DetachLocalEnvironment( void* local_environment )
+	const bool JniConnection::InitializeServices()
 	{
-		ENSURES( IsValid() );
-		GetConnection()->DetachCurrentThread();
+		CRETE( !ClassRegistry::GetInstance().Initialize(), false, LOG_CHANNEL, "Failed to initialize the class registry." );
+		CRETE( !ObjectStateRegistry::GetInstance().Initialize(), false, LOG_CHANNEL, "Failed to initialize the object-state registry." );
+
+		return true;
 	}
 
-	const bool JniConnection::InitEnvironmentDetacher()
+	const bool JniConnection::FinalizeServices()
+	{
+		CRETE( !ObjectStateRegistry::GetInstance().Finalize(), false, LOG_CHANNEL, "Failed to finalize the object-state registry." );
+		CRETE( !ClassRegistry::GetInstance().Finalize(), false, LOG_CHANNEL, "Failed to finalize the class registry." );
+
+		return true;
+	}
+
+	const bool JniConnection::InitializeDetachKey()
 	{
 		CRETD( m_main_thread_id != 0, false, LOG_CHANNEL, "Double initialization of environment detacher blocked." );
 
@@ -84,6 +140,12 @@ namespace
 		ENSURES( pthread_key_create( reinterpret_cast<pthread_key_t*>( &m_thread_detach_key ), JniConnection::DetachLocalEnvironment ) == 0 );
 
 		return true;
+	}
+
+	void JniConnection::DetachLocalEnvironment( void* local_environment )
+	{
+		ENSURES( IsValid() );
+		GetConnection()->DetachCurrentThread();
 	}
 }
 }
