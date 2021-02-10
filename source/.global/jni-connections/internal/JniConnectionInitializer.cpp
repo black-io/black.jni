@@ -27,9 +27,10 @@ namespace
 		CRETE( main_env_result != JNI_OK, false, LOG_CHANNEL, "Failed to acquire the main JNI environment (error: {:08X}).", main_env_result );
 
 		connection.m_connection = virtual_machine;
-		EXPECTS( connection.InitEnvironmentDetacher() );
+		EXPECTS( connection.InitializeDetachKey() );
 		ENSURES( connection.m_main_environment != nullptr );
 
+		CRETE( !connection.InitializeServices(), false, LOG_CHANNEL, "Failed to initialize JNI services." );
 		return true;
 	}
 
@@ -38,6 +39,7 @@ namespace
 		auto& connection = Black::JniConnection::GetInstance();
 		CRET( !Black::JniConnection::IsValid(), true );
 
+		connection.FinalizeServices();
 		pthread_key_delete( connection.m_thread_detach_key );
 
 		connection.m_connection			= nullptr;
