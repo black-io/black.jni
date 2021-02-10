@@ -29,7 +29,7 @@ inline namespace Objects
 	public:
 		// Usable shared state to optimize the owning of function/field handles.
 		template< typename TState, bool IS_PERSISTENT = false >
-		using SharedState = Internal::SharedState<TState, IS_PERSISTENT>;
+		using ObjectState = Internal::ObjectState<TState, IS_PERSISTENT>;
 
 		// Custom JNI converter template for every derived type.
 		template< typename TObjectHandle >
