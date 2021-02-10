@@ -61,7 +61,7 @@ namespace Internal
 		CRET( m_buffer != nullptr, *m_buffer );
 
 		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
-		m_buffer = ObjectStateRegistry::QueryStateBuffer<TState>();
+		m_buffer = ObjectStateRegistry::GetStateBuffer<TState>();
 		ENSURES_DEBUG( m_buffer != nullptr );
 
 		RetainStorage();
