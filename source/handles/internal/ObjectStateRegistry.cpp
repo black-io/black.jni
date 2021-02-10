@@ -1,4 +1,5 @@
 #include <black/jni/handles.h>
+#include <black/jni/startup.h>
 
 
 namespace Black
@@ -52,8 +53,7 @@ namespace
 
 	ObjectStateRegistry& ObjectStateRegistry::GetInstance()
 	{
-		static ObjectStateRegistry object_state_registry;
-		return object_state_registry;
+		return Black::JniSessionStorage::Get<ObjectStateRegistry>();
 	}
 
 	const bool ObjectStateRegistry::Initialize()

@@ -1,5 +1,6 @@
 #include <black/jni.h>
 #include <black/jni/handles.h>
+#include <black/jni/startup.h>
 
 #include <pthread.h>
 
@@ -111,8 +112,7 @@ namespace
 
 	JniConnection& JniConnection::GetInstance()
 	{
-		static JniConnection connection;
-		return connection;
+		return Black::JniSessionStorage::Get<JniConnection>();
 	}
 
 	const bool JniConnection::InitializeServices()

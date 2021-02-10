@@ -1,4 +1,5 @@
 #include <black/jni/handles.h>
+#include <black/jni/startup.h>
 
 #include <black/jni/java/lang/Thread.h>
 #include <black/jni/java/lang/ClassLoader.h>
@@ -101,8 +102,7 @@ namespace
 
 	ClassRegistry& ClassRegistry::GetInstance()
 	{
-		static ClassRegistry class_registry{};
-		return class_registry;
+		return Black::JniSessionStorage::Get<ClassRegistry>();
 	}
 
 	void ClassRegistry::DeleteSharedClass( jclass value )
