@@ -10,13 +10,13 @@ inline namespace Handles
 namespace Internal
 {
 	template< typename TState >
-	SharedStateStorage<TState>::~SharedStateStorage()
+	ObjectStateBuffer<TState>::~ObjectStateBuffer()
 	{
 		DeleteState();
 	}
 
 	template< typename TState >
-	inline void SharedStateStorage<TState>::Retain()
+	inline void ObjectStateBuffer<TState>::Retain()
 	{
 		++m_presence;
 		ENSURES_DEBUG( m_presence > 0 );
@@ -26,7 +26,7 @@ namespace Internal
 	}
 
 	template< typename TState >
-	inline void SharedStateStorage<TState>::Release()
+	inline void ObjectStateBuffer<TState>::Release()
 	{
 		EXPECTS_DEBUG( m_presence > 0 );
 		--m_presence;
@@ -36,16 +36,15 @@ namespace Internal
 	}
 
 	template< typename TState >
-	inline void SharedStateStorage<TState>::CreateState()
+	inline void ObjectStateBuffer<TState>::CreateState()
 	{
 		EXPECTS_DEBUG( m_state == nullptr );
 
-		uint8_t* state_memory	= Black::GetAlignedPointer( m_storage, alignof( TState ) );
-		m_state					= new( state_memory ) TState{};
+		m_state = new( &m_buffer ) TState{};
 	}
 
 	template< typename TState >
-	inline void SharedStateStorage<TState>::DeleteState()
+	inline void ObjectStateBuffer<TState>::DeleteState()
 	{
 		CRET( m_state == nullptr );
 		m_state->~TState();
