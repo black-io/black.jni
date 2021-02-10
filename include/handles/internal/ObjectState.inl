@@ -10,88 +10,85 @@ inline namespace Handles
 namespace Internal
 {
 	template< typename TState, bool IS_PERSISTENT >
-	SharedState<TState, IS_PERSISTENT>::SharedState( const SharedState<TState, IS_PERSISTENT>& other )
-		: m_storage{ other.m_storage }
+	ObjectState<TState, IS_PERSISTENT>::ObjectState( const ObjectState<TState, IS_PERSISTENT>& other )
+		: m_buffer{ other.m_buffer }
 	{
-		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
-		RetainStorage();
+		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
+		RetainBuffer();
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	SharedState<TState, IS_PERSISTENT>::SharedState( SharedState<TState, IS_PERSISTENT>&& other )
-		: m_storage{ other.m_storage }
+	ObjectState<TState, IS_PERSISTENT>::ObjectState( ObjectState<TState, IS_PERSISTENT>&& other )
+		: m_buffer{ std::exchange( other.m_buffer, nullptr ) }
 	{
-		other.m_storage = nullptr;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	SharedState<TState, IS_PERSISTENT>::~SharedState()
+	ObjectState<TState, IS_PERSISTENT>::~ObjectState()
 	{
-		CRET( m_storage == nullptr );
+		CRET( m_buffer == nullptr );
 
-		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
-		m_storage->Release();
+		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
+		ReleaseBuffer();
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline SharedState<TState, IS_PERSISTENT>& SharedState<TState, IS_PERSISTENT>::operator=( const SharedState<TState, IS_PERSISTENT>& other )
+	inline ObjectState<TState, IS_PERSISTENT>& ObjectState<TState, IS_PERSISTENT>::operator=( const ObjectState<TState, IS_PERSISTENT>& other )
 	{
-		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
+		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
 
 		ReleaseStorage();
-		m_storage = other.m_storage;
+		m_buffer = other.m_buffer;
 		RetainStorage();
 
 		return *this;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline SharedState<TState, IS_PERSISTENT>& SharedState<TState, IS_PERSISTENT>::operator=( SharedState<TState, IS_PERSISTENT>&& other )
+	inline ObjectState<TState, IS_PERSISTENT>& ObjectState<TState, IS_PERSISTENT>::operator=( ObjectState<TState, IS_PERSISTENT>&& other )
 	{
-		if( m_storage != nullptr )
-		{
-			Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
-			ReleaseStorage();
-		}
+		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
 
-		std::swap( m_storage, other.m_storage );
+		ReleaseStorage();
+		m_buffer = std::exchange( other.m_buffer, nullptr );
+
 		return *this;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline SharedStateStorage<TState>& SharedState<TState, IS_PERSISTENT>::GetStorage() const
+	inline ObjectStateBuffer<TState>& ObjectState<TState, IS_PERSISTENT>::GetBuffer() const
 	{
-		CRET( m_storage != nullptr, *m_storage );
+		CRET( m_buffer != nullptr, *m_buffer );
 
-		Black::MutexLock lock{ Black::JniConnection::GetSharedStateStorage().GetMutex() };
-		m_storage = Black::JniConnection::GetSharedStateStorage().GetCachedStorage<TState>();
-		ENSURES_DEBUG( m_storage != nullptr );
+		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
+		m_buffer = ObjectStateRegistry::QueryStateBuffer<TState>();
+		ENSURES_DEBUG( m_buffer != nullptr );
 
 		RetainStorage();
 		MakeStoragePersistent();
-		return *m_storage;
+		return *m_buffer;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline void SharedState<TState, IS_PERSISTENT>::RetainStorage() const
+	inline void ObjectState<TState, IS_PERSISTENT>::RetainBuffer() const
 	{
-		CRET( m_storage == nullptr );
-		m_storage->Retain();
+		CRET( m_buffer == nullptr );
+		m_buffer->Retain();
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline void SharedState<TState, IS_PERSISTENT>::ReleaseStorage() const
+	inline void ObjectState<TState, IS_PERSISTENT>::ReleaseBuffer() const
 	{
-		CRET( m_storage == nullptr );
-		m_storage->Release();
-		m_storage = nullptr;
+		CRET( m_buffer == nullptr );
+		m_buffer->Release();
+		m_buffer = nullptr;
 	}
 
 	template< typename TState, bool IS_PERSISTENT >
-	inline void SharedState<TState, IS_PERSISTENT>::MakeStoragePersistent() const
+	inline void ObjectState<TState, IS_PERSISTENT>::MakeBufferPersistent() const
 	{
 		CRET( !IS_PERSISTENT );
-		m_storage->MakePersistent();
+		m_buffer->MakePersistent();
 	}
 }
 }
