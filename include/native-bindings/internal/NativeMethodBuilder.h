@@ -5,7 +5,7 @@ namespace Black
 {
 inline namespace Jni
 {
-inline namespace VirtualMachine
+inline namespace NativeBindings
 {
 namespace Internal
 {
