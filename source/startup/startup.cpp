@@ -42,6 +42,7 @@ extern "C"
 		}
 
 		JniConnectionInitializer::Finalize();
+		Black::JniSessionStorage::Clear();
 		BLACK_LOG_DEBUG( LOG_CHANNEL, "Native library finalized." );
 	}
 }
