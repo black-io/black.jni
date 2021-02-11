@@ -17,51 +17,99 @@ namespace Internal
 
 	// `void` type signature.
 	template<>
-	struct CommonTypeSignature<void>;
+	struct CommonTypeSignature<void>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'V'>;
+	};
 
 	// `boolean` type signature.
 	template<>
-	struct CommonTypeSignature<jboolean>;
+	struct CommonTypeSignature<jboolean>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'Z'>;
+	};
 
 	// `byte` type signature.
 	template<>
-	struct CommonTypeSignature<jbyte>;
+	struct CommonTypeSignature<jbyte>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'B'>;
+	};
 
 	// `char` type signature.
 	template<>
-	struct CommonTypeSignature<jchar>;
+	struct CommonTypeSignature<jchar>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'C'>;
+	};
 
 	// `short` type signature.
 	template<>
-	struct CommonTypeSignature<jshort>;
+	struct CommonTypeSignature<jshort>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'S'>;
+	};
 
 	// `int` type signature.
 	template<>
-	struct CommonTypeSignature<jint>;
+	struct CommonTypeSignature<jint>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'I'>;
+	};
 
 	// `long` type signature.
 	template<>
-	struct CommonTypeSignature<jlong>;
+	struct CommonTypeSignature<jlong>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'J'>;
+	};
 
 	// `float` type signature.
 	template<>
-	struct CommonTypeSignature<jfloat>;
+	struct CommonTypeSignature<jfloat>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'F'>;
+	};
 
 	// `double` type signature.
 	template<>
-	struct CommonTypeSignature<jdouble>;
+	struct CommonTypeSignature<jdouble>
+	{
+		// JNI signature.
+		using Signature	= Black::StaticString<'D'>;
+	};
 
 	// `java.lang.Object` type signature.
 	template<>
-	struct CommonTypeSignature<jobject>;
+	struct CommonTypeSignature<jobject>
+	{
+		// JNI signature.
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't'>;
+	};
 
 	// `java.lang.Class` type signature.
 	template<>
-	struct CommonTypeSignature<jclass>;
+	struct CommonTypeSignature<jclass>
+	{
+		// JNI signature.
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'C', 'l', 'a', 's', 's'>;
+	};
 
 	// `java.lang.String` type signature.
 	template<>
-	struct CommonTypeSignature<jstring>;
+	struct CommonTypeSignature<jstring>
+	{
+		// JNI signature.
+		using Signature	= Black::JniClassSignatureString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g'>;
+	};
 }
 }
 }
