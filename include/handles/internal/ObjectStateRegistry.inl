@@ -14,7 +14,7 @@ namespace Internal
 	{
 		using StateBuffer = ObjectStateBuffer<TState>;
 
-		constexpr std::type_index state_index{ typeid( TState ) };
+		const std::type_index state_index{ typeid( TState ) };
 		ObjectStateRegistry& registry = GetInstance();
 
 		Black::MutexLock lock{ registry.m_lock };
@@ -23,7 +23,7 @@ namespace Internal
 		CRET( state_buffer, static_cast<StateBuffer*>( state_buffer.get() ) );
 
 		state_buffer = std::make_unique<StateBuffer>();
-		return state_buffer.get();
+		return static_cast<StateBuffer*>( state_buffer.get() );
 	}
 }
 }
