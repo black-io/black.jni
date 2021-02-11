@@ -40,7 +40,12 @@ inline namespace Marshaling
 	template< typename... TNativeTypes >
 	inline constexpr size_t CalculateLocalFrameSize()
 	{
-		return (JniNativeTypeConverter<TNativeTypes>::LOCAL_FRAME_SIZE + ...);
+		if constexpr( sizeof...( TNativeTypes ) > 0 )
+		{
+			return (JniNativeTypeConverter<TNativeTypes>::LOCAL_FRAME_SIZE + ...);
+		}
+
+		return 0;
 	}
 }
 }
