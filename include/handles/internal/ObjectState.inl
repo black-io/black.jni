@@ -37,9 +37,9 @@ namespace Internal
 	{
 		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
 
-		ReleaseStorage();
+		ReleaseBuffer();
 		m_buffer = other.m_buffer;
-		RetainStorage();
+		RetainBuffer();
 
 		return *this;
 	}
@@ -49,7 +49,7 @@ namespace Internal
 	{
 		Black::MutexLock lock{ ObjectStateRegistry::GetMutex() };
 
-		ReleaseStorage();
+		ReleaseBuffer();
 		m_buffer = std::exchange( other.m_buffer, nullptr );
 
 		return *this;
@@ -64,8 +64,8 @@ namespace Internal
 		m_buffer = ObjectStateRegistry::GetStateBuffer<TState>();
 		ENSURES_DEBUG( m_buffer != nullptr );
 
-		RetainStorage();
-		MakeStoragePersistent();
+		RetainBuffer();
+		MakeBufferPersistent();
 		return *m_buffer;
 	}
 
