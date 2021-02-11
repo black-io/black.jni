@@ -27,7 +27,7 @@ namespace Internal
 		for( jsize index = 0; index < array_length; ++index )
 		{
 			auto source_element = static_cast<JniValue>( (local_env->*ARRAY_ELEMENT_READ_HANDLER)( source, index ) );
-			destination.emplace_back( Black::FromJni<NativeValue>( source_element ) );
+			destination.emplace_back( Black::ConvertFromJni<NativeValue>( source_element ) );
 		}
 
 		local_env->PopLocalFrame( nullptr );
@@ -53,7 +53,7 @@ namespace Internal
 		jsize index = 0;
 		for( const auto& source_element : source )
 		{
-			(local_env->*ARRAY_ELEMENT_WRITE_HANDLER)( destination, index++, Black::ToJni( source_element ) );
+			(local_env->*ARRAY_ELEMENT_WRITE_HANDLER)( destination, index++, Black::ConvertToJni( source_element ) );
 		}
 
 		local_env->PopLocalFrame( nullptr );
@@ -75,7 +75,8 @@ namespace Internal
 
 		auto array_data = (local_env->*ARRAY_ELEMENTS_ACQUIRE_HANDLER)( source, nullptr );
 
-		std::transform( array_data, array_data + array_length, std::back_inserter( destination ), Black::FromJni<NativeValue> );
+		auto convert = []( const JniValue& source ) -> NativeValue { return Black::ConvertFromJni<NativeValue>( source ); };
+		std::transform( array_data, array_data + array_length, std::back_inserter( destination ), convert );
 
 		(local_env->*ARRAY_ELEMENTS_RELEASE_HANDLER)( source, array_data, JNI_ABORT );
 	}
@@ -95,7 +96,8 @@ namespace Internal
 
 		auto destination_data = (local_env->*ARRAY_ELEMENTS_ACQUIRE_HANDLER)( destination, nullptr );
 
-		std::transform( source.begin(), source.end(), destination_data, Black::ToJni<NativeValue> );
+		auto convert = []( const NativeValue& source ) -> JniValue { return Black::ConvertToJni( source ); };
+		std::transform( source.begin(), source.end(), destination_data, convert );
 
 		(local_env->*ARRAY_ELEMENTS_RELEASE_HANDLER)( destination, destination_data, JNI_OK );
 	}
