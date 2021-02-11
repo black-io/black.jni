@@ -29,6 +29,10 @@ inline namespace JniConnections
 
 	// Public static interface.
 	public:
+		// For debugging purposes.
+		static inline Black::DebugName GetDebugName() { return "JNI Connection"; };
+
+
 		// Register the native function handlers for JNI class.
 		static const bool RegisterClassNatives( const NativeBindingTable& bindings );
 
@@ -80,10 +84,6 @@ inline namespace JniConnections
 	private:
 		// Get the global instance of connection.
 		static JniConnection& GetInstance();
-
-	// Private construction.
-	private:
-		JniConnection() = default;
 
 	// Private interface.
 	private:
