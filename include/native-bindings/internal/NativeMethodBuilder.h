@@ -41,7 +41,7 @@ namespace Internal
 
 
 		// Function signature.
-		using Signature	= Black::NativeFunctionSignature<TResult, TArguments...>;
+		using Signature	= Black::JniTypeFunctionSignature<TResult, TArguments...>;
 
 		// Type of function wrap.
 		using Wrap		= NativeFunctionWrap<TSender, TResult, TArguments...>;
