@@ -24,6 +24,10 @@ namespace Internal
 
 	// Public static interface.
 	public:
+		// For debugging purposes.
+		static inline Black::DebugName GetDebugName() { return "JNI State registry for objects"; };
+
+
 		// Call the `java.lang.Object.notify()`.
 		static void NotifyFromObject( Black::NotNull<jobject> object_ref );
 
