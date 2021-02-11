@@ -17,8 +17,8 @@ namespace Internal
 		Black::JniType<TArguments>... arguments
 	)
 	{
-		return static_cast<Black::JniType<TResult>>( Black::ToJni<TResult>(
-			NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... )
+		return static_cast<Black::JniType<TResult>>( Black::ConvertToJni<TResult>(
+			NATIVE_HANDLER( local_env, sender, Black::ConvertFromJni<TArguments>( arguments )... )
 		) );
 	}
 
@@ -26,7 +26,7 @@ namespace Internal
 	template< void (*NATIVE_HANDLER)( ::JNIEnv*, TSender, const TArguments&... ) >
 	inline void NativeFunctionWrap<TSender, void, TArguments...>::Handle( ::JNIEnv* local_env, TSender sender, Black::JniType<TArguments>... arguments )
 	{
-		NATIVE_HANDLER( local_env, sender, Black::FromJni<TArguments>( arguments )... );
+		NATIVE_HANDLER( local_env, sender, Black::ConvertFromJni<TArguments>( arguments )... );
 	}
 
 	template< typename TSender, typename TResult, typename... TArguments >
