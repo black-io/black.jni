@@ -23,6 +23,10 @@ namespace Internal
 
 	// Public static interface.
 	public:
+		// For debugging purposes.
+		static inline Black::DebugName GetDebugName() { return "JNI Class registry"; };
+
+
 		// Get the class reference for JNI object by given JNI reference.
 		static std::shared_ptr<_jclass> GetClassReference( jobject object_ref );
 
