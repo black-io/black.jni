@@ -85,7 +85,7 @@ inline namespace Fields
 		}
 
 		auto jni_value = (JniType)(local_env->*FIELD_READ_HANDLER)( *m_class_handle, m_field_id );
-		Black::FromJni( jni_value, value_storage );
+		Black::ConvertFromJni( jni_value, value_storage );
 
 		CRET( frame_size == 0, true );
 		local_env->PopLocalFrame( nullptr );
@@ -106,7 +106,7 @@ inline namespace Fields
 		}
 
 		JniType jni_value{};
-		Black::ToJni( value_storage, jni_value );
+		Black::ConvertToJni( value_storage, jni_value );
 		(local_env->*FIELD_WRITE_HANDLER)( *m_class_handle, m_field_id, jni_value );
 
 		CRET( frame_size == 0, true );
