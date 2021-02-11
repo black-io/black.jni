@@ -3,6 +3,7 @@
 
 // General dependency.
 #include <black/jni.h>
+#include <black/jni/handles.h>
 
 
 // References.
