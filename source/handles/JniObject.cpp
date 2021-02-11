@@ -80,7 +80,7 @@ inline namespace Objects
 		EXPECTS_DEBUG( IsValid() );
 		CRETE( !IsValid(), , LOG_CHANNEL, "Failed to notify from the null object." );
 
-		Black::JniConnection::NotifyFromObject( *this );
+		Black::JniConnection::NotifyFromObject( GetJniReference() );
 	}
 
 	void JniObject::NotifyAll() const
@@ -88,7 +88,7 @@ inline namespace Objects
 		EXPECTS_DEBUG( IsValid() );
 		CRETE( !IsValid(), , LOG_CHANNEL, "Failed to notify from the null object." );
 
-		Black::JniConnection::NotifyAllFromObject( *this );
+		Black::JniConnection::NotifyAllFromObject( GetJniReference() );
 	}
 
 	void JniObject::Wait() const
@@ -96,7 +96,7 @@ inline namespace Objects
 		EXPECTS_DEBUG( IsValid() );
 		CRETE( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
 
-		Black::JniConnection::WaitFromObject( *this );
+		Black::JniConnection::WaitFromObject( GetJniReference() );
 	}
 
 	void JniObject::Wait( const std::chrono::milliseconds millis ) const
@@ -104,7 +104,7 @@ inline namespace Objects
 		EXPECTS_DEBUG( IsValid() );
 		CRETE( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
 
-		Black::JniConnection::WaitFromObject( *this, millis.count() );
+		Black::JniConnection::WaitFromObject( GetJniReference(), millis.count() );
 	}
 
 	void JniObject::Wait( const std::chrono::milliseconds millis, std::chrono::nanoseconds nanos ) const
@@ -112,7 +112,7 @@ inline namespace Objects
 		EXPECTS_DEBUG( IsValid() );
 		CRETE( !IsValid(), , LOG_CHANNEL, "Failed to wait from the null object." );
 
-		Black::JniConnection::WaitFromObject( *this, millis.count(), nanos.count() );
+		Black::JniConnection::WaitFromObject( GetJniReference(), millis.count(), nanos.count() );
 	}
 
 	const bool JniObject::IsInstanceOf( const JniClass& base_class ) const
