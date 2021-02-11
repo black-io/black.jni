@@ -12,7 +12,7 @@ namespace Internal
 	template< const bool (*ON_SHUTDOWN_FUNCTION)( ::JavaVM* ) >
 	const bool FunctionalShutdownNode<ON_SHUTDOWN_FUNCTION>::OnJniShutdown( Black::NotNull<::JavaVM*> virtual_machine ) const
 	{
-		EXPECTS_DEBUG( ON_STARTUP_FUNCTION != nullptr );
+		EXPECTS_DEBUG( ON_SHUTDOWN_FUNCTION != nullptr );
 		return ON_SHUTDOWN_FUNCTION( virtual_machine );
 	}
 }
