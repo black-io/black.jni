@@ -115,11 +115,11 @@ namespace Internal
 	template< typename TNativeValue, typename TAllocator >
 	inline void CommonTypeJniConverter<std::vector<TNativeValue, TAllocator>>::ToJni( const NativeType& source, JniType& destination )
 	{
-		using ElementContext	= CommonTypeJniConverter<TNativeValue>;
-		using JniArray			= typename ElementContext::ArrayType;
-		using ArrayTrnslation	= Black::JniArrayTranslation<ElementContext>;
+		using ElementConverter	= Black::JniNativeTypeConverter<TNativeValue>;
+		using JniArray			= typename ElementConverter::ArrayType;
+		using ArrayConverter	= Black::JniArrayConverter<ElementConverter>;
 
-		ArrayTrnslation::ToJni( source, static_cast<JniArray&>( destination ) );
+		ArrayConverter::ToJni( source, reinterpret_cast<JniArray&>( destination ) );
 	}
 }
 }

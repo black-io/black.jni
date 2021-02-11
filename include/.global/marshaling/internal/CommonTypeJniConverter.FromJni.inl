@@ -103,11 +103,11 @@ namespace Internal
 		destination.clear();
 		CRET( source == nullptr );
 
-		using ElementContext	= CommonTypeJniConverter<TNativeValue>;
-		using JniArray			= typename ElementContext::ArrayType;
-		using ArrayTrnslation	= Black::JniArrayTranslation<ElementContext>;
+		using ElementConverter	= Black::JniNativeTypeConverter<TNativeValue>;
+		using JniArray			= typename ElementConverter::ArrayType;
+		using ArrayConverter	= Black::JniArrayConverter<ElementConverter>;
 
-		ArrayTrnslation::FromJni( static_cast<JniArray>( source ), destination );
+		ArrayConverter::FromJni( reinterpret_cast<const JniArray&>( source ), destination );
 	}
 }
 }
