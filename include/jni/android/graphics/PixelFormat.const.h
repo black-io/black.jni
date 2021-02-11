@@ -34,23 +34,3 @@ inline namespace graphics
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.InputDevice.SOURCE_CLASS_*` values.
-	template<>
-	struct NativeContext<::Jni::android::graphics::PixelFormatCode> : public Black::NativeEnumContext<::Jni::android::graphics::PixelFormatCode>
-	{
-
-	};
-}
-}
-}
-}

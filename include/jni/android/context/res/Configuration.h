@@ -12,6 +12,12 @@ inline namespace res
 	// Handle for `android.content.res.Configuration` objects.
 	class Configuration final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Configuration> GetJniConverter( Configuration );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -86,30 +92,10 @@ inline namespace res
 			Black::JniMemberField<int32_t>				scren_smallest_width_dp	{ class_handle, "smallestScreenWidthDp" };
 			Black::JniMemberField<ScreenUiMode>			ui_mode					{ class_handle, "uiMode" };
 
-			Black::JniMemberFunction<Jni::LocaleList>	get_locales				{ class_handle, "getLocales", Black::IGNORE_FALURE }; // since android-24
+			Black::JniMemberFunction<Jni::LocaleList ()> get_locales { class_handle, "getLocales", Black::IGNORE_FALURE }; // since android-24
 		};
 
-		SharedState<ConfigurationState, true>	m_handles;	// Shared JNI handles.
-	};
-}
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.content.res.Configuration` class.
-	template<>
-	struct NativeContext<::Jni::android::context::res::Configuration> : public Black::NativeObjectContext<::Jni::android::context::res::Configuration>
-	{
-
+		ObjectState<ConfigurationState, true> m_handles; // Shared JNI handles.
 	};
 }
 }

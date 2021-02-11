@@ -11,15 +11,15 @@ inline namespace view
 	{
 		Black::JniClass	class_handle{ ClassPath::GetData() };
 
-		Black::JniMemberFunction<void, Callback>				add_callback			{ class_handle, "addCallback" };
-		Black::JniMemberFunction<Surface>						get_surface				{ class_handle, "getSurface" };
-		Black::JniMemberFunction<bool>							is_creating				{ class_handle, "isCreating" };
-		Black::JniMemberFunction<void, Callback>				remove_callback			{ class_handle, "removeCallback" };
-		Black::JniMemberFunction<void, int32_t, int32_t>		set_fixed_size			{ class_handle, "setFixedSize" };
-		Black::JniMemberFunction<void, ::Jni::PixelFormatCode>	set_format				{ class_handle, "setFormat" };
-		Black::JniMemberFunction<void, bool>					set_keep_screen_on		{ class_handle, "setKeepScreenOn" };
-		Black::JniMemberFunction<void>							set_size_from_layout	{ class_handle, "setSizeFromLayout" };
-		Black::JniMemberFunction<void, SurfaceType>				set_type				{ class_handle, "setType", Black::IGNORE_FALURE };
+		Black::JniMemberFunction<void ( Callback )>					add_callback			{ class_handle, "addCallback" };
+		Black::JniMemberFunction<Surface ()>						get_surface				{ class_handle, "getSurface" };
+		Black::JniMemberFunction<bool ()>							is_creating				{ class_handle, "isCreating" };
+		Black::JniMemberFunction<void ( Callback )>					remove_callback			{ class_handle, "removeCallback" };
+		Black::JniMemberFunction<void ( int32_t, int32_t )>			set_fixed_size			{ class_handle, "setFixedSize" };
+		Black::JniMemberFunction<void ( ::Jni::PixelFormatCode )>	set_format				{ class_handle, "setFormat" };
+		Black::JniMemberFunction<void ( bool )>						set_keep_screen_on		{ class_handle, "setKeepScreenOn" };
+		Black::JniMemberFunction<void ()>							set_size_from_layout	{ class_handle, "setSizeFromLayout" };
+		Black::JniMemberFunction<void ( SurfaceType )>				set_type				{ class_handle, "setType", Black::IGNORE_FALURE }; // until android-15
 	};
 
 

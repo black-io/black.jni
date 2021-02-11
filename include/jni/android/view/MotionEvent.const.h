@@ -25,23 +25,3 @@ inline namespace view
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.MotionEvent.ACTION_*` values.
-	template<>
-	struct NativeContext<::Jni::android::view::MotionActionType> : public Black::NativeEnumContext<::Jni::android::view::MotionActionType>
-	{
-
-	};
-}
-}
-}
-}

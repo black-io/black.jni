@@ -17,23 +17,3 @@ inline namespace view
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.View.(VISIBLE|INVISIBLE|GONE)` constants group.
-	template<>
-	struct NativeContext<::Jni::android::view::VisibilityState> : public Black::NativeEnumContext<::Jni::android::view::VisibilityState>
-	{
-
-	};
-}
-}
-}
-}

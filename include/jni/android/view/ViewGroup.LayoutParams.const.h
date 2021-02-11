@@ -17,23 +17,3 @@ inline namespace view
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.ViewGroup.LayoutParams` constants.
-	template<>
-	struct NativeContext<::Jni::android::view::LayoutParamsCode> : public Black::NativeEnumContext<::Jni::android::view::LayoutParamsCode>
-	{
-
-	};
-}
-}
-}
-}

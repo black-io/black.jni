@@ -10,6 +10,12 @@ inline namespace util
 	// Handle for `android.util.DisplayMetrics` objects.
 	class DisplayMetrics final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<DisplayMetrics> GetJniConverter( DisplayMetrics );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -68,28 +74,8 @@ inline namespace util
 			Black::JniMemberField<float>	height_dpi		{ class_handle,	"ydpi" };
 		};
 
-		SharedState<DisplayMetricsState>	m_handles;
+		ObjectState<DisplayMetricsState> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.util.DisplayMetrics` class.
-	template<>
-	struct NativeContext<::Jni::android::util::DisplayMetrics> : public Black::NativeObjectContext<::Jni::android::util::DisplayMetrics>
-	{
-
-	};
-}
 }
 }
 }

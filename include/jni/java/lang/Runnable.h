@@ -10,6 +10,12 @@ inline namespace lang
 	// Handle for `java.lang.Runnable` objects.
 	class Runnable final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Runnable> GetJniConverter( Runnable );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'R', 'u', 'n', 'n', 'a', 'b', 'l', 'e'>;
@@ -26,26 +32,6 @@ inline namespace lang
 		const Runnable& operator = ( const Runnable& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const Runnable& operator = ( Runnable&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `java.lang.Runnable` class.
-	template<>
-	struct NativeContext<::Jni::java::lang::Runnable> : public Black::NativeObjectContext<::Jni::java::lang::Runnable>
-	{
-
-	};
-}
 }
 }
 }

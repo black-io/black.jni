@@ -39,37 +39,3 @@ inline namespace res
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.content.res.Configuration.KEYBOARD_*` values.
-	template<>
-	struct NativeContext<::Jni::android::context::res::KeyboardType> : public Black::NativeEnumContext<::Jni::android::context::res::KeyboardType>
-	{
-
-	};
-
-	// JNI context specification for `android.content.res.Configuration.KEYBOARDHIDDEN_*` values.
-	template<>
-	struct NativeContext<::Jni::android::context::res::KeyboardState> : public Black::NativeEnumContext<::Jni::android::context::res::KeyboardState>
-	{
-
-	};
-
-	// JNI context specification for `android.content.res.Configuration.ORIENTATION_*` values.
-	template<>
-	struct NativeContext<::Jni::android::context::res::ScreenOrientation> : public Black::NativeEnumContext<::Jni::android::context::res::ScreenOrientation>
-	{
-
-	};
-}
-}
-}
-}

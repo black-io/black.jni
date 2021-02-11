@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.ViewGroup.LayoutParams` objects.
 	class LayoutParams final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<LayoutParams> GetJniConverter( LayoutParams );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -30,26 +36,6 @@ inline namespace view
 		const LayoutParams& operator = ( const LayoutParams& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const LayoutParams& operator = ( LayoutParams&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.ViewGroup.LayoutParams` class.
-	template<>
-	struct NativeContext<::Jni::android::view::LayoutParams> : public Black::NativeObjectContext<::Jni::android::view::LayoutParams>
-	{
-
-	};
-}
 }
 }
 }

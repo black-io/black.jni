@@ -10,6 +10,12 @@ inline namespace lang
 	// Handle for `java.lang.Thread` objects.
 	class Thread final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Thread> GetJniConverter( Thread );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'T', 'h', 'r', 'e', 'a', 'd'>;
@@ -26,26 +32,6 @@ inline namespace lang
 		const Thread& operator = ( const Thread& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const Thread& operator = ( Thread&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `java.lang.Thread` class.
-	template<>
-	struct NativeContext<::Jni::java::lang::Thread> : public Black::NativeObjectContext<::Jni::java::lang::Thread>
-	{
-
-	};
-}
 }
 }
 }

@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.Surface` objects.
 	class Surface final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Surface> GetJniConverter( Surface );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'S', 'u', 'r', 'f', 'a', 'c', 'e'>;
@@ -47,28 +53,8 @@ inline namespace view
 		struct SurfaceState;
 
 		ANativeWindow*					m_window	= nullptr;	// Pointer to native window.
-		SharedState<SurfaceState, true>	m_handles;				// Shared JNI handles.
+		ObjectState<SurfaceState, true>	m_handles;				// Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.Surface` class.
-	template<>
-	struct NativeContext<::Jni::android::view::Surface> : public Black::NativeObjectContext<::Jni::android::view::Surface>
-	{
-
-	};
-}
 }
 }
 }

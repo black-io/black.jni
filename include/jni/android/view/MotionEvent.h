@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.MotionEvent` objects.
 	class MotionEvent final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<MotionEvent> GetJniConverter( MotionEvent );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -69,41 +75,21 @@ inline namespace view
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<int32_t>				get_pointer_count		{ class_handle, "getPointerCount" };
-			Black::JniMemberFunction<Jni::InputSourceClass>	get_source_class		{ class_handle, "getSource" };
-			Black::JniMemberFunction<Jni::MotionActionType>	get_action_masked		{ class_handle, "getActionMasked" };
-			Black::JniMemberFunction<int32_t>				get_action_index		{ class_handle, "getActionIndex" };
-			Black::JniMemberFunction<int64_t>				get_down_time			{ class_handle, "getDownTime" };
-			Black::JniMemberFunction<int32_t>				get_buton_state			{ class_handle, "getButtonState" };
+			Black::JniMemberFunction<int32_t ()>				get_pointer_count		{ class_handle, "getPointerCount" };
+			Black::JniMemberFunction<Jni::InputSourceClass ()>	get_source_class		{ class_handle, "getSource" };
+			Black::JniMemberFunction<Jni::MotionActionType ()>	get_action_masked		{ class_handle, "getActionMasked" };
+			Black::JniMemberFunction<int32_t ()>				get_action_index		{ class_handle, "getActionIndex" };
+			Black::JniMemberFunction<int64_t ()>				get_down_time			{ class_handle, "getDownTime" };
+			Black::JniMemberFunction<int32_t ()>				get_buton_state			{ class_handle, "getButtonState" };
 
-			Black::JniMemberFunction<int32_t, int32_t>		get_pointer_id			{ class_handle, "getPointerId" };
-			Black::JniMemberFunction<float, int32_t>		get_pointer_x			{ class_handle, "getX" };
-			Black::JniMemberFunction<float, int32_t>		get_pointer_y			{ class_handle, "getY" };
-			Black::JniMemberFunction<float, int32_t>		get_pointer_pressure	{ class_handle, "getPressure" };
+			Black::JniMemberFunction<int32_t ( int32_t )>		get_pointer_id			{ class_handle, "getPointerId" };
+			Black::JniMemberFunction<float ( int32_t )>			get_pointer_x			{ class_handle, "getX" };
+			Black::JniMemberFunction<float ( int32_t )>			get_pointer_y			{ class_handle, "getY" };
+			Black::JniMemberFunction<float ( int32_t )>			get_pointer_pressure	{ class_handle, "getPressure" };
 		};
 
-		SharedState<MotionEventState, true>	m_handles;	// Shared JNI handles.
+		ObjectState<MotionEventState, true> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `java.util.Locale` class.
-	template<>
-	struct NativeContext<::Jni::android::view::MotionEvent> : public Black::NativeObjectContext<::Jni::android::view::MotionEvent>
-	{
-
-	};
-}
 }
 }
 }

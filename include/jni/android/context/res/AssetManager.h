@@ -12,6 +12,12 @@ inline namespace res
 	// Handle for `android.content.res.AssetManager` objects.
 	class AssetManager final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<AssetManager> GetJniConverter( AssetManager );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -56,33 +62,13 @@ inline namespace res
 	private:
 		struct AssetManagerState
 		{
-			Black::JniClass		class_handle{ ClassPath::GetData() };
+			Black::JniClass class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<std::vector<std::string>, std::string>	list_path	{ class_handle,	"list" };
+			Black::JniMemberFunction<std::vector<std::string> ( std::string )> list_path { class_handle, "list" };
 		};
 
 		AAssetManager*							m_assets	= nullptr;	// Low-level representation of assets manager.
-		SharedState<AssetManagerState, true>	m_handles;				// Shared JNI handles.
-	};
-}
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.content.res.AssetManager` class.
-	template<>
-	struct NativeContext<::Jni::android::context::res::AssetManager> : public Black::NativeObjectContext<::Jni::android::context::res::AssetManager>
-	{
-
+		ObjectState<AssetManagerState, true>	m_handles;				// Shared JNI handles.
 	};
 }
 }

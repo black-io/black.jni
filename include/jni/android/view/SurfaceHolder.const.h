@@ -18,23 +18,3 @@ inline namespace view
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.SurfaceHolder.SURFAC_TYPE_` constants.
-	template<>
-	struct NativeContext<::Jni::android::view::SurfaceType> : public Black::NativeEnumContext<::Jni::android::view::SurfaceType>
-	{
-
-	};
-}
-}
-}
-}

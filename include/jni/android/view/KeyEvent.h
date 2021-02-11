@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.KeyEvent` objects.
 	class KeyEvent final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<KeyEvent> GetJniConverter( KeyEvent );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'K', 'e', 'y', 'E', 'v', 'e', 'n', 't'>;
@@ -55,37 +61,17 @@ inline namespace view
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<std::string>		get_chars		{ class_handle,	"getCharacters" };
-			Black::JniMemberFunction<char16_t>			get_label		{ class_handle,	"getDisplayLabel" };
-			Black::JniMemberFunction<int64_t>			get_down_time	{ class_handle,	"getDownTime" };
-			Black::JniMemberFunction<int64_t>			get_event_time	{ class_handle,	"getEventTime" };
-			Black::JniMemberFunction<int32_t>			get_key_code	{ class_handle,	"getKeyCode" };
-			Black::JniMemberFunction<Jni::KeyMetaState>	get_meta_state	{ class_handle,	"getMetaState" };
-			Black::JniMemberFunction<int32_t>			get_scan_code	{ class_handle,	"getRepeatCount" };
+			Black::JniMemberFunction<std::string ()>		get_chars		{ class_handle,	"getCharacters" };
+			Black::JniMemberFunction<char16_t ()>			get_label		{ class_handle,	"getDisplayLabel" };
+			Black::JniMemberFunction<int64_t ()>			get_down_time	{ class_handle,	"getDownTime" };
+			Black::JniMemberFunction<int64_t ()>			get_event_time	{ class_handle,	"getEventTime" };
+			Black::JniMemberFunction<int32_t ()>			get_key_code	{ class_handle,	"getKeyCode" };
+			Black::JniMemberFunction<Jni::KeyMetaState ()>	get_meta_state	{ class_handle,	"getMetaState" };
+			Black::JniMemberFunction<int32_t ()>			get_scan_code	{ class_handle,	"getRepeatCount" };
 		};
 
-		SharedState<KeyEventState, true>	m_handles;	// Shared JNI handles.
+		ObjectState<KeyEventState, true> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.KeyEvent` class.
-	template<>
-	struct NativeContext<::Jni::android::view::KeyEvent> : public Black::NativeObjectContext<::Jni::android::view::KeyEvent>
-	{
-
-	};
-}
 }
 }
 }

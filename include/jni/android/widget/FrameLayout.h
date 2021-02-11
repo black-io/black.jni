@@ -10,6 +10,12 @@ inline namespace widget
 	// Handle for `android.widget.FrameLayout` objects.
 	class FrameLayout final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<FrameLayout> GetJniConverter( FrameLayout );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -30,26 +36,6 @@ inline namespace widget
 		const FrameLayout& operator = ( const FrameLayout& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const FrameLayout& operator = ( FrameLayout&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.View` class.
-	template<>
-	struct NativeContext<::Jni::android::widget::FrameLayout> : public Black::NativeObjectContext<::Jni::android::widget::FrameLayout>
-	{
-
-	};
-}
 }
 }
 }

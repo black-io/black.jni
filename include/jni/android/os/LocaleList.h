@@ -10,6 +10,12 @@ inline namespace os
 	// Handle for `android.os.LocaleList` objects.
 	class LocaleList final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<LocaleList> GetJniConverter( LocaleList );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'o', 's', '/', 'L', 'o', 'c', 'a', 'l', 'e', 'L', 'i', 's', 't'>;
@@ -43,33 +49,13 @@ inline namespace os
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<bool>				is_empty	{ class_handle, "isEmpty" };
-			Black::JniMemberFunction<int32_t>			get_size	{ class_handle, "size" };
-			Black::JniMemberFunction<Locale, int32_t>	get_locale	{ class_handle, "get" };
+			Black::JniMemberFunction<bool ()>				is_empty	{ class_handle, "isEmpty" };
+			Black::JniMemberFunction<int32_t ()>			get_size	{ class_handle, "size" };
+			Black::JniMemberFunction<Locale ( int32_t )>	get_locale	{ class_handle, "get" };
 		};
 
-		SharedState<LocaleListState>	m_handles; // Shared JNI handles.
+		ObjectState<LocaleListState> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.os.LocaleList` class.
-	template<>
-	struct NativeContext<::Jni::android::os::LocaleList> : public Black::NativeObjectContext<::Jni::android::os::LocaleList>
-	{
-
-	};
-}
 }
 }
 }

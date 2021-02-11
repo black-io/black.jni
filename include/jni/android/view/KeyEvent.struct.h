@@ -42,23 +42,3 @@ inline namespace view
 }
 }
 }
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for `android.view.KeyEvent.META_*` mask.
-	template<>
-	struct NativeContext<::Jni::android::view::KeyMetaState> : public Black::NativeBitfieldContext<::Jni::android::view::KeyMetaState>
-	{
-
-	};
-}
-}
-}
-}

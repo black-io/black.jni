@@ -11,20 +11,20 @@ inline namespace util
 	{
 		Black::JniClass	class_handle{ ClassPath::GetData() };
 
-		Black::JniMemberFunction<std::string>			get_country				{ class_handle,	"getCountry" };
-		Black::JniMemberFunction<std::string>			get_display_country		{ class_handle,	"getDisplayCountry" };
-		Black::JniMemberFunction<std::string>			get_display_lang		{ class_handle,	"getDisplayLanguage" };
-		Black::JniMemberFunction<std::string>			get_display_name		{ class_handle,	"getDisplayName" };
-		Black::JniMemberFunction<std::string>			get_display_script		{ class_handle,	"getDisplayScript" };
-		Black::JniMemberFunction<std::string>			get_display_variant		{ class_handle,	"getDisplayVariant" };
-		Black::JniMemberFunction<std::string, Locale>	get_display_country_for	{ class_handle,	"getDisplayCountry" };
-		Black::JniMemberFunction<std::string, Locale>	get_display_lang_for	{ class_handle,	"getDisplayLanguage" };
-		Black::JniMemberFunction<std::string, Locale>	get_display_name_for	{ class_handle,	"getDisplayName" };
-		Black::JniMemberFunction<std::string, Locale>	get_display_script_for	{ class_handle,	"getDisplayScript" };
-		Black::JniMemberFunction<std::string, Locale>	get_display_variant_for	{ class_handle,	"getDisplayVariant" };
-		Black::JniMemberFunction<std::string>			get_language			{ class_handle,	"getLanguage" };
-		Black::JniMemberFunction<std::string>			get_script				{ class_handle,	"getScript" };
-		Black::JniMemberFunction<std::string>			get_variant				{ class_handle,	"getVariant" };
+		Black::JniMemberFunction<std::string ()>			get_country				{ class_handle,	"getCountry" };
+		Black::JniMemberFunction<std::string ()>			get_display_country		{ class_handle,	"getDisplayCountry" };
+		Black::JniMemberFunction<std::string ()>			get_display_lang		{ class_handle,	"getDisplayLanguage" };
+		Black::JniMemberFunction<std::string ()>			get_display_name		{ class_handle,	"getDisplayName" };
+		Black::JniMemberFunction<std::string ()>			get_display_script		{ class_handle,	"getDisplayScript" };
+		Black::JniMemberFunction<std::string ()>			get_display_variant		{ class_handle,	"getDisplayVariant" };
+		Black::JniMemberFunction<std::string ( Locale )>	get_display_country_for	{ class_handle,	"getDisplayCountry" };
+		Black::JniMemberFunction<std::string ( Locale )>	get_display_lang_for	{ class_handle,	"getDisplayLanguage" };
+		Black::JniMemberFunction<std::string ( Locale )>	get_display_name_for	{ class_handle,	"getDisplayName" };
+		Black::JniMemberFunction<std::string ( Locale )>	get_display_script_for	{ class_handle,	"getDisplayScript" };
+		Black::JniMemberFunction<std::string ( Locale )>	get_display_variant_for	{ class_handle,	"getDisplayVariant" };
+		Black::JniMemberFunction<std::string ()>			get_language			{ class_handle,	"getLanguage" };
+		Black::JniMemberFunction<std::string ()>			get_script				{ class_handle,	"getScript" };
+		Black::JniMemberFunction<std::string ()>			get_variant				{ class_handle,	"getVariant" };
 	};
 
 

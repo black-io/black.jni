@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.SurfaceHolder.Callback` objects.
 	class Callback final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Callback> GetJniConverter( Callback );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -30,26 +36,6 @@ inline namespace view
 		const Callback& operator = ( const Callback& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const Callback& operator = ( Callback&& other )			{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.Callback` class.
-	template<>
-	struct NativeContext<::Jni::android::view::Callback> : public Black::NativeObjectContext<::Jni::android::view::Callback>
-	{
-
-	};
-}
 }
 }
 }

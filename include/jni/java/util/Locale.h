@@ -10,6 +10,12 @@ inline namespace util
 	// Handle for `java.util.Locale` objects.
 	class Locale final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Locale> GetJniConverter( Locale );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'j', 'a', 'v', 'a', '/', 'u', 't', 'i', 'l', '/', 'L', 'o', 'c', 'a', 'l', 'e'>;
@@ -75,28 +81,8 @@ inline namespace util
 		// The external declaration is forced by necessary of using the `Locale` class itself as well-defined one.
 		struct LocaleState;
 
-		SharedState<LocaleState>	m_handles;	// Shared JNI handles.
+		ObjectState<LocaleState> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `java.util.Locale` class.
-	template<>
-	struct NativeContext<::Jni::java::util::Locale> : public Black::NativeObjectContext<::Jni::java::util::Locale>
-	{
-
-	};
-}
 }
 }
 }

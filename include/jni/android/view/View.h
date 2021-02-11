@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.View` objects.
 	class View final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<View> GetJniConverter( View );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'V', 'i', 'e', 'w'>;
@@ -37,31 +43,11 @@ inline namespace view
 		{
 			Black::JniClass	class_handle{ ClassPath::GetData() };
 
-			Black::JniMemberFunction<void, LayoutParams>	set_layout_params	{ class_handle, "setLayoutParams" };
+			Black::JniMemberFunction<void ( LayoutParams )> set_layout_params { class_handle, "setLayoutParams" };
 		};
 
-		SharedState<ViewState> m_handles; // Shared JNI handles.
+		ObjectState<ViewState> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.View` class.
-	template<>
-	struct NativeContext<::Jni::android::view::View> : public Black::NativeObjectContext<::Jni::android::view::View>
-	{
-
-	};
-}
 }
 }
 }

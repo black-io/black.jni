@@ -10,6 +10,12 @@ inline namespace view
 	// Handle for `android.view.SurfaceHolder` objects.
 	class SurfaceHolder final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<SurfaceHolder> GetJniConverter( SurfaceHolder );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<
@@ -63,28 +69,8 @@ inline namespace view
 	private:
 		struct SurfaceHolderState;
 
-		SharedState<SurfaceHolderState> m_handles; // Shared JNI handles.
+		ObjectState<SurfaceHolderState> m_handles; // Shared JNI handles.
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.view.SurfaceHolder` class.
-	template<>
-	struct NativeContext<::Jni::android::view::SurfaceHolder> : public Black::NativeObjectContext<::Jni::android::view::SurfaceHolder>
-	{
-
-	};
-}
 }
 }
 }

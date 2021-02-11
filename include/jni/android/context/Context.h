@@ -10,6 +10,12 @@ inline namespace context
 	// Handle for `android.content.Context` objects.
 	class Context final : public Black::JniObject
 	{
+	// Friendship declarations.
+	public:
+		// Custom JNI converter for object handles.
+		friend JniConverter<Context> GetJniConverter( Context );
+
+	// Public inner types.
 	public:
 		// Class path.
 		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'c', 'o', 'n', 't', 'e', 'n', 't', '/', 'C', 'o', 'n', 't', 'e', 'x', 't'>;
@@ -26,26 +32,6 @@ inline namespace context
 		const Context& operator = ( const Context& other )	{ Black::JniObject::operator=( other ); return *this; };
 		const Context& operator = ( Context&& other )		{ Black::JniObject::operator=( std::move( other ) ); return *this; };
 	};
-}
-}
-}
-
-
-namespace Black
-{
-inline namespace Jni
-{
-inline namespace Marshaling
-{
-namespace Internal
-{
-	// JNI context specification for handles to `android.content.Context` class.
-	template<>
-	struct NativeContext<::Jni::android::context::Context> : public Black::NativeObjectContext<::Jni::android::context::Context>
-	{
-
-	};
-}
 }
 }
 }

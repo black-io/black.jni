@@ -11,8 +11,8 @@ inline namespace view
 	{
 		Black::JniClass class_handle{ ClassPath::GetData() };
 
-		Black::JniMemberFunction<bool>	is_valid	{ class_handle, "isValid" };
-		Black::JniMemberFunction<void>	release		{ class_handle, "release" };
+		Black::JniMemberFunction<bool ()>	is_valid	{ class_handle, "isValid" };
+		Black::JniMemberFunction<void ()>	release		{ class_handle, "release" };
 	};
 
 

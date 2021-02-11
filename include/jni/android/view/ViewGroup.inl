@@ -11,13 +11,13 @@ inline namespace view
 	{
 		Black::JniClass	class_handle{ ClassPath::GetData() };
 
-		Black::JniMemberFunction<void, View>						add_view_0				{ class_handle, "addView" };
-		Black::JniMemberFunction<void, View, int32_t>				add_view_1				{ class_handle, "addView" };
-		Black::JniMemberFunction<void, View, LayoutParams>			add_view_2				{ class_handle, "addView" };
-		Black::JniMemberFunction<void, View, int32_t, LayoutParams>	add_view_3				{ class_handle, "addView" };
-		Black::JniMemberFunction<void, View>						bring_child_to_front	{ class_handle, "bringChildToFront" };
-		Black::JniMemberFunction<void, View>						remove_view				{ class_handle, "removeView" };
-		Black::JniMemberFunction<void>								remove_all_views		{ class_handle, "removeAllViews" };
+		Black::JniMemberFunction<void ( View )>							add_view_0				{ class_handle, "addView" };
+		Black::JniMemberFunction<void ( View, int32_t )>				add_view_1				{ class_handle, "addView" };
+		Black::JniMemberFunction<void (  View, LayoutParams )>			add_view_2				{ class_handle, "addView" };
+		Black::JniMemberFunction<void ( View, int32_t, LayoutParams )>	add_view_3				{ class_handle, "addView" };
+		Black::JniMemberFunction<void ( View )>							bring_child_to_front	{ class_handle, "bringChildToFront" };
+		Black::JniMemberFunction<void ( View )>							remove_view				{ class_handle, "removeView" };
+		Black::JniMemberFunction<void ()>								remove_all_views		{ class_handle, "removeAllViews" };
 	};
 
 
