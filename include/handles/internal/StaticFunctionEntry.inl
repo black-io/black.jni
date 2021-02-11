@@ -32,9 +32,9 @@ namespace Internal
 			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, result, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ToJni( arguments )... );
+		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
-		Black::FromJni( jni_result, result );
+		Black::ConvertFromJni( jni_result, result );
 		CRET( frame_size == 0, result );
 
 		m_local_env->PopLocalFrame( nullptr );
@@ -55,18 +55,17 @@ namespace Internal
 	template< typename... TArguments >
 	inline void StaticFunctionEntry<void, TArguments...>::Call( const TArguments&... arguments ) const
 	{
-		constexpr size_t frame_size = Black::CalculateLocalFrameSize<TArguments...>();
-
 		CRETD( m_local_env == nullptr, , LOG_CHANNEL, "{}:{} - Attempt to call JNI function using invalid JNI environment.", __func__, __LINE__ );
 
-		if( FRAME_SIZE != 0 )
+		constexpr size_t frame_size = Black::CalculateLocalFrameSize<TArguments...>();
+		if( frame_size != 0 )
 		{
-			CRETD( m_local_env->PushLocalFrame( FRAME_SIZE ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", FRAME_SIZE );
+			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ToJni( arguments )... );
+		(m_local_env->*FUNCTION_HANDLER)( m_class_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
-		CRET( FRAME_SIZE == 0 );
+		CRET( frame_size == 0 );
 		m_local_env->PopLocalFrame( nullptr );
 	}
 }

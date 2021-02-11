@@ -32,9 +32,9 @@ namespace Internal
 			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, result, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ToJni( arguments )... );
+		auto jni_result = (JniResult)(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
-		Black::FromJni( jni_result, result );
+		Black::ConvertFromJni( jni_result, result );
 		CRET( frame_size == 0, result );
 
 		m_local_env->PopLocalFrame( nullptr );
@@ -55,9 +55,9 @@ namespace Internal
 			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, result, LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		auto jni_result = (JniResult)(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ToJni( arguments )... );
+		auto jni_result = (JniResult)(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
-		Black::FromJni( jni_result, result );
+		Black::ConvertFromJni( jni_result, result );
 		CRET( frame_size == 0, result );
 
 		m_local_env->PopLocalFrame( nullptr );
@@ -86,7 +86,7 @@ namespace Internal
 			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ToJni( arguments )... );
+		(m_local_env->*FUNCTION_HANDLER)( m_object_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
 		CRET( frame_size == 0 );
 		m_local_env->PopLocalFrame( nullptr );
@@ -104,7 +104,7 @@ namespace Internal
 			CRETD( m_local_env->PushLocalFrame( frame_size ) != JNI_OK, , LOG_CHANNEL, "Failed to request local frame of {} items.", frame_size );
 		}
 
-		(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ToJni( arguments )... );
+		(m_local_env->*NONVIRTUAL_FUNCTION_HANDLER)( m_object_ref, class_ref, m_function_id, Black::ConvertToJni( arguments )... );
 
 		CRET( frame_size == 0 );
 		m_local_env->PopLocalFrame( nullptr );
