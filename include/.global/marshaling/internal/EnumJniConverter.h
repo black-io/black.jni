@@ -16,24 +16,24 @@ namespace Internal
 	struct EnumJniConverter : CommonTypeJniConverter<std::underlying_type_t<TNativeEnum>>
 	{
 		// Underlying type for enumeration type.
-		using UnderlyingType	= std::underlying_type_t<TNativeEnum>;
+		using UnderlyingType		= std::underlying_type_t<TNativeEnum>;
 
 		// JNI context for underlying type.
-		using UnderlyingContext	= CommonTypeContext<UnderlyingType>;
+		using UnderlyingConvrter	= CommonTypeJniConverter<UnderlyingType>;
 
 
 		// C++ native type.
 		using NativeType	= TNativeEnum;
 
 		// JNI type
-		using JniType		= typename UnderlyingContext::JniType;
+		using JniType		= typename UnderlyingConvrter::JniType;
 
 
 		// Type translation from JNI space to C++ space.
 		static inline void FromJni( const JniType& source, NativeType& destination )
 		{
 			UnderlyingType transition_buffer{};
-			UnderlyingContext::FromJni( source, transition_buffer );
+			UnderlyingConvrter::FromJni( source, transition_buffer );
 			destination = NativeType{ transition_buffer };
 		}
 
@@ -41,7 +41,7 @@ namespace Internal
 		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
 			const UnderlyingType transition_buffer = Black::GetEnumValue( source );
-			UnderlyingContext::FromJni( transition_buffer, destination );
+			UnderlyingConvrter::FromJni( transition_buffer, destination );
 		}
 	};
 }

@@ -16,24 +16,24 @@ namespace Internal
 	struct EnumFlagsJniConvertter final : CommonTypeJniConverter<typename Black::EnumFlags<TEnumeration, TProjection>::Bits>
 	{
 		// Underlying type.
-		using UnderlyingType	= typename Black::EnumFlags<TEnumeration, TProjection>::Bits;
+		using UnderlyingType		= typename Black::EnumFlags<TEnumeration, TProjection>::Bits;
 
 		// JNI context for underlying type.
-		using UnderlyingContext	= CommonTypeContext<UnderlyingType>;
+		using UnderlyingConvrter	= CommonTypeJniConverter<UnderlyingType>;
 
 
 		// C++ native type.
 		using NativeType	= Black::EnumFlags<TEnumeration, TProjection>;
 
 		// JNI type
-		using JniType		= typename UnderlyingContext::JniType;
+		using JniType		= typename UnderlyingConvrter::JniType;
 
 
 		// Type translation from JNI space to C++ space.
 		static inline void FromJni( const JniType& source, NativeType& destination )
 		{
 			UnderlyingType transition_buffer{};
-			UnderlyingContext::FromJni( source, transition_buffer );
+			UnderlyingConvrter::FromJni( source, transition_buffer );
 			destination = NativeType{ transition_buffer };
 		}
 
@@ -41,7 +41,7 @@ namespace Internal
 		static inline void ToJni( const NativeType& source, JniType& destination )
 		{
 			const UnderlyingType transition_buffer{ source };
-			UnderlyingContext::FromJni( transition_buffer, destination );
+			UnderlyingConvrter::FromJni( transition_buffer, destination );
 		}
 	};
 }
