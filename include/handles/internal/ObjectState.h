@@ -27,10 +27,10 @@ namespace Internal
 	// Public interface.
 	public:
 		// Get the shared state.
-		inline const TState& GetState() const		{ return *GetStorage().GetState(); };
+		inline const TState& GetState() const		{ return *GetBuffer().GetState(); };
 
 
-		inline const TState* operator -> () const	{ return GetStorage().GetState(); };
+		inline const TState* operator -> () const	{ return GetBuffer().GetState(); };
 
 	// Private interface.
 	private:
