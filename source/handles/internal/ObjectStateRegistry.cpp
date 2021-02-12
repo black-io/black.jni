@@ -68,7 +68,7 @@ namespace
 	{
 		auto storage_check = []( const StateStorage::value_type& buffer_slot ) -> bool
 		{
-			return !buffer_slot.second->IsAllocated();
+			return !buffer_slot.second->HasPresence();
 		};
 
 		EXPECTS( std::all_of( m_storage.begin(), m_storage.end(), storage_check ) );
