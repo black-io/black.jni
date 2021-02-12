@@ -1,5 +1,5 @@
 #include <black/jni.h>
-#include <black/jni/android/context/res/AssetManager.h>
+#include <black/jni/android/content/res/AssetManager.h>
 
 #include <android/asset_manager_jni.h>
 
@@ -37,7 +37,7 @@ namespace Jni
 {
 inline namespace android
 {
-inline namespace context
+inline namespace content
 {
 inline namespace res
 {

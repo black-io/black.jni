@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace android
 {
-inline namespace context
+inline namespace content
 {
 	// Handle for `android.content.Context` objects.
 	class Context final : public Black::JniObject

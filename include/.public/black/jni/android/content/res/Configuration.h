@@ -13,6 +13,6 @@
 
 
 // Implementation.
-#include "../../../../../../jni/android/context/res/Configuration.const.h"
-#include "../../../../../../jni/android/context/res/Configuration.struct.h"
-#include "../../../../../../jni/android/context/res/Configuration.h"
+#include "../../../../../../jni/android/content/res/Configuration.const.h"
+#include "../../../../../../jni/android/content/res/Configuration.struct.h"
+#include "../../../../../../jni/android/content/res/Configuration.h"

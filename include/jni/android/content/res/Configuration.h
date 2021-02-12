@@ -5,7 +5,7 @@ namespace Jni
 {
 inline namespace android
 {
-inline namespace context
+inline namespace content
 {
 inline namespace res
 {

@@ -1,12 +1,12 @@
 #include <black/jni.h>
-#include <black/jni/android/context/res/Configuration.h>
+#include <black/jni/android/content/res/Configuration.h>
 
 
 namespace Jni
 {
 inline namespace android
 {
-inline namespace context
+inline namespace content
 {
 inline namespace res
 {

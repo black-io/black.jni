@@ -8,5 +8,5 @@
 
 
 // Implementation.
-#include "../../../../../../jni/android/context/res/AssetManager.const.h"
-#include "../../../../../../jni/android/context/res/AssetManager.h"
+#include "../../../../../../jni/android/content/res/AssetManager.const.h"
+#include "../../../../../../jni/android/content/res/AssetManager.h"
