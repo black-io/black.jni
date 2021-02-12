@@ -12,7 +12,7 @@ inline namespace TypeTraits
 namespace Internal
 {
 	// Common path to check the non-bit-field types.
-	template< typename TBitfield, typename = int >
+	template< typename TBitfield, typename = void >
 	struct HasBitsField : std::false_type
 	{
 
@@ -22,7 +22,7 @@ namespace Internal
 	// In case of `TBitfield` has no `bits` member, the deducing will fall into common path with `false` result.
 	// Additional checks may be implemented for this path, if needed.
 	template< typename TBitfield >
-	struct HasBitsField<TBitfield, decltype( (void)TBitfield::bits, 0 )> : std::true_type
+	struct HasBitsField<TBitfield, std::void_t<decltype( std::declval<TBitfield>().bits )>> : std::is_integral<decltype( std::declval<TBitfield>().bits )>
 	{
 
 	};
@@ -36,7 +36,7 @@ namespace Internal
 		@tparam	TCandidate	The candidate type to check.
 	*/
 	template< typename TCandidate >
-	inline constexpr bool IS_BIT_FIELD = Internal::HasBitsField<TCandidate>::value;
+	inline constexpr bool IS_BIT_FIELD = std::is_union_v<TCandidate> && Internal::HasBitsField<TCandidate>::value;
 }
 }
 }
