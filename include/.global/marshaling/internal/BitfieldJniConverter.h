@@ -11,7 +11,15 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Safe environment context for native bit-fields.
+	/**
+		@brief	JNI converter for User-defined bit-fields.
+
+		The user-defined bit-field should satisfy the requirements of convertible bit-fields.
+		* The bit-field is the union.
+		* There is member-field `bits` defined, that represents the buffer of all bits.
+
+		@tparam	TNativeBitfield	Type of bit-field for conversion.
+	*/
 	template< typename TNativeBitfield >
 	struct BitfieldJniConverter : CommonTypeJniConverter<decltype( std::declval<TNativeBitfield>().bits )>
 	{

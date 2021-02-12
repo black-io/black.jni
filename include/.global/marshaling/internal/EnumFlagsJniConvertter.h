@@ -11,7 +11,14 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// JNI environment context for `Black::EnumFlags` type.
+	/**
+		@brief	JNI converter for `Black::EnumFlags` instantiations.
+
+		This converter will be used by default for any instantiation of `Black::EnumFlags` template.
+
+		@tparam	TEnumeration	Enumeration type used as flags collection.
+		@tparam	TProjection		Projection type for enumeration flags.
+	*/
 	template< typename TEnumeration, typename TProjection >
 	struct EnumFlagsJniConvertter final : CommonTypeJniConverter<typename Black::EnumFlags<TEnumeration, TProjection>::Bits>
 	{

@@ -11,7 +11,14 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Signature in JNI notation for common types.
+	/**
+		@brief	JNI-specific signature wrap for regular JNI types.
+
+		This template is statically instantiated for regular JNI types only.
+		Inner type `Signature` is used to produce the compile-time JNI signatures for functions.
+
+		@tparam	TJniType	Regular JNI type.
+	*/
 	template< typename TJniType >
 	struct CommonTypeSignature;
 

@@ -11,7 +11,16 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Context for JNIEnv to operate with common JNI type.
+	/**
+		@brief	Context for JNIEnv to operate with common JNI type.
+
+		This template is statically instantiated for regular JNI types only.
+		`JNIEnv` interface operate with different JNI types by means differently named functions. It is uncomfortable a lot,
+		so the JNIEnv context is created to make `JNIEnv` calls more comfortable and simplified.
+		This context is widely used by function and field handles to send and receive the values between the C++ and Java sides.
+
+		@tparam	TJniType	Regular JNI type.
+	*/
 	template< typename TJniType >
 	struct CommonTypeJniContext;
 

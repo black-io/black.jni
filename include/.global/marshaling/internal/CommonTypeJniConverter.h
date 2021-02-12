@@ -12,9 +12,10 @@ inline namespace Marshaling
 namespace Internal
 {
 	/**
-		@brief	Type translation environment for particular C++ type.
+		@brief	JNI converter for regular JNI types.
 
-		This context used to properly translate known native C++ type into JNI-consumed type and back from JNI-consumed type.
+		This template is statically instantiated for regular JNI types only.
+		This type implements regular JNI converter with full required content to perform the type marshaling between C++ and Java sides.
 
 		@tparam	TNativeType	Native C++ type, for which the translation is required.
 	*/

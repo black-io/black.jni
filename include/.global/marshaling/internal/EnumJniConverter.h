@@ -11,7 +11,13 @@ inline namespace Marshaling
 {
 namespace Internal
 {
-	// Safe environment context for native enumeration.
+	/**
+		@brief	JNI converter for values of regular enumeration type.
+
+		This converter will be used by default for any value of enumeration type.
+
+		@tparam	TNativeEnum	Given enumeration type.
+	*/
 	template< typename TNativeEnum >
 	struct EnumJniConverter : CommonTypeJniConverter<std::underlying_type_t<TNativeEnum>>
 	{

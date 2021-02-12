@@ -10,7 +10,11 @@ inline namespace Handles
 namespace Internal
 {
 	/**
-		@brief ObjectJniConverter
+		@brief Custom JNI converter for any derived from `Black::JniObject` type.
+
+		This template may be used to instantiate the custom converter. It simplifies the process of custom converter creation.
+
+		@tparam	TObjectHandle	Type to be converted. Should be derived from `Black::JniObject` type.
 	*/
 	template< typename TObjectHandle >
 	struct ObjectJniConverter final : Black::JniCommonTypeEnvContext<jobject>

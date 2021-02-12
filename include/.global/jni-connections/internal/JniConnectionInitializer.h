@@ -13,6 +13,9 @@ namespace Internal
 {
 	/**
 		@brief	Initialization tool for JNI connection instance.
+
+		This tool is used by JNI startup subsystem to initialize the JNI connection properly.
+		Also it is used on JNI finalization.
 	*/
 	class JniConnectionInitializer final : Black::NonTransferable
 	{

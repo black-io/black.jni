@@ -12,7 +12,7 @@ namespace Internal
 	/**
 		@breif	Registry for JNI object states.
 
-		This registry implements the `Lightweight` pattern for any type derived from `JniObject`.
+		This registry implements the Lightweight pattern for any type derived from `JniObject`.
 		The registry implements the management of state buffers and guaranties that there only one instance of each required state in runtime.
 	*/
 	class ObjectStateRegistry final : private Black::NonTransferable

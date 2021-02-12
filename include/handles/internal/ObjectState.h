@@ -9,7 +9,15 @@ inline namespace Handles
 {
 namespace Internal
 {
-	// The shared state entity.
+	/**
+		@brief	Object state holder.
+
+		This template implements the Lightweight pattern for the JNI objects. Using this template one can access the same instance of the state
+		between all instances of JNI object.
+
+		@tparam	TState			Type of object state to share.
+		@tparam	IS_PERSISTENT	Whether the state should be kept alive after all references released.
+	*/
 	template< typename TState, bool IS_PERSISTENT = false >
 	class ObjectState final
 	{

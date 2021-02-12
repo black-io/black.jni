@@ -14,6 +14,9 @@ inline namespace JniConnections
 
 		This service helps to track the local JNI Environment for any low-level thread of process.
 		It tracks the presence of local JNI Environment and performs the valid detaching of JVM on thread exit.
+
+		@warning	One should never create instances of this type. There is no dynamic public interface, so there is
+					no practical reason in manual instance construction.
 	*/
 	class JniConnection final : private Black::NonTransferable
 	{
