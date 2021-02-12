@@ -4,7 +4,7 @@
 // The prologue of library.
 #include "../../.prologue.h"
 
-// JNI startup subsystem.
+// Included JNI subsystems.
 #include "../../handles/handles.h"
 #include "../../native-bindings/native-bindings.h"
 #include "../../startup/startup.h"
