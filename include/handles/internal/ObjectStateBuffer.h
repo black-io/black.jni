@@ -25,8 +25,11 @@ namespace Internal
 
 	// Public interface.
 	public:
-		// Check that the entity is currently allocated.
+		// Whether the State is currently allocated.
 		virtual const bool IsAllocated() const = 0;
+
+		// Whether the interface has presented in alive objects.
+		virtual const bool HasPresence() const = 0;
 
 	// Heirs construction.
 	protected:
@@ -69,8 +72,11 @@ namespace Internal
 		// Get the state.
 		inline TState* GetState() const					{ return m_state; };
 
-		// Check that the entity is currently allocated.
-		const bool IsAllocated() const override			{ return m_presence > 0; };
+		/// @see	ObjectStateInterface::IsAllocated
+		const bool IsAllocated() const override			{ return m_state != nullptr; };
+
+		/// @see	ObjectStateInterface::HasPresence
+		const bool HasPresence() const override			{ return m_presence > 0; };
 
 	// Private inner types.
 	private:

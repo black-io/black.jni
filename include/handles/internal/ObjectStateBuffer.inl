@@ -12,6 +12,7 @@ namespace Internal
 	template< typename TState >
 	ObjectStateBuffer<TState>::~ObjectStateBuffer()
 	{
+		CRET( m_state == nullptr );
 		DeleteState();
 	}
 
@@ -22,6 +23,7 @@ namespace Internal
 		ENSURES_DEBUG( m_presence > 0 );
 
 		CRET( m_presence > 1 );
+		CRET( m_is_persistent && IsAllocated() );
 		CreateState();
 	}
 
@@ -31,7 +33,7 @@ namespace Internal
 		EXPECTS_DEBUG( m_presence > 0 );
 		--m_presence;
 
-		CRET( m_presence > 0 );
+		CRET( ( m_presence > 0 ) || m_is_persistent );
 		DeleteState();
 	}
 
@@ -39,14 +41,13 @@ namespace Internal
 	inline void ObjectStateBuffer<TState>::CreateState()
 	{
 		EXPECTS_DEBUG( m_state == nullptr );
-
 		m_state = new( &m_buffer ) TState{};
 	}
 
 	template< typename TState >
 	inline void ObjectStateBuffer<TState>::DeleteState()
 	{
-		CRET( m_state == nullptr );
+		EXPECTS_DEBUG( m_state != nullptr );
 		m_state->~TState();
 		m_state = nullptr;
 	}
