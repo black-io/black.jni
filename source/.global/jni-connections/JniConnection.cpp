@@ -26,7 +26,20 @@ namespace
 
 	const bool JniConnection::RegisterClassNatives( const NativeBindingTable& bindings )
 	{
-		return false;
+		CRETD( !IsValid(), false, LOG_CHANNEL, "{}:{} - Attempt to use invalid JNI connection.", __func__, __LINE__ );
+
+		JNIEnv* local_env = GetLocalEnvironment();
+		Black::JniClass bound_class{ bindings.class_name };
+		CRETE( !bound_class, false, LOG_CHANNEL, "Failed to get handle to class '{}'.", bindings.class_name );
+
+		std::vector<JNINativeMethod> jni_natives;
+		jni_natives.reserve( bindings.natives.size() );
+		std::copy( bindings.natives.begin(), bindings.natives.end(), std::back_inserter( jni_natives ) );
+
+		auto result = local_env->RegisterNatives( *bound_class, jni_natives.data(), static_cast<jsize>( jni_natives.size() ) );
+		CRETE( result != JNI_OK, false, LOG_CHANNEL, "Failed to register natives for class '{}', error code: {:08X}", bindings.class_name, result );
+
+		return true;
 	}
 
 	const bool JniConnection::RegisterClassNatives( std::initializer_list< NativeBindingTable> bindings )
