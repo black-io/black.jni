@@ -158,6 +158,7 @@ namespace
 	void JniConnection::DetachLocalEnvironment( void* local_environment )
 	{
 		ENSURES( IsValid() );
+		BLACK_LOG_DEBUG( LOG_CHANNEL, "Thread-local environment `{:p}` will be detached from thread `#{:X}`.", local_environment, (uint64_t)pthread_self() );
 		GetConnection()->DetachCurrentThread();
 	}
 }
