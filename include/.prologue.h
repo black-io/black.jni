@@ -13,10 +13,6 @@
 // Environment configuration.
 #include ".bootstrap/configuration.h"
 
-// Isolate the logging for all JNI declarations.
-#include ".bootstrap/logging.isolation.h"
-#include ".global/logging/macros.h"
-
 // Most global code.
 #include ".global/static-strings/signatures.h"
 #include ".global/type-traits/IsBitField.h"
