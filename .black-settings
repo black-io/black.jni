@@ -1,16 +1,17 @@
 __include__:
   - '../{current-file-name}'
 
-# Component general settings.
+# Main component settings.
 component:
   path: '{current-folder-path}' # The root path of component.
+  domain: '{framework/domain}.outer_party.{current-folder-name}' # Domain of component. Used to build the package IDs or package topology in some cases.
   type: 'static-library' # Type of component output.
 
-# Main include paths. Inherited by referencing components.
+# Main include paths of component. Inherited by referencing components.
 includes:
   - '{component/path}/include/.public'
 
-# Additional, private paths. Visible only for this component.
+# Additional, private paths of component. Visible only for this component.
 private-includes:
   - '{component/path}/include'
 
@@ -19,6 +20,6 @@ files:
   - '{component/path}/include'
   - '{component/path}/source'
 
-# External dependencies.
+# Other components this one depends on. Only component names allowed.
 references:
   - 'black.core'
