@@ -38,7 +38,7 @@ inline namespace content
 		inline std::string GetDisplayServiceName() const							{ return m_handles->display_service.GetValue( {} ); };
 
 		// Getter for `android.content.Context.WINDOW_SERVICE` field.
-		inline std::string GetWindowServiceName() const							{ return m_handles->window_service.GetValue( {} ); };
+		inline std::string GetWindowServiceName() const								{ return m_handles->window_service.GetValue( {} ); };
 
 
 		// Call the `android.content.Context.getSystemService` function.
