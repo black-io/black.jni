@@ -7,11 +7,11 @@
 
 
 // References.
-#include "Surface.h"
+#include <black/jni/android/view/Surface.h>
+#include <black/jni/android/graphics/PixelFormat.h>
 
 
 // Implementation.
-#include "../../../../../jni/android/graphics/PixelFormat.const.h"
 #include "../../../../../jni/android/view/SurfaceHolder.const.h"
 #include "../../../../../jni/android/view/SurfaceHolder.Callback.h"
 #include "../../../../../jni/android/view/SurfaceHolder.Callback2.h"
