@@ -46,7 +46,7 @@ inline namespace graphics
 		inline const int32_t GetBitsPerPixel() const { return m_handles->bits_per_pixel.GetValue( *this, 0 ); };
 
 		// Getter for `android.graphics.PixelFormat.bytesPerPixel` field.
-		inline const int32_t GetBitsPerPixel() const { return m_handles->bytes_per_pixel.GetValue( *this, 0 ); };
+		inline const int32_t GetBytsPerPixel() const { return m_handles->bytes_per_pixel.GetValue( *this, 0 ); };
 
 	// Private inner types.
 	private:
