@@ -7,6 +7,7 @@
 
 
 // References.
+#include <black/jni/android/graphics/PixelFormat.h>
 #include <black/jni/android/util/DisplayMetrics.h>
 
 
