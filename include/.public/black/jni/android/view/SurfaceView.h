@@ -7,7 +7,7 @@
 
 
 // References.
-#include "SurfaceHolder.h"
+#include <black/jni/android/view/SurfaceHolder.h>
 
 
 // Implementation.
