@@ -38,7 +38,13 @@ inline namespace view
 		inline void GetRealMetrics( const DisplayMetrics& metrics ) const	{ m_handles->get_real_metrics.Call( *this, metrics ); };
 
 		// Call the `android.view.Display.getRefreshRate` function.
-		inline const float GetRefreshRate() const							{ m_handles->get_refresh_rate.Call( *this ); };
+		inline const float GetRefreshRate() const							{ return m_handles->get_refresh_rate.Call( *this ); };
+
+		// Call the `android.view.Display.getPixelFormat` function.
+		inline const PixelFormatCode GetPixelFormat() const					{ return m_handles->get_pixel_format.Call( *this ); };
+
+		// Call the `android.view.Display.getName` function.
+		inline std::string GetName() const									{ return m_handles->get_name.Call( *this ); };
 
 	// Private inner types.
 	private:
@@ -48,6 +54,8 @@ inline namespace view
 
 			Black::JniMemberFunction<void ( DisplayMetrics )>	get_real_metrics	{ class_handle, "getRealMetrics" };
 			Black::JniMemberFunction<float ()>					get_refresh_rate	{ class_handle, "getRefreshRate" };
+			Black::JniMemberFunction<PixelFormatCode ()>		get_pixel_format	{ class_handle, "getPixelFormat" };
+			Black::JniMemberFunction<std::string ()>			get_name			{ class_handle, "getName" };
 		};
 
 	// Private state.
