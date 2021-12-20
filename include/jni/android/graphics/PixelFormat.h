@@ -18,7 +18,11 @@ inline namespace graphics
 	// Public inner types.
 	public:
 		// Class path.
-		using ClassPath = Black::StaticString<'a', 'n', 'd', 'r', 'o', 'i', 'd', '/', 'v', 'i', 'e', 'w', '/', 'D', 'i', 's', 'p', 'l', 'a', 'y'>;
+		using ClassPath = Black::StaticString<
+			'a', 'n', 'd', 'r', 'o', 'i', 'd', '/',
+			'g', 'r', 'a', 'p', 'h', 'i', 'c', 's', '/',
+			'P', 'i', 'x', 'e', 'l', 'F', 'o', 'r', 'm', 'a', 't'
+		>;
 
 	// Public static interface.
 	public:
