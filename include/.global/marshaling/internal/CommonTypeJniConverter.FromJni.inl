@@ -76,12 +76,13 @@ namespace Internal
 		destination.clear();
 		CRET( source == nullptr );
 
-		JNIEnv* local_env			= Black::JniConnection::GetLocalEnvironment();
-		const jsize string_length	= local_env->GetStringUTFLength( source );
-		CRET( string_length == 0 );
+		JNIEnv* local_env					= Black::JniConnection::GetLocalEnvironment();
+		const jsize string_multibyte_length	= local_env->GetStringUTFLength( source );
+		const jsize string_unicode_length	= local_env->GetStringLength( source );
+		CRET( string_multibyte_length == 0 );
 
-		destination.resize( static_cast<size_t>( string_length ), ' ' );
-		local_env->GetStringUTFRegion( source, 0, string_length, &destination.front() );
+		destination.resize( static_cast<size_t>( string_multibyte_length ), ' ' );
+		local_env->GetStringUTFRegion( source, 0, string_unicode_length, destination.data() );
 	}
 
 	inline void CommonTypeJniConverter<std::u16string>::FromJni( const JniType& source, NativeType& destination )
@@ -94,7 +95,7 @@ namespace Internal
 		CRET( string_length == 0 );
 
 		destination.resize( static_cast<size_t>( string_length ), ' ' );
-		local_env->GetStringRegion( source, 0, string_length, reinterpret_cast<jchar*>( &destination.front() ) );
+		local_env->GetStringRegion( source, 0, string_length, reinterpret_cast<jchar*>( destination.data() ) );
 	}
 
 	template< typename TNativeValue, typename TAllocator >
