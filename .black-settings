@@ -6,6 +6,7 @@ component:
   path: '{current-folder-path}' # The root path of component.
   domain: '{framework/domain}.outer_party.{current-folder-name}' # Domain of component. Used to build the package IDs or package topology in some cases.
   type: 'static-library' # Type of component output.
+  is_whole_archive: true # Whether the static library should be processed as whole archive. The setting is viable only for static libraries.
 
 # Main include paths of component. Inherited by referencing components.
 includes:
