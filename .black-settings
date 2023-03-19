@@ -1,26 +1,11 @@
+# Propagate the global settings.
 __include__:
   - '../{current-file-name}'
 
-# Main component settings.
+# Current component settings.
 component:
-  path: '{current-folder-path}' # The root path of component.
-  domain: '{framework/domain}.outer_party.{current-folder-name}' # Domain of component. Used to build the package IDs or package topology in some cases.
-  type: 'static-library' # Type of component output.
-  is_whole_archive: true # Whether the static library should be processed as whole archive. The setting is viable only for static libraries.
-
-# Main include paths of component. Inherited by referencing components.
-includes:
-  - '{component/path}/include/.public'
-
-# Additional, private paths of component. Visible only for this component.
-private-includes:
-  - '{component/path}/include'
-
-# List of all C++ files the component consists of. Folder or file paths are accepted.
-files:
-  - '{component/path}/include'
-  - '{component/path}/source'
-
-# Other components this one depends on. Only component names allowed.
-references:
-  - 'black.core'
+  type: 'static-library'          # Required, one of: static-library, shared-library, console-application, desktop-application
+  name: '{current-folder-name}'   # Name of component.
+  path: '{current-folder-path}'   # Root path of component.
+  domain: '{collection/domain}.{component/name}'    # Package domain of component.
+  is_whole_archive: true    # Whether the static library should be processed as whole archive. The setting is viable only for static libraries.

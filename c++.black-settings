@@ -1,0 +1,16 @@
+# Main include paths of component. Inherited by referencing components.
+includes:
+  - '{component/path}/include/.public'
+
+# Additional, private paths of component. Visible only for this component.
+private-includes:
+  - '{component/path}/include'
+
+# List of all C++ files the component consists of. Folder or file paths are accepted.
+files:
+  - '{component/path}/include'
+  - '{component/path}/source'
+
+# Other components this one depends on. Only component names allowed.
+references:
+  - 'black.core'
