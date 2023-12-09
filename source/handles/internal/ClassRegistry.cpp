@@ -15,7 +15,7 @@ namespace Internal
 {
 namespace
 {
-	static constexpr const char* LOG_CHANNEL = "Black/Jni/ClassRegistry";
+	constexpr const char* LOG_CHANNEL = "Black/Jni/ClassRegistry";
 }
 
 

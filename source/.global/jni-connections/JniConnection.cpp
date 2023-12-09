@@ -20,7 +20,7 @@ namespace
 	using Black::Jni::Handles::Internal::ObjectStateRegistry;
 
 
-	static constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
+	constexpr const char* LOG_CHANNEL = "Black/Jni/Connection";
 }
 
 

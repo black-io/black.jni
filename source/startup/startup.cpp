@@ -4,7 +4,7 @@
 
 namespace
 {
-	static constexpr const char* LOG_CHANNEL = "Black/Jni";
+	constexpr const char* LOG_CHANNEL = "Black/Jni";
 
 
 	using Black::Jni::Startup::Internal::BasicStartupNode;
