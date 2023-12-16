@@ -3,8 +3,7 @@ includes:
   - '{component/path}/include/.public'
 
 # Additional, private paths of component. Visible only for this component.
-private-includes:
-  - '{component/path}/include'
+private-includes: []
 
 # List of all C++ files the component consists of. Folder or file paths are accepted.
 files:
